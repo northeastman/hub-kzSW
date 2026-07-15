@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>标准/法律 RAG 问答 · 教学演示</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+               "Microsoft YaHei", "Hiragino Sans GB", sans-serif;
+  background: #f1f5f9;
+  color: #1e293b;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* ── 顶部导航 ─────────────────────────────────────────── */
+header {
+  background: #0f172a;
+  color: white;
+  padding: 0.9rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+header h1 { font-size: 1.05rem; font-weight: 700; letter-spacing: .02em; }
+header .sub {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-left: auto;
+  display: flex;
+  gap: 1rem;
+}
+header .sub a { color: #60a5fa; text-decoration: none; }
+header .sub a:hover { text-decoration: underline; }
+
+/* ── 布局 ──────────────────────────────────────────────── */
+.container { max-width: 900px; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+
+/* ── 输入卡片 ─────────────────────────────────────────── */
+.input-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  padding: 1.1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.input-card h2 { font-size: 0.85rem; color: #64748b; margin-bottom: 0.6rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+
+textarea#question {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 68px;
+  outline: none;
+  color: #1e293b;
+  transition: border-color .15s;
+}
+textarea#question:focus { border-color: #3b82f6; }
+
+.row { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.7rem; flex-wrap: wrap; }
+.row label { font-size: 0.78rem; color: #64748b; white-space: nowrap; }
+.filter-input {
+  width: 108px;
+  padding: 0.38rem 0.65rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color .15s;
+}
+.filter-input:focus { border-color: #3b82f6; }
+
+.filter-select {
+  max-width: 260px;
+  padding: 0.4rem 2rem 0.4rem 0.7rem;
+  border: 1.5px solid #bfdbfe;
+  border-radius: 7px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  font-weight: 600;
+  color: #1d4ed8;
+  background-color: #eff6ff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color .15s, background-color .15s, box-shadow .15s;
+}
+.filter-select:hover { background-color: #dbeafe; border-color: #93c5fd; }
+.filter-select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.18); }
+
+.btn-submit {
+  padding: 0.45rem 1.4rem;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s, transform .1s;
+}
+.btn-submit:hover  { background: #1d4ed8; }
+.btn-submit:active { transform: scale(.97); }
+.btn-submit:disabled { background: #93c5fd; cursor: not-allowed; }
+
+.btn-debug {
+  margin-left: auto;
+  padding: 0.45rem 1.1rem;
+  background: white;
+  color: #475569;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 7px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s, transform .1s;
+}
+.btn-debug:hover  { background: #f1f5f9; border-color: #94a3b8; color: #1e293b; }
+.btn-debug:active { transform: scale(.97); }
+.btn-debug:disabled { opacity: .5; cursor: not-allowed; }
+
+/* 示例问题 */
+.examples { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.8rem; align-items: center; }
+.examples-label { font-size: 0.75rem; color: #94a3b8; }
+.eg {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  cursor: pointer;
+  color: #475569;
+  transition: all .15s;
+}
+.eg:hover { background: #dbeafe; border-color: #93c5fd; color: #1d4ed8; }
+
+/* ── 提示 / 加载 / 错误 ───────────────────────────────── */
+.hint {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+.hint p:first-child { font-size: 2rem; margin-bottom: 0.5rem; }
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 2.5rem;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+.spinner {
+  width: 18px; height: 18px;
+  border: 2px solid #e2e8f0;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-box {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  color: #dc2626;
+  font-size: 0.875rem;
+}
+
+.hidden { display: none !important; }
+
+/* ── Pipeline 流水线 ─────────────────────────────────── */
+.pipeline { display: flex; flex-direction: column; gap: 0; }
+
+.arrow {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 1.1rem;
+  line-height: 1;
+  margin: 0.1rem 0;
+}
+
+/* ── 步骤卡片通用 ────────────────────────────────────── */
+.step {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,.07);
+}
+
+.step-hd {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+.step-hd:hover { filter: brightness(.97); }
+
+.step-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.step-name { font-weight: 700; font-size: 0.92rem; }
+.step-tech { font-size: 0.72rem; opacity: .7; font-family: "Consolas","SF Mono",monospace; }
+.step-stat { margin-left: auto; font-size: 0.72rem; opacity: .75; font-weight: 500; }
+.collapse-icon { font-size: 0.55rem; color: inherit; opacity: .6; transition: transform .2s; }
+.step.collapsed .collapse-icon { transform: rotate(-90deg); }
+
+.step-bd { padding: 0.6rem 0.9rem 0.8rem; background: white; }
+.step.collapsed .step-bd { display: none; }
+
+/* ── 步骤主题色 ─────────────────────────────────────── */
+/* ① 向量 · 蓝 */
+.s-vec { border: 1px solid #bfdbfe; }
+.s-vec .step-hd { background: #eff6ff; color: #1e40af; }
+.s-vec .step-num { background: #2563eb; color: white; }
+
+/* ② BM25 · 绿 */
+.s-bm25 { border: 1px solid #a7f3d0; }
+.s-bm25 .step-hd { background: #ecfdf5; color: #065f46; }
+.s-bm25 .step-num { background: #059669; color: white; }
+
+/* ③ RRF · 琥珀 */
+.s-rrf { border: 1px solid #fcd34d; }
+.s-rrf .step-hd { background: #fffbeb; color: #78350f; }
+.s-rrf .step-num { background: #d97706; color: white; }
+
+/* ④ 上下文 · 紫 */
+.s-ctx { border: 1px solid #c4b5fd; }
+.s-ctx .step-hd { background: #f5f3ff; color: #4c1d95; }
+.s-ctx .step-num { background: #7c3aed; color: white; }
+
+/* ⑤ 答案 · 靛蓝 */
+.s-ans { border: 1px solid #99f6e4; }
+.s-ans .step-hd { background: #f0fdfa; color: #134e4a; }
+.s-ans .step-num { background: #0d9488; color: white; }
+
+/* ── Chunk 卡片 ─────────────────────────────────────── */
+.chunk {
+  border: 1px solid #f1f5f9;
+  border-radius: 7px;
+  margin-bottom: 0.45rem;
+  overflow: hidden;
+}
+.chunk:last-child { margin-bottom: 0; }
+
+.chunk-hd {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 0.7rem;
+  background: #f8fafc;
+  cursor: pointer;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+.chunk-hd:hover { background: #f1f5f9; }
+
+.chunk-bd {
+  display: none;
+  padding: 0.65rem 0.8rem;
+  font-size: 0.82rem;
+  color: #334155;
+  border-top: 1px solid #f1f5f9;
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.75;
+  background: white;
+  max-height: 260px;
+  overflow-y: auto;
+}
+.chunk.open .chunk-bd { display: block; }
+.chunk.open .caret { transform: rotate(90deg); }
+
+/* 徽章 */
+.badge {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.12rem 0.38rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.b-rank-vec  { background: #dbeafe; color: #1d4ed8; }
+.b-rank-bm25 { background: #d1fae5; color: #065f46; }
+.b-rank-rrf  { background: #fef3c7; color: #92400e; }
+.b-rank-ctx  { background: #ede9fe; color: #5b21b6; }
+.b-score     { background: #f1f5f9; color: #475569; font-family: "Consolas","SF Mono",monospace; }
+.b-src-vec   { background: #dbeafe; color: #1e40af; }
+.b-src-bm25  { background: #d1fae5; color: #065f46; }
+.b-only      { background: #fef9c3; color: #713f12; }
+
+.chunk-src {
+  font-size: 0.77rem;
+  color: #475569;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.caret { font-size: 0.6rem; color: #94a3b8; flex-shrink: 0; transition: transform .18s; }
+
+/* ── 答案（Markdown 渲染）─────────────────────────────── */
+.answer-text {
+  font-size: 0.975rem;
+  line-height: 1.85;
+  color: #0f172a;
+  padding: 0.15rem 0 0.6rem;
+}
+.answer-text > *:first-child { margin-top: 0; }
+.answer-text > *:last-child  { margin-bottom: 0; }
+.answer-text h1, .answer-text h2, .answer-text h3, .answer-text h4 { margin: 0.7rem 0 0.4rem; line-height: 1.4; }
+.answer-text h1 { font-size: 1.2rem; }
+.answer-text h2 { font-size: 1.08rem; }
+.answer-text h3 { font-size: 1rem; }
+.answer-text h4 { font-size: 0.94rem; }
+.answer-text p  { margin: 0.45rem 0; }
+.answer-text ul, .answer-text ol { margin: 0.45rem 0 0.45rem 1.4rem; }
+.answer-text li { margin: 0.22rem 0; }
+.answer-text code {
+  background: #f1f5f9; padding: 0.1rem 0.35rem; border-radius: 4px;
+  font-family: "Consolas","SF Mono",monospace; font-size: 0.88em; color: #be185d;
+}
+.answer-text pre {
+  background: #0f172a; color: #e2e8f0; padding: 0.8rem 1rem;
+  border-radius: 8px; overflow-x: auto; margin: 0.55rem 0; line-height: 1.5;
+}
+.answer-text pre code { background: none; padding: 0; color: inherit; }
+.answer-text table { border-collapse: collapse; margin: 0.55rem 0; width: 100%; font-size: 0.9rem; }
+.answer-text th, .answer-text td { border: 1px solid #e2e8f0; padding: 0.4rem 0.6rem; text-align: left; }
+.answer-text th { background: #f8fafc; font-weight: 700; }
+.answer-text blockquote {
+  border-left: 3px solid #cbd5e1; padding: 0.1rem 0 0.1rem 0.85rem;
+  color: #475569; margin: 0.55rem 0;
+}
+.answer-text strong { font-weight: 700; }
+.answer-text a { color: #2563eb; text-decoration: none; }
+.answer-text a:hover { text-decoration: underline; }
+.answer-text hr { border: none; border-top: 1px solid #e2e8f0; margin: 0.7rem 0; }
+
+/* 仅答案模式：隐藏检索步骤与箭头，只保留 ⑤ 答案框 */
+.pipeline.answer-only .step:not(#s5) { display: none; }
+.pipeline.answer-only .arrow         { display: none; }
+
+.cits { border-top: 1px solid #ccfbf1; padding-top: 0.6rem; margin-top: 0.2rem; }
+.cits-title { font-size: 0.72rem; color: #64748b; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 0.35rem; }
+.cit-item { font-size: 0.78rem; color: #0f766e; padding: 0.15rem 0; }
+
+/* 折叠提示 */
+.toggle-hint {
+  text-align: center;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin-top: 0.4rem;
+  cursor: pointer;
+}
+.toggle-hint:hover { color: #64748b; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+</head>
+
+<body>
+
+<header>
+  <h1>📖 标准/法律 RAG 问答系统</h1>
+  <div class="sub">
+    <span>教学演示 · 可视化检索与生成的每一步</span>
+    <a href="/docs" target="_blank">API 文档 ↗</a>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- 输入区域 -->
+  <div class="input-card">
+    <h2>输入问题</h2>
+    <textarea id="question" placeholder="用自然语言提问，例如：电动自行车的最高设计车速是多少？（Ctrl+Enter 发送）"></textarea>
+
+    <div class="row">
+      <label>文书</label>
+      <select class="filter-select" id="doc">
+        <option value="">全部文书</option>
+        <option value="GB17761-2024">GB17761-2024 电动自行车安全技术规范</option>
+        <option value="GB43854-2024">GB 43854-2024</option>
+        <option value="LAW-中华人民共和国道路交通安全法">中华人民共和国道路交通安全法</option>
+      </select>
+      <label>类型</label>
+      <select class="filter-select" id="docType">
+        <option value="">全部类型</option>
+        <option value="标准">标准</option>
+        <option value="法律">法律</option>
+      </select>
+      <button class="btn-debug"  id="btnDebug" onclick="debug()">调试</button>
+      <button class="btn-submit" id="btn" onclick="ask()">提问</button>
+    </div>
+
+    <div class="examples">
+      <span class="examples-label">示例：</span>
+      <span class="eg" onclick="fill('电动自行车的最高设计车速是多少？')">最高车速</span>
+      <span class="eg" onclick="fill('电动自行车用锂离子蓄电池有哪些安全要求？')">锂电池安全要求</span>
+      <span class="eg" onclick="fill('饮酒后驾驶机动车如何处罚？')">酒驾处罚</span>
+      <span class="eg" onclick="fill('电动自行车整车质量的上限是多少？')">整车质量上限</span>
+      <span class="eg" onclick="fill('哪个品牌的电动自行车最好用？')">应拒绝回答</span>
+    </div>
+  </div>
+
+  <!-- 状态区域 -->
+  <div id="hint" class="hint">
+    <p>🔍</p>
+    <p>点击「提问」直接查看 LLM 生成的答案；点击「调试」查看 RAG 检索的每一步中间结果</p>
+    <p style="margin-top:.4rem;font-size:.78rem">向量检索 → BM25检索 → RRF融合 → 上下文 → LLM生成</p>
+  </div>
+
+  <div id="loading" class="loading hidden">
+    <div class="spinner"></div>
+    <span>正在检索与生成，通常需要 3～8 秒……</span>
+  </div>
+
+  <div id="error" class="error-box hidden"></div>
+
+  <!-- 流水线可视化 -->
+  <div id="pipeline" class="pipeline hidden">
+
+    <!-- ① 向量检索 -->
+    <div class="step s-vec" id="s1">
+      <div class="step-hd" onclick="toggleStep('s1')">
+        <span class="step-num">①</span>
+        <span class="step-name">向量检索</span>
+        <span class="step-tech">text-embedding-v3 → FAISS IndexFlatIP（余弦相似度）</span>
+        <span class="step-stat" id="stat1"></span>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="step-bd" id="bd1"></div>
+    </div>
+
+    <div class="arrow">↓</div>
+
+    <!-- ② BM25 -->
+    <div class="step s-bm25" id="s2">
+      <div class="step-hd" onclick="toggleStep('s2')">
+        <span class="step-num">②</span>
+        <span class="step-name">BM25 关键词检索</span>
+        <span class="step-tech">jieba 分词 → BM25Okapi 打分</span>
+        <span class="step-stat" id="stat2"></span>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="step-bd" id="bd2"></div>
+    </div>
+
+    <div class="arrow">↓</div>
+
+    <!-- ③ RRF -->
+    <div class="step s-rrf" id="s3">
+      <div class="step-hd" onclick="toggleStep('s3')">
+        <span class="step-num">③</span>
+        <span class="step-name">RRF 融合排名</span>
+        <span class="step-tech">score(d) = Σ 1 / (60 + rankᵢ(d))，两路互补</span>
+        <span class="step-stat" id="stat3"></span>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="step-bd" id="bd3"></div>
+    </div>
+
+    <div class="arrow">↓</div>
+
+    <!-- ④ 上下文 -->
+    <div class="step s-ctx" id="s4">
+      <div class="step-hd" onclick="toggleStep('s4')">
+        <span class="step-num">④</span>
+        <span class="step-name">输入 LLM 的上下文</span>
+        <span class="step-tech">Top-4 chunks 拼接为 Prompt · 以下内容均原文可见</span>
+        <span class="step-stat" id="stat4"></span>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="step-bd" id="bd4"></div>
+    </div>
+
+    <div class="arrow">↓</div>
+
+    <!-- ⑤ 答案 -->
+    <div class="step s-ans" id="s5">
+      <div class="step-hd" onclick="toggleStep('s5')">
+        <span class="step-num">⑤</span>
+        <span class="step-name">LLM 生成答案</span>
+        <span class="step-tech">DashScope qwen-plus · temperature=0.1</span>
+        <span class="collapse-icon">▼</span>
+      </div>
+      <div class="step-bd" id="bd5"></div>
+    </div>
+
+  </div><!-- /pipeline -->
+
+</div><!-- /container -->
+
+<script>
+// ── 工具函数 ──────────────────────────────────────────
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function fill(q) { document.getElementById('question').value = q; }
+
+function toggleStep(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function toggleChunk(el) {
+  el.closest('.chunk').classList.toggle('open');
+}
+
+// Ctrl+Enter 提交（提问）
+document.getElementById('question').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) ask();
+});
+
+// ── 构建 chunk 卡片 ────────────────────────────────────
+function chunkCard(badgesHtml, src, contentText, openByDefault=false) {
+  const id = 'c' + Math.random().toString(36).slice(2,8);
+  return `
+    <div class="chunk${openByDefault?' open':''}" id="${id}">
+      <div class="chunk-hd" onclick="toggleChunk(this)">
+        ${badgesHtml}
+        <span class="chunk-src" title="${esc(src)}">${esc(src)}</span>
+        <span class="caret">▶</span>
+      </div>
+      <div class="chunk-bd">${esc(contentText)}</div>
+    </div>`;
+}
+
+// ── 渲染各步骤 ────────────────────────────────────────
+function renderVec(items) {
+  document.getElementById('stat1').textContent = `Top ${items.length} · 按余弦相似度排序`;
+  const html = items.map(d => {
+    const badges = `
+      <span class="badge b-rank-vec">#${d.rank}</span>
+      <span class="badge b-score">cos=${d.vec_score.toFixed(3)}</span>`;
+    return chunkCard(badges, d.source, d.content_preview);
+  }).join('');
+  document.getElementById('bd1').innerHTML = html || empty();
+}
+
+function renderBM25(items) {
+  document.getElementById('stat2').textContent = `Top ${items.length} · 按 BM25 分数排序`;
+  const html = items.map(d => {
+    const badges = `
+      <span class="badge b-rank-bm25">#${d.rank}</span>
+      <span class="badge b-score">BM25=${d.bm25_score.toFixed(2)}</span>`;
+    return chunkCard(badges, d.source, d.content_preview);
+  }).join('');
+  document.getElementById('bd2').innerHTML = html || empty();
+}
+
+function renderRRF(items) {
+  document.getElementById('stat3').textContent = `融合后 Top ${items.length}`;
+  const html = items.map(d => {
+    let srcBadges = '';
+    if (d.vec_rank  != null) srcBadges += `<span class="badge b-src-vec">向量#${d.vec_rank}</span>`;
+    if (d.bm25_rank != null) srcBadges += `<span class="badge b-src-bm25">BM25#${d.bm25_rank}</span>`;
+    if (!srcBadges)          srcBadges  = `<span class="badge b-only">单路</span>`;
+    const badges = `
+      <span class="badge b-rank-rrf">#${d.rank}</span>
+      <span class="badge b-score">RRF=${d.rrf_score.toFixed(4)}</span>
+      ${srcBadges}`;
+    return chunkCard(badges, d.source, d.content_preview);
+  }).join('');
+  document.getElementById('bd3').innerHTML = html;
+}
+
+function renderCtx(items) {
+  document.getElementById('stat4').textContent = `${items.length} 个 chunk → LLM`;
+  const html = items.map(d => {
+    const badges = `<span class="badge b-rank-ctx">[${d.index}]</span>`;
+    return chunkCard(badges, d.source, d.content, true);  // 默认展开
+  }).join('');
+  document.getElementById('bd4').innerHTML = html;
+}
+
+// ── Markdown 渲染（marked 加载失败时降级为纯文本）──────
+function renderMarkdown(text) {
+  if (window.marked) {
+    return marked.parse(String(text || ''), { breaks: true, gfm: true });
+  }
+  return `<div style="white-space:pre-wrap">${esc(text)}</div>`;
+}
+
+function renderAnswer(answer, cits) {
+  const citHtml = cits.length
+    ? cits.map(c => `<div class="cit-item">${esc(c.source)}</div>`).join('')
+    : '<span style="color:#94a3b8;font-size:.78rem">无引用</span>';
+
+  document.getElementById('bd5').innerHTML = `
+    <div class="answer-text">${renderMarkdown(answer)}</div>
+    <div class="cits">
+      <div class="cits-title">来源引用</div>
+      ${citHtml}
+    </div>`;
+}
+
+function empty() {
+  return '<p style="color:#94a3b8;font-size:.82rem;padding:.2rem 0">无结果</p>';
+}
+
+// ── 主流程 ────────────────────────────────────────────
+// 提问：只调用 /query，仅展示 ⑤ LLM 答案框（Markdown）
+function ask()   { run(false); }
+// 调试：调用 /query/debug，展示检索全过程的所有框
+function debug() { run(true); }
+
+async function run(debugMode) {
+  const question = document.getElementById('question').value.trim();
+  if (!question) return;
+
+  const doc     = document.getElementById('doc').value.trim()     || null;
+  const docType = document.getElementById('docType').value.trim() || null;
+
+  const pipeline = document.getElementById('pipeline');
+
+  // 切换 UI 状态
+  document.getElementById('btn').disabled      = true;
+  document.getElementById('btnDebug').disabled = true;
+  document.getElementById('hint').classList.add('hidden');
+  document.getElementById('error').classList.add('hidden');
+  pipeline.classList.add('hidden');
+  document.getElementById('loading').classList.remove('hidden');
+
+  try {
+    const endpoint = debugMode ? '/query/debug' : '/query';
+    const resp = await fetch(endpoint, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ question, doc_id: doc, doc_type: docType }),
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      throw new Error(err.detail || `HTTP ${resp.status}`);
+    }
+
+    const data = await resp.json();
+
+    if (debugMode) {
+      // 展示检索过程的全部步骤
+      pipeline.classList.remove('answer-only');
+      renderVec(data.vec_results);
+      renderBM25(data.bm25_results);
+      renderRRF(data.rrf_results);
+      renderCtx(data.context_chunks);
+      renderAnswer(data.answer, data.citations);
+      ['s1','s2','s3','s4','s5'].forEach(id =>
+        document.getElementById(id).classList.remove('collapsed')
+      );
+    } else {
+      // 仅展示 LLM 答案框
+      pipeline.classList.add('answer-only');
+      renderAnswer(data.answer, data.citations);
+      document.getElementById('s5').classList.remove('collapsed');
+    }
+
+    pipeline.classList.remove('hidden');
+    pipeline.scrollIntoView({behavior:'smooth', block:'start'});
+
+  } catch(e) {
+    const el = document.getElementById('error');
+    el.textContent = '请求失败：' + e.message;
+    el.classList.remove('hidden');
+    document.getElementById('hint').classList.remove('hidden');
+  } finally {
+    document.getElementById('btn').disabled      = false;
+    document.getElementById('btnDebug').disabled = false;
+    document.getElementById('loading').classList.add('hidden');
+  }
+}
+</script>
+</body>
+</html>

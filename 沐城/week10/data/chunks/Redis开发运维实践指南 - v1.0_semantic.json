@@ -1,0 +1,2197 @@
+[
+  {
+    "content": "前言\n\n本手册是我在一家中国大陆的中型商业银行做大数据系统工程师中进行的总结归纳，包含开发和运维的各方面的\n使用、应用场景和最佳实践，以及各个高可用架构的搭建和测试。\n下载和线上阅读最新版请访问：https://www.gitbook.com/book/gnuhpc/redis-all-about/details\n我会定期持续更新此指南，以供各位了解认识redis。\n其中会有引用的各种文献和图片，我会尽可能的标注引用，如果您发现您的文字或者图片未标注引用，请fork本\n手册的github并pull request：https://github.com/gnuhpc/All-About-Redis\n本手册符合共同创作协议, 协议文本见http://creativecommons.net.cn/licenses/meet-the-licenses/\n有不正确的地方，请通过gnuhpc@weibo或者huangpengcheng#cmbc.com.cn (:s/#/@)联系我。\n如果你觉得这些内容有帮助，欢迎Star我，也欢迎打赏 ^_^ ，我会不定期公布支持我的好朋友名单。\n— Pengcheng Huang\n赞助名单：\n1.\nTina 10元 2016-01-13\n2.\nFloydZhang 10元 2016-01-15\n3.\nSammy-lp 16.8元 2016-01-21\n4.\nYunwei 10.1元 2016-01-25\n5.\ncsyangchsh 15元 2016-01-29\n微信二维码：\n\n[扫描页，OCR 失败，内容跳过]\n\n[扫描页，OCR 失败，内容跳过]",
+    "metadata": {
+      "page_num": 2,
+      "section": "前言 > 前言",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": true,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00000"
+  },
+  {
+    "content": "目录\n\n前言\n前言. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 1\n第 1 章\n第 1 章",
+    "metadata": {
+      "page_num": 5,
+      "section": "前言 > 前言 > 目录 > 目录",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00001"
+  },
+  {
+    "content": "1. 简述. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n\n. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7\n第 2 章\n第 2 章",
+    "metadata": {
+      "page_num": 5,
+      "section": "前言 > 前言 > 目录 > 1. 简述. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00002"
+  },
+  {
+    "content": "2. 数据操作. . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n\n. . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9\n2.1. key操作. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 11\n第 3 章\n第 3 章",
+    "metadata": {
+      "page_num": 5,
+      "section": "前言 > 前言 > 目录 > 2. 数据操作. . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00003"
+  },
+  {
+    "content": "3. 专题功能. . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n\n. . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13\n3.1 排序. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14\n3.2 事务. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15\n3.3 流水线. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16\n3.4 发布订阅. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17\n第 4 章\n第 4 章",
+    "metadata": {
+      "page_num": 5,
+      "section": "前言 > 前言 > 目录 > 3. 专题功能. . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00004"
+  },
+  {
+    "content": "4. 开发设计规范. . . . . . . . . . . . . . . . . . . . . . . . . . .\n\n. . . . . . . . . . . . . . . . . . . . . . . . . . . 18\n4.1 Key设计. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19\n4.2 超时设置. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20\n4.3 数据异常处理. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21\n4.4 内存考虑. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22\n4.5 延迟考虑. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25\n4.6 典型使用场景参考. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 29\n4.7 客户端推荐. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 34\n第 5 章\n第 5 章",
+    "metadata": {
+      "page_num": 5,
+      "section": "前言 > 前言 > 目录 > 4. 开发设计规范. . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00005"
+  },
+  {
+    "content": "5. 上线部署规划. . . . . . . . . . . . . . . . . . . . . . . . . . .\n\n. . . . . . . . . . . . . . . . . . . . . . . . . . . 35\n2.1 内存、CPU规划. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36\n2.2 网卡RPS设置. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 37\n2.3 服务器部署位置. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 38\n2.4 持久化设置. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 39\n2.5 多实例配置. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 40\n\n2.6 具体设置参数. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41\n2.7 其他好用的配置技巧. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 42\n第 6 章\n第 6 章",
+    "metadata": {
+      "page_num": 5,
+      "section": "前言 > 前言 > 目录 > 5. 上线部署规划. . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00006"
+  },
+  {
+    "content": ". . . . . . . . . . . . . . . . . . . . . . . . . . . 49\n3.1 启动. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 50\n3.2 停止. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 51\n3.3 查看和修改配置. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 52\n3.4 批量执行操作. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 53\n3.5 选择数据库. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 54\n3.7 重命名命令. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 55\n3.8 执行lua脚本. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 56\n3.9 设置密码. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 57\n3.10 验证密码. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 58\n3.11 性能测试命令. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 59\n3.12 Redis-cli命令行其他操作. . . . . . . . . . . . . . . . . . . . . . . . . . . 62\n6.13 持久化与备份恢复. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 63\n第 7 章\n第 7 章",
+    "metadata": {
+      "page_num": 6,
+      "section": "前言 > 前言 > 目录 > 6. 常见运维操作. . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00007"
+  },
+  {
+    "content": "7. 数据迁移. . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n\n. . . . . . . . . . . . . . . . . . . . . . . . . . . . . 66\n4.1 将key从当前数据库移动到指定数据库. . . . . . . . . . . . . . . . . . . . . . . 67\n第 8 章\n第 8 章",
+    "metadata": {
+      "page_num": 6,
+      "section": "前言 > 前言 > 目录 > 7. 数据迁移. . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00008"
+  },
+  {
+    "content": "8. 数据迁移. . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n\n. . . . . . . . . . . . . . . . . . . . . . . . . . . . . 68\n8.1 一般处理流程. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 69\n6.2 并发延迟检查. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 70\n8.3 内存检查. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 71\n第 9 章\n第 9 章",
+    "metadata": {
+      "page_num": 6,
+      "section": "前言 > 前言 > 目录 > 8. 数据迁移. . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00009"
+  },
+  {
+    "content": "9. 测试方法. . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n\n. . . . . . . . . . . . . . . . . . . . . . . . . . . . . 73\n7.1 模拟oom. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 74\n7.2 模拟宕机. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 75\n7.3 模拟hang . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 76\n7.4 快速产生测试数据. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 77\n7.5 模拟RDB load情形. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 78",
+    "metadata": {
+      "page_num": 6,
+      "section": "前言 > 前言 > 目录 > 9. 测试方法. . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00010"
+  },
+  {
+    "content": "|  |\n| --- |\n| 11 |",
+    "metadata": {
+      "page_num": 7,
+      "section": "前言 > 前言 > 目录 > 9. 测试方法. . . . . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00011"
+  },
+  {
+    "content": "9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .\n\n. . . . . . . . . . . . . . . . . . . . . . . . . . 80\n9.1 Shell提权问题. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 82\n\n[扫描页，OCR 失败，内容跳过]",
+    "metadata": {
+      "page_num": 7,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": true,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00012"
+  },
+  {
+    "content": "|  |\n| --- |\n| 22 |",
+    "metadata": {
+      "page_num": 9,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00013"
+  },
+  {
+    "content": "Redis为一个运行在内存中的数据结构服务器（data structures server）。Redis使用的是单进程（除持久化\n时），所以在配置时，一个实例只会用到一个CPU。本手册分为三部分，第一部分从开发角度介绍了redis开发中\n使用API、场景和生产设计规范最佳实践，第二部分从运维角度介绍了如何运维redis，其间的常见操作和最佳实\n践等,第三部分是从高可用和集群方面介绍了redis相关的集群架构、搭建和测试。\n第 1 章 1. 简述 | 8\n\n[扫描页，OCR 失败，内容跳过]",
+    "metadata": {
+      "page_num": 9,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": true,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00014"
+  },
+  {
+    "content": "| 22..11.. kkeeyy操操作作 |\n| --- |\n| redis 的key操作是涉及范围最广的操作 。 最大字符串为512M，但是大字符串非常不建议。 Sorted Set的实现是hash table(element->score, 用于实现ZScore及判断element是否在集合内)，和skip lis t(score->element,按score排序)的混合体。 skip list有点像平衡二叉树那样，不同范围的score被分成一层一 层，每层是一个按score排序的链表。 ZAdd/ZRem是O(log(N))，ZRangeByScore/ZRemRangeByScore是O(log(N)+M)，N是Set大小，M是结果/操作元素的个 数。可见，原本可能很大的N被很关键的Log了一下，1000万大小的Set，复杂度也只是几十不到。当然，如果一次 命中很多元素M很大那谁也没办法了。 底层实现是hash table，一般操作复杂度是O(1)，要同时操作多个field时就是O(N)，N是field的数量。应用场 景：土法建索引。比如User对象，除了id有时还要按name来查询。 可以有如下的数据记录: (String) user:101 -> {\"id\":101,\"name\":\"calvin\"...} (String) user:102 -> {\"i d\":102,\"name\":\"kevin\"...} (Hash) user:name:index-> \"calvin\"->101, \"kevin\" -> 102 HyperLogLog主要解决大数据应用中的非精确计数（可能多也可能少，但是会在一个合理的范围）操作，它可以接 受多个元素作为输入，并给出输入元素的基数估算值，基数指的是集合中不同元素的数量。比如 {'apple', 'ban ana', 'cherry', 'banana', 'apple'} 的基数就是 3 。 HyperLogLog 的优点是，即使输入元素的数量或者体积 非常非常大，计算基数所需的空间总是固定的、并且是很小的。在 Redis 里面，每个 HyperLogLog 键只需要花 费 12 KB 内存，就可以计算接近 2^64 个不同元素的基数。这和计算基数时，元素越多耗费内存就越多的集合形 成鲜明对比。但是，因为 HyperLogLog 只会根据输入元素来计算基数，而不会储存输入元素本身，所以 HyperLo gLog 不能像集合那样，返回输入的各个元素。 关于这个数据类型的误差：在一个大小为12k的key所存储的hyperloglog集合基数计算的误差是%0.81. 参考文献：http://highscalability.com/blog/2012/4/5/big-data-counting-how-to-count-a-billion-distinc t-objects-us.html 22..77..11 将将元元素素添添加加至至 HHyyppeerrLLooggLLoogg |\n| PFADD key element [element ...] |\n|  |",
+    "metadata": {
+      "page_num": 11,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00015"
+  },
+  {
+    "content": "| 这个命令可能会对 HyperLogLog 进行修改，以便反映新的基数估算值，如果 HyperLogLog 的基数估算值在命令 执行之后出现了变化， 那么命令返回 1 ， 否则返回 0 。 命令的复杂度为 O(N) ，N 为被添加元素的数量。 22..77..22 返返回回给给定定 HHyyppeerrLLooggLLoogg 的的基基数数估估算算值值 |\n| --- |\n| PFCOUNT key [key ...] |\n| 当只给定一个 HyperLogLog 时，命令返回给定 HyperLogLog 的基数估算值。当给定多个 HyperLogLog 时，命令 会先对给定的 HyperLogLog 进行并集计算，得出一个合并后的 HyperLogLog ，然后返回这个合并 HyperLogLog 的基数估算值作为命令的结果（合并得出的 HyperLogLog 不会被储存，使用之后就会被删掉）。 当命令作用于 单个 HyperLogLog 时， 复杂度为 O(1) ， 并且具有非常低的平均常数时间。 当命令作用于多个 HyperLogLog 时， 复杂度为 O(N) ，并且常数时间也比处理单个 HyperLogLog 时要大得多。 22..77..33 合合并并多多个个 HHyyppeerrLLooggLLoogg |\n| PFMERGE destkey sourcekey [sourcekey ...] |\n| 将多个 HyperLogLog 合并为一个 HyperLogLog ，合并后的 HyperLogLog 的基数估算值是通过对所有给定 Hyper LogLog 进行并集计算得出的。 命令的复杂度为 O(N) ， 其中 N 为被合并的 HyperLogLog 数量， 不过这个命 令的常数复杂度比较高。 |",
+    "metadata": {
+      "page_num": 12,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00016"
+  },
+  {
+    "content": "2.1. key操作\n2.1. key操作\nredis 的key操作是涉及范围最广的操作 。\n最大字符串为512M，但是大字符串非常不建议。\nSorted Set的实现是hash table(element->score, 用于实现ZScore及判断element是否在集合内)，和skip lis\nt(score->element,按score排序)的混合体。 skip list有点像平衡二叉树那样，不同范围的score被分成一层一\n层，每层是一个按score排序的链表。\nZAdd/ZRem是O(log(N))，ZRangeByScore/ZRemRangeByScore是O(log(N)+M)，N是Set大小，M是结果/操作元素的个\n数。可见，原本可能很大的N被很关键的Log了一下，1000万大小的Set，复杂度也只是几十不到。当然，如果一次\n命中很多元素M很大那谁也没办法了。\n底层实现是hash table，一般操作复杂度是O(1)，要同时操作多个field时就是O(N)，N是field的数量。应用场\n景：土法建索引。比如User对象，除了id有时还要按name来查询。\n可以有如下的数据记录: (String) user:101 -> {\"id\":101,\"name\":\"calvin\"...} (String) user:102 -> {\"i\nd\":102,\"name\":\"kevin\"...} (Hash) user:name:index-> \"calvin\"->101, \"kevin\" -> 102\nHyperLogLog主要解决大数据应用中的非精确计数（可能多也可能少，但是会在一个合理的范围）操作，它可以接\n受多个元素作为输入，并给出输入元素的基数估算值，基数指的是集合中不同元素的数量。比如 {'apple', 'ban\nana', 'cherry', 'banana', 'apple'} 的基数就是 3 。 HyperLogLog 的优点是，即使输入元素的数量或者体积\n非常非常大，计算基数所需的空间总是固定的、并且是很小的。在 Redis 里面，每个 HyperLogLog 键只需要花\n费 12 KB 内存，就可以计算接近 2^64 个不同元素的基数。这和计算基数时，元素越多耗费内存就越多的集合形\n成鲜明对比。但是，因为 HyperLogLog 只会根据输入元素来计算基数，而不会储存输入元素本身，所以 HyperLo\ngLog 不能像集合那样，返回输入的各个元素。\n关于这个数据类型的误差：在一个大小为12k的key所存储的hyperloglog集合基数计算的误差是%0.81.\n参考文献：http://highscalability.com/blog/2012/4/5/big-data-counting-how-to-count-a-billion-distinc\nt-objects-us.html\n2.7.1 将元素添加至 HyperLogLog\n2.7.1 将元素添加至 HyperLogLog\nPFADD key element [element ...]\n第 2 章 2. 数据操作 | 11",
+    "metadata": {
+      "page_num": 12,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00017"
+  },
+  {
+    "content": "|  |\n| --- |\n| 33 |",
+    "metadata": {
+      "page_num": 13,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00018"
+  },
+  {
+    "content": "这个命令可能会对 HyperLogLog 进行修改，以便反映新的基数估算值，如果 HyperLogLog 的基数估算值在命令\n执行之后出现了变化， 那么命令返回 1 ， 否则返回 0 。 命令的复杂度为 O(N) ，N 为被添加元素的数量。\n2.7.2 返回给定 HyperLogLog 的基数估算值\n2.7.2 返回给定 HyperLogLog 的基数估算值\nPFCOUNT key [key ...]\n当只给定一个 HyperLogLog 时，命令返回给定 HyperLogLog 的基数估算值。当给定多个 HyperLogLog 时，命令\n会先对给定的 HyperLogLog 进行并集计算，得出一个合并后的 HyperLogLog ，然后返回这个合并 HyperLogLog\n的基数估算值作为命令的结果（合并得出的 HyperLogLog 不会被储存，使用之后就会被删掉）。 当命令作用于\n单个 HyperLogLog 时， 复杂度为 O(1) ， 并且具有非常低的平均常数时间。 当命令作用于多个 HyperLogLog\n时， 复杂度为 O(N) ，并且常数时间也比处理单个 HyperLogLog 时要大得多。\n2.7.3 合并多个 HyperLogLog\n2.7.3 合并多个 HyperLogLog\nPFMERGE destkey sourcekey [sourcekey ...]\n将多个 HyperLogLog 合并为一个 HyperLogLog ，合并后的 HyperLogLog 的基数估算值是通过对所有给定 Hyper\nLogLog 进行并集计算得出的。 命令的复杂度为 O(N) ， 其中 N 为被合并的 HyperLogLog 数量， 不过这个命\n令的常数复杂度比较高。\n第 2 章 2. 数据操作 | 12\n\n[扫描页，OCR 失败，内容跳过]",
+    "metadata": {
+      "page_num": 13,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": true,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00019"
+  },
+  {
+    "content": "| 33..22 事事务务 |\n| --- |\n| 用Multi(Start Transaction)、Exec(Commit)、Discard(Rollback)实现。 在事务提交前，不会执行任何指 令，只会把它们存到一个队列里，不影响其他客户端的操作。在事务提交时，批量执行所有指令。 一般情况下re dis在接受到一个client发来的命令后会立即处理并返回处理结果，但是当一个client在一个连接中发出multi命 令后，这个连接会进入一个事务上下文，该连接后续的命令并不是立即执行，而是先放到一个队列中。当从此连 接受到exec命令后，redis会顺序的执行队列中的所有命令。并将所有命令的运行结果打包到一起返回给clien t.然后此连接就结束事务上下文。 Redis还提供了一个Watch功能，你可以对一个key进行Watch，然后再执行Transactions，在这过程中，如果这个W atched的值进行了修改，那么这个Transactions会发现并拒绝执行。 使用discard命令来取消一个事务。 注意：redis只能保证事务的每个命令连续执行（因为是单线程架构，在执行完事务内所有指令前是不可能再去同 时执行其他客户端的请求的，也因此就不存在\"事务内的查询要看到事务里的更新，在事务外查询不能看到\"这个 让人万分头痛的问题），但是如果事务中的一个命令失败了，并不回滚其他命令。另外，一个十分罕见的问题是 当事务的执行过程中，如果redis意外的挂了。只有部分命令执行了，后面的也就被丢弃了。注意，如果是笔 误，语法出现错误，则整个事务都无法执行。 当然如果我们使用的append-only file方式持久化，redis会用单个write操作写入整个事务内容。即是是这种方 式还是有可能只部分写入了事务到磁盘。发生部分写入事务的情况下，redis重启时会检测到这种情况，然后失败 退出。可以使用redis-check-aof工具进行修复，修复会删除部分写入的事务内容。修复完后就能够重新启动了。 |",
+    "metadata": {
+      "page_num": 15,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00020"
+  },
+  {
+    "content": "3.1 排序\n3.1 排序\nredis支持对list，set和sorted set元素的排序。排序命令是sort 完整的命令格式如下：\nSORT key [BY pattern] [LIMIT start count] [GET pattern] [ASC|DESC] [ALPHA] [STORE dstkey]\n复杂度为O(N+M*log(M))。(N是集合大小，M 为返回元素的数量)\n说明： 1. [ASC|DESC] [ALPHA]: sort默认的排序方式（asc）是从小到大排的,当然也可以按照逆序或者按字符\n顺序排。 2. [BY pattern] : 除了可以按集合元素自身值排序外，还可以将集合元素内容按照给定pattern组合\n成新的key，并按照新key中对应的内容进行排序。例如： 3. 127.0.0.1:6379sort watch:leto by severtity:*\ndesc 4. [GET pattern]：可以通过get选项去获取指定pattern作为新key对应的值，get选项可以有多个。例\n如：127.0.0.1:6379sort watch:leto by severtity:* get severtity:。 对于Hash的引用，采用->，例如：sor\nt watch:leto get # get bug:->priority。 5. [LIMIT start count] 限定返回结果的数量。 6. [STORE dstke\ny] 把排序结果缓存起来\n第 3 章 3. 专题功能 | 14",
+    "metadata": {
+      "page_num": 15,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00021"
+  },
+  {
+    "content": "| 33..33 流流水水线线 |\n| --- |\n| 利用流水线（pipeline）的方式从client打包多条命令一起发出，不需要等待单条命令的响应返回，而redis服务 端会处理完多条命令后会将多条命令的处理结果打包到一起返回给客户端： |\n| cat data.txt | redis-cli –pipe |\n| 在选择开源redis开发库时需要着重注意是否支持pipeline，常见的jedis可以支持。 在部署架构是网络多跳的时候需要注意使用pipeline提高处理效率。 |",
+    "metadata": {
+      "page_num": 16,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00022"
+  },
+  {
+    "content": "3.2 事务\n3.2 事务\n用Multi(Start Transaction)、Exec(Commit)、Discard(Rollback)实现。 在事务提交前，不会执行任何指\n令，只会把它们存到一个队列里，不影响其他客户端的操作。在事务提交时，批量执行所有指令。 一般情况下re\ndis在接受到一个client发来的命令后会立即处理并返回处理结果，但是当一个client在一个连接中发出multi命\n令后，这个连接会进入一个事务上下文，该连接后续的命令并不是立即执行，而是先放到一个队列中。当从此连\n接受到exec命令后，redis会顺序的执行队列中的所有命令。并将所有命令的运行结果打包到一起返回给clien\nt.然后此连接就结束事务上下文。\nRedis还提供了一个Watch功能，你可以对一个key进行Watch，然后再执行Transactions，在这过程中，如果这个W\natched的值进行了修改，那么这个Transactions会发现并拒绝执行。\n使用discard命令来取消一个事务。\n注意：redis只能保证事务的每个命令连续执行（因为是单线程架构，在执行完事务内所有指令前是不可能再去同\n时执行其他客户端的请求的，也因此就不存在\"事务内的查询要看到事务里的更新，在事务外查询不能看到\"这个\n让人万分头痛的问题），但是如果事务中的一个命令失败了，并不回滚其他命令。另外，一个十分罕见的问题是\n当事务的执行过程中，如果redis意外的挂了。只有部分命令执行了，后面的也就被丢弃了。注意，如果是笔\n误，语法出现错误，则整个事务都无法执行。\n当然如果我们使用的append-only file方式持久化，redis会用单个write操作写入整个事务内容。即是是这种方\n式还是有可能只部分写入了事务到磁盘。发生部分写入事务的情况下，redis重启时会检测到这种情况，然后失败\n退出。可以使用redis-check-aof工具进行修复，修复会删除部分写入的事务内容。修复完后就能够重新启动了。\n第 3 章 3. 专题功能 | 15",
+    "metadata": {
+      "page_num": 16,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00023"
+  },
+  {
+    "content": "| 33..44 发发布布订订阅阅 |\n| --- |\n| redis作为一个pub/sub server，在订阅者和发布者之间起到了消息路由的功能。订阅者可以通过subscribe和psu bscribe命令向redis server订阅自己感兴趣的消息类型，redis将消息类型称为频道(channel)。当发布者通过pu blish命令向redis server发送特定类型的消息时。订阅该消息类型的全部client都会收到此消息。这里消息的传 递是多对多的。一个client可以订阅多个 channel,也可以向多个channel发送消息。 |\n| 终端A： 127.0.0.1:6379> subscribe comments Reading messages... (press Ctrl-C to quit) 1) \"subscribe\" 2) \"comments\" 3) (integer) 1 终端B: 127.0.0.1:6379> subscribe comments Reading messages... (press Ctrl-C to quit) 1) \"subscribe\" 2) \"comments\" 3) (integer) 1 终端C： 127.0.0.1:6379> publish comments good! (integer) 2 终端A: 127.0.0.1:6379> subscribe comments Reading messages... (press Ctrl-C to quit) 1) \"subscribe\" 2) \"comments\" 3) (integer) 1 1) \"message\" 2) \"comments\" 3) \"good!\" 终端B： 127.0.0.1:6379> subscribe comments Reading messages... (press Ctrl-C to quit) 1) \"subscribe\" 2) \"comments\" 3) (integer) 1 1) \"message\" 2) \"comments\" 3) \"good!\" |\n| 可以使用psubscribe通过通配符进行多个channel的订阅 |",
+    "metadata": {
+      "page_num": 17,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00024"
+  },
+  {
+    "content": "3.3 流水线\n3.3 流水线\n利用流水线（pipeline）的方式从client打包多条命令一起发出，不需要等待单条命令的响应返回，而redis服务\n端会处理完多条命令后会将多条命令的处理结果打包到一起返回给客户端：\ncat data.txt | redis-cli –pipe\n在选择开源redis开发库时需要着重注意是否支持pipeline，常见的jedis可以支持。\n在部署架构是网络多跳的时候需要注意使用pipeline提高处理效率。\n第 3 章 3. 专题功能 | 16",
+    "metadata": {
+      "page_num": 17,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00025"
+  },
+  {
+    "content": "|  |\n| --- |\n| 44 |",
+    "metadata": {
+      "page_num": 18,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00026"
+  },
+  {
+    "content": "3.4 发布订阅\n3.4 发布订阅\nredis作为一个pub/sub server，在订阅者和发布者之间起到了消息路由的功能。订阅者可以通过subscribe和psu\nbscribe命令向redis server订阅自己感兴趣的消息类型，redis将消息类型称为频道(channel)。当发布者通过pu\nblish命令向redis server发送特定类型的消息时。订阅该消息类型的全部client都会收到此消息。这里消息的传\n递是多对多的。一个client可以订阅多个 channel,也可以向多个channel发送消息。\n终端A：\n127.0.0.1:6379> subscribe comments\nReading messages... (press Ctrl-C to quit)\n1) \"subscribe\"\n2) \"comments\"\n3) (integer) 1\n终端B:\n127.0.0.1:6379> subscribe comments\nReading messages... (press Ctrl-C to quit)\n1) \"subscribe\"\n2) \"comments\"\n3) (integer) 1\n终端C：\n127.0.0.1:6379> publish comments good!\n(integer) 2\n终端A:\n127.0.0.1:6379> subscribe comments\nReading messages... (press Ctrl-C to quit)\n1) \"subscribe\"\n2) \"comments\"\n3) (integer) 1\n1) \"message\"\n2) \"comments\"\n3) \"good!\"\n终端B：\n127.0.0.1:6379> subscribe comments\nReading messages... (press Ctrl-C to quit)\n1) \"subscribe\"\n2) \"comments\"\n3) (integer) 1\n1) \"message\"\n2) \"comments\"\n3) \"good!\"\n可以使用psubscribe通过通配符进行多个channel的订阅\n第 3 章 3. 专题功能 | 17",
+    "metadata": {
+      "page_num": 18,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00027"
+  },
+  {
+    "content": "| 44..22 超超时时设设置置 |\n| --- |\n| 从业务需求逻辑和内存的角度，尽可能的设置key存活时间。 |",
+    "metadata": {
+      "page_num": 20,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00028"
+  },
+  {
+    "content": "4.1 Key设计\n4.1 Key设计\nkey的一个格式约定：object-type:id:field 。用\":\"分隔域，用\".\"作为单词间的连接，如\" comment:12345:repl\ny.to \"。不推荐含义不清的key和特别长的key。\n一般的设计方法如下： 1: 把表名转换为key前缀 如, tag: 2: 第2段放置用于区分区key的字段--对应mysql中的\n主键的列名,如userid 3: 第3段放置主键值,如2,3,4...., a , b ,c 4: 第4段,写要存储的列名\n例如用户表 user, 转换为key-value存储：\nuserid\nuserid\nusername\nusername\npassword\npassword\nemail\nemail\nlisi\nlisi@163.com\nset user:userid:9:username lisi\nset user:userid:9:password 111111\nset user:userid:9:email   lisi@163.com\n例如，查看某个用户的所有信息为：\nkeys user:userid:9*\n如果另一个列也常常被用来查找，比如username，则也要相应的生成一条按照该列为主的key-value，例如：\nuser:username:lisi:uid 9\n此时相当于RDBMS中在username上加索引，我们可以根据\nusername:lisi:uid ,查出userid=9，再查user:9:passwo\nrd/email\n...\n第 4 章 4. 开发设计规范 | 19",
+    "metadata": {
+      "page_num": 20,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00029"
+  },
+  {
+    "content": "| 44..33 数数据据异异常常处处理理 |\n| --- |\n| 程序应该处理如果redis数据丢失时的清理redis内存和重新加载的过程。 |",
+    "metadata": {
+      "page_num": 21,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00030"
+  },
+  {
+    "content": "| 44..44 内内存存考考虑虑 |\n| --- |\n| 1. 只要有可能的话，就尽量使用散列键而不是字符串键来储存键值对数据，因为散列键管理方便、能够避免键 名冲突、并且还能够节约内存。 具体实例： 节约内存：Instagram的Redis实践 blog.nosqlfan.com/html/3379.html 2. 如果将redis作为cache进行频繁读写和超时删除等，此时应该避免设置较大的k-v，因为这样会导致redis的 内存碎片增加，导致rss占用较大，最后被操作系统OOM killer干掉。一个很具体的issue例子请见：http s://github.com/antirez/redis/issues/2136 3. 如果采用序列化考虑通用性，请采用json相关的库进行处理，如果对内存大小和速度都很关注的，推荐使用m essagepack进行序列化和反序列化 4. 如果需要计数器，请将计数器的key通过天或者小时分割，比如下边的设计: 需要修改为： 更好的一个设计是采用hash： |",
+    "metadata": {
+      "page_num": 22,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00031"
+  },
+  {
+    "content": "| 5. 各种数据结构及其占用内存的benchmark测试 sseett个个数数 每每个个sseett的的元元素素总总数数 内内存存占占用用 KKeeyy大大小小 VVaalluuee大大小小 |  |  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| 100 | 100 |  | 1.88M |  | 7 |  | 36 |\n| 100 | 1000 |  | 10.75M |  | 7 |  | 36 |\n| 100 | 10000 |  | 111.12M |  | 7 |  | 36 |\n| 1000 | 100 |  | 11.59M |  | 8 |  | 36 |\n| 1000 | 1000 |  | 100.35M |  | 8 |  | 36 |\n| 1000 | 10000 |  | 1.08G |  | 8 |  | 36 |\n| 10000 | 100 |  | 108.71M |  | 9 |  | 36 |\n| 10000 1000 996.23M 9 36 zzsseett个个数数 每每个个zzsseett的的元元素素总总数数 内内存存占占用用 KKeeyy大大小小 VVaalluuee大大小小 |  |  |  |  |  |  |  |\n| 100 |  | 100 |  | 1.62M |  | 8 | 49 |\n| 100 |  | 1000 |  | 15.91M |  | 8 | 49 |\n| 100 |  | 10000 |  | 162.06M |  | 8 | 49 |\n| 1000 |  | 100 |  | 8.71M |  | 9 | 49 |\n| 1000 |  | 1000 |  | 151.87M |  | 9 | 49 |\n| 1000 |  | 10000 |  | 1.58G |  | 9 | 49 |\n| 10000 |  | 100 |  | 79.83M |  | 10 | 49 |\n| 10000 1000 1.48G 10 49 hhaasshh个个数数 每每个个hhaasshh的的元元素素总总数数 内内存存占占用用 KKeeyy大大小小 VVaalluuee大大小小 |  |  |  |  |  |  |  |\n| 100 |  | 100 |  | 1.63M |  | 8 | 49 |\n| 100 |  | 1000 |  | 6.29M |  | 8 | 49 |\n| 100 |  | 10000 |  | 156.91M |  | 8 | 49 |\n| 1000 |  | 100 |  | 8.71M |  | 9 | 49 |\n| 1000 |  | 1000 |  | 55.59M |  | 9 | 49 |",
+    "metadata": {
+      "page_num": 23,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00032"
+  },
+  {
+    "content": "4.4 内存考虑\n4.4 内存考虑\n1.\n只要有可能的话，就尽量使用散列键而不是字符串键来储存键值对数据，因为散列键管理方便、能够避免键\n名冲突、并且还能够节约内存。\n具体实例： 节约内存：Instagram的Redis实践blog.nosqlfan.com/html/3379.html\n2.\n如果将redis作为cache进行频繁读写和超时删除等，此时应该避免设置较大的k-v，因为这样会导致redis的\n内存碎片增加，导致rss占用较大，最后被操作系统OOM killer干掉。一个很具体的issue例子请见：http\ns://github.com/antirez/redis/issues/2136\n3.\n如果采用序列化考虑通用性，请采用json相关的库进行处理，如果对内存大小和速度都很关注的，推荐使用m\nessagepack进行序列化和反序列化\n4.\n如果需要计数器，请将计数器的key通过天或者小时分割，比如下边的设计:\n需要修改为：\n更好的一个设计是采用hash：\n第 4 章 4. 开发设计规范 | 22",
+    "metadata": {
+      "page_num": 23,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00033"
+  },
+  {
+    "content": "| hhaasshh个个数数 每每个个hhaasshh的的元元素素总总数数 内内存存占占用用 KKeeyy大大小小 VVaalluuee大大小小 |  |  |  |  |  |  |  |\n| --- | --- | --- | --- | --- | --- | --- | --- |\n| 1000 | 10000 |  | 1.52G |  | 9 |  | 49 |\n| 10000 | 100 |  | 79.83M |  | 10 |  | 49 |\n| 10000 1000 548.58M 10 49 lliisstt个个数数 每每个个lliisstt的的元元素素总总数数 内内存存占占用用 KKeeyy大大小小 VVaalluuee大大小小 |  |  |  |  |  |  |  |\n| 100 | 100 |  | 1.23M |  | 8 |  | 36 |\n| 100 | 1000 |  | 10.00M |  | 8 |  | 36 |\n| 100 | 10000 |  | 92.40M |  | 8 |  | 36 |\n| 1000 | 100 |  | 4.83M |  | 9 |  | 36 |\n| 1000 | 1000 |  | 92.52M |  | 9 |  | 36 |\n| 1000 | 10000 |  | 916.47M |  | 9 |  | 36 |\n| 10000 | 100 |  | 40.76M |  | 10 |  | 36 |\n| 10000 1000 917.69M 10 36 ssttrriinngg个个数数 内内存存占占用用 KKeeyy大大小小 VVaalluuee大大小小 |  |  |  |  |  |  |  |\n| 100 |  | 846.79K |  | 13 |  | 36 |  |\n| 1000 |  | 966.29K |  | 13 |  | 36 |  |\n| 10000 |  | 2.16M |  | 13 |  | 36 |  |\n| 100000 130.88M 13 36 |  |  |  |  |  |  |  |",
+    "metadata": {
+      "page_num": 24,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00034"
+  },
+  {
+    "content": "5.\n各种数据结构及其占用内存的benchmark测试\nset个数\nset个数\n每个set的元素总数\n每个set的元素总数\n内存占用\n内存占用\nKey大小\nKey大小\nValue大小\nValue大小\n1.88M\n10.75M\n111.12M\n11.59M\n100.35M\n1.08G\n108.71M\n996.23M\nzset个数\nzset个数\n每个zset的元素总数\n每个zset的元素总数\n内存占用\n内存占用\nKey大小\nKey大小\nValue大小\nValue大小\n1.62M\n15.91M\n162.06M\n8.71M\n151.87M\n1.58G\n79.83M\n1.48G\nhash个数\nhash个数\n每个hash的元素总数\n每个hash的元素总数\n内存占用\n内存占用\nKey大小\nKey大小\nValue大小\nValue大小\n1.63M\n6.29M\n156.91M\n8.71M\n55.59M\n第 4 章 4. 开发设计规范 | 23",
+    "metadata": {
+      "page_num": 24,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00035"
+  },
+  {
+    "content": "| 44..55 延延迟迟考考虑虑 |\n| --- |\n| 11.. 尽尽可可能能使使用用批批量量操操作作：： • mget、hmget而不是get和hget，对于set也是如此。 • lpush向一个list一次性导入多个元素，而不用lset一个个添加 • LRANGE 一次取出一个范围的元素，也不用LINDEX一个个取出 22.. 尽尽可可能能的的把把rreeddiiss和和AAPPPP SSEERRVVEERR部部署署在在一一个个网网段段甚甚至至一一台台机机器器。。 33.. 对对于于数数据据量量较较大大的的集集合合，，不不要要轻轻易易进进行行删删除除操操作作，，这这样样会会阻阻塞塞服服务务器器，，一一般般采采用用重重命命名名++批批量量删删除除的的策策略略：： 排序集合： # Rename the key newkey = \"gc:hashes:\" + redis.INCR(\"gc:index\") redis.RENAME(\"my.zset.ke y\", newkey) |\n| # Delete members from the sorted set in batche of 100s while redis.ZCARD(newkey) > 0 redis.ZREMRANGEBYRANK(newkey, 0, 99) end |\n| 集合： # Rename the key newkey = \"gc:hashes:\" + redis.INCR(\"gc:index\") redis.RENAME(\"my.set.key\", n ewkey) |\n| # Delete members from the set in batches of 100 cursor = 0 loop cursor, members = redis.SSCAN(newkey, cursor, \"COUNT\", 100) if size of members > 0 redis.SREM(newkey, members) end if cursor == 0 break end end |\n| 列表： # Rename the key newkey = \"gc:hashes:\" + redis.INCR(\"gc:index\") redis.RENAME(\"my.list.key\", newkey) |\n| # Trim off elements in batche of 100s while redis.LLEN(newkey) > 0 redis.LTRIM(newkey, 0, -99) end |\n|  |",
+    "metadata": {
+      "page_num": 25,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00036"
+  },
+  {
+    "content": "hash个数\nhash个数\n每个hash的元素总数\n每个hash的元素总数\n内存占用\n内存占用\nKey大小\nKey大小\nValue大小\nValue大小\n1.52G\n79.83M\n548.58M\nlist个数\nlist个数\n每个list的元素总数\n每个list的元素总数\n内存占用\n内存占用\nKey大小\nKey大小\nValue大小\nValue大小\n1.23M\n10.00M\n92.40M\n4.83M\n92.52M\n916.47M\n40.76M\n917.69M\nstring个数\nstring个数\n内存占用\n内存占用\nKey大小\nKey大小\nValue大小\nValue大小\n846.79K\n966.29K\n2.16M\n130.88M\n第 4 章 4. 开发设计规范 | 24",
+    "metadata": {
+      "page_num": 25,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00037"
+  },
+  {
+    "content": "| Hash： # Rename the key newkey = \"gc:hashes:\" + redis.INCR( \"gc:index\" ) redis.RENAME(\"my.hash.ke y\", newkey) |\n| --- |\n| # Delete fields from the hash in batche of 100s cursor = 0 loop cursor, hash_keys = redis.HSCAN(newkey, cursor, \"COUNT\", 100) if hash_keys count > 0 redis.HDEL(newkey, hash_keys) end if cursor == 0 break end end |\n| 44.. 尽尽可可能能使使用用不不要要超超过过11MM大大小小的的kkvv。。 55.. 减减少少对对大大数数据据集集的的高高时时间间复复杂杂度度的的操操作作：：根根据据复复杂杂度度计计算算，，如如下下命命令令可可以以优优化化:: 66.. 尽尽可可能能使使用用ppiippeelliinnee操操作作：：一一次次性性的的发发送送命命令令比比一一个个个个发发要要减减少少网网络络延延迟迟和和单单个个处处理理开开销销。。一一个个性性能能测测试试结结果果为为（（注注意意并并不不是是ppiippeellii nnee越越大大效效率率越越高高，，注注意意最最后后一一个个测测试试结结果果）） :: |\n| logger@BIGD1TMP:~> redis-benchmark -q -r 100000 -n 1000000 -c 50 PING_INLINE: 90155.07 requests per second PING_BULK: 92302.02 requests per second SET: 85070.18 requests per second GET: 86184.61 requests per second logger@BIGD1TMP:~> redis-benchmark -q -r 100000 -n 1000000 -c 50 -P 10 PING_INLINE: 558035.69 requests per second PING_BULK: 668002.69 requests per second SET: 275027.50 requests per second GET: 376647.84 requests per second logger@BIGD1TMP:~> redis-benchmark -q -r 100000 -n 1000000 -c 50 -P 20 PING_INLINE: 705716.25 requests per second PING_BULK: 869565.25 requests per second SET: 343406.59 requests per second |",
+    "metadata": {
+      "page_num": 26,
+      "section": "前言 > 前言 > 目录 > 9. Redis安全问题. . . . . . . . . . . . . . . . . . . . . . . . . .",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00038"
+  },
+  {
+    "content": "1. 尽可能使用批量操作：\n\nmget、hmget而不是get和hget，对于set也是如此。\nlpush向一个list一次性导入多个元素，而不用lset一个个添加\nLRANGE 一次取出一个范围的元素，也不用LINDEX一个个取出",
+    "metadata": {
+      "page_num": 26,
+      "section": "前言 > 前言 > 目录 > 1. 尽可能使用批量操作：",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00039"
+  },
+  {
+    "content": "排序集合： # Rename the key newkey = \"gc:hashes:\" + redis.INCR(\"gc:index\") redis.RENAME(\"my.zset.ke\ny\", newkey)\n# Delete members from the sorted set in batche of 100s\nwhile redis.ZCARD(newkey) > 0\nredis.ZREMRANGEBYRANK(newkey, 0, 99)\nend\n集合： # Rename the key newkey = \"gc:hashes:\" + redis.INCR(\"gc:index\") redis.RENAME(\"my.set.key\", n\newkey)\n# Delete members from the set in batches of 100\ncursor = 0\nloop\ncursor, members = redis.SSCAN(newkey, cursor, \"COUNT\", 100)\nif size of members > 0\nredis.SREM(newkey, members)\nend\nif cursor == 0\nbreak\nend\nend\n列表： # Rename the key newkey = \"gc:hashes:\" + redis.INCR(\"gc:index\") redis.RENAME(\"my.list.key\",\nnewkey)\n# Trim off elements in batche of 100s\nwhile redis.LLEN(newkey) > 0\nredis.LTRIM(newkey, 0, -99)\nend\n第 4 章 4. 开发设计规范 | 25",
+    "metadata": {
+      "page_num": 26,
+      "section": "前言 > 前言 > 目录 > 3. 对于数据量较大的集合，不要轻易进行删除操作，这样会阻塞服务器，一般采用重命名+批量删除的策略：",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00040"
+  },
+  {
+    "content": "|  |\n| --- |\n| GET: 459347.72 requests per second logger@BIGD1TMP:~> redis-benchmark -q -r 100000 -n 1000000 -c 50 -P 50 PING_INLINE: 940733.81 requests per second PING_BULK: 1317523.00 requests per second SET: 380807.31 requests per second GET: 523834.47 requests per second logger@BIGD1TMP:~> redis-benchmark -q -r 100000 -n 1000000 -c 50 -P 100 PING_INLINE: 999000.94 requests per second PING_BULK: 1440922.12 requests per second SET: 386996.88 requests per second GET: 602046.94 requests per second logger@BIGD1TMP:~> redis-benchmark -q -r 100000 -n 1000000 -c 50 -P 200 PING_INLINE: 1078748.62 requests per second PING_BULK: 1381215.50 requests per second SET: 379218.81 requests per second GET: 537634.38 requests per second |\n| 一个场景是一个购物车的设计，一般的设计思路是： 在获取购物车内部货品时，不使用pipeline会很低效： 可以修改为： |",
+    "metadata": {
+      "page_num": 27,
+      "section": "前言 > 前言 > 目录 > 3. 对于数据量较大的集合，不要轻易进行删除操作，这样会阻塞服务器，一般采用重命名+批量删除的策略：",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00041"
+  },
+  {
+    "content": "Hash： # Rename the key newkey = \"gc:hashes:\" + redis.INCR( \"gc:index\" ) redis.RENAME(\"my.hash.ke\ny\", newkey)\n# Delete fields from the hash in batche of 100s\ncursor = 0\nloop\ncursor, hash_keys = redis.HSCAN(newkey, cursor, \"COUNT\", 100)\nif hash_keys count > 0\nredis.HDEL(newkey, hash_keys)\nend\nif cursor == 0\nbreak\nend\nend",
+    "metadata": {
+      "page_num": 27,
+      "section": "前言 > 前言 > 目录 > 3. 对于数据量较大的集合，不要轻易进行删除操作，这样会阻塞服务器，一般采用重命名+批量删除的策略：",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00042"
+  },
+  {
+    "content": "6. 尽可能使用pipeline操作：一次性的发送命令比一个个发要减少网络延迟和单个处理开销。一个性能测试结果为（注意并不是pipeli\n\nne越大效率越高，注意最后一个测试结果） :\nne越大效率越高，注意最后一个测试结果） :\nlogger@BIGD1TMP:~> redis-benchmark -q -r 100000 -n 1000000 -c 50\nPING_INLINE: 90155.07 requests per second\nPING_BULK: 92302.02 requests per second\nSET: 85070.18 requests per second\nGET: 86184.61 requests per second\nlogger@BIGD1TMP:~> redis-benchmark -q -r 100000 -n 1000000 -c 50 -P 10\nPING_INLINE: 558035.69 requests per second\nPING_BULK: 668002.69 requests per second\nSET: 275027.50 requests per second\nGET: 376647.84 requests per second\nlogger@BIGD1TMP:~> redis-benchmark -q -r 100000 -n 1000000 -c 50 -P 20\nPING_INLINE: 705716.25 requests per second\nPING_BULK: 869565.25 requests per second\nSET: 343406.59 requests per second\n第 4 章 4. 开发设计规范 | 26",
+    "metadata": {
+      "page_num": 27,
+      "section": "前言 > 前言 > 目录 > 6. 尽可能使用pipeline操作：一次性的发送命令比一个个发要减少网络延迟和单个处理开销。一个性能测试结果为（注意并不是pipeli",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00043"
+  },
+  {
+    "content": "GET: 459347.72 requests per second\nlogger@BIGD1TMP:~> redis-benchmark -q -r 100000 -n 1000000 -c 50 -P 50\nPING_INLINE: 940733.81 requests per second\nPING_BULK: 1317523.00 requests per second\nSET: 380807.31 requests per second\nGET: 523834.47 requests per second\nlogger@BIGD1TMP:~> redis-benchmark -q -r 100000 -n 1000000 -c 50 -P 100\nPING_INLINE: 999000.94 requests per second\nPING_BULK: 1440922.12 requests per second\nSET: 386996.88 requests per second\nGET: 602046.94 requests per second\nlogger@BIGD1TMP:~> redis-benchmark -q -r 100000 -n 1000000 -c 50 -P 200\nPING_INLINE: 1078748.62 requests per second\nPING_BULK: 1381215.50 requests per second\nSET: 379218.81 requests per second\nGET: 537634.38 requests per second\n一个场景是一个购物车的设计，一般的设计思路是：\n在获取购物车内部货品时，不使用pipeline会很低效：\n可以修改为：\n第 4 章 4. 开发设计规范 | 27",
+    "metadata": {
+      "page_num": 28,
+      "section": "前言 > 前言 > 目录 > 6. 尽可能使用pipeline操作：一次性的发送命令比一个个发要减少网络延迟和单个处理开销。一个性能测试结果为（注意并不是pipeli",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00044"
+  },
+  {
+    "content": "| 44..66 典典型型使使用用场场景景参参考考 |\n| --- |\n| 下面是Redis适用的一些场景: 11.. 取取最最新新 NN 个个数数据据的的操操作作 比如典型的取你网站的最新文章，通过下面方式，我们可以将最新的 5000条评论的ID放在Redis的List集合 中，并将超出集合部分从数据库获取。 使用LPUSH latest.comments命令，向 list集合中插入数据 插入完成后再用 LTRIM latest.comments 0 5000 命 令使其永远只保存最近5000个 ID 然后我们在客户端获取某一页评论时可以用下面的逻辑 |\n| FUNCTION get_latest_comments(start,num_items): id_list = redis.lrange(\"latest.comments\",start,start+num_items-1) IF id_list.length < num_items id_list = SQL_DB(\"SELECT ... ORDER BY time LIMIT ...\") END RETURN id_list END |\n| 如果你还有不同的筛选维度，比如某个分类的最新 N 条，那么你可以再建一个按此分类的List，只存ID的话，Re dis是非常高效的。 22.. 排排行行榜榜应应用用，，取取 TTOOPP NN 操操作作 这个需求与上面需求的不同之处在于，前面操作以时间为权重，这个是以某个条件为权重，比如按顶的次数排 序，这时候就需要我们的 sorted set出马了，将你要排序的值设置成 sorted set的score，将具体的数据设置成 相应的 value，每次只需要执行一条ZADD命令即可。 |\n| 127.0.0.1:6379> zdd topapp 1 weixin (error) ERR unknown command 'zdd' 127.0.0.1:6379> zadd topapp 1 weixin (integer) 1 127.0.0.1:6379> zadd topapp 1 QQ (integer) 1 127.0.0.1:6379> zadd topapp 2 meituan (integer) 1 127.0.0.1:6379> zincrby topapp 1 meituan \"3\" 127.0.0.1:6379> zincrby topapp 1 QQ \"2\" 127.0.0.1:6379> zrank topapp QQ (integer) 1 3) \"meituan\" |\n|  |",
+    "metadata": {
+      "page_num": 29,
+      "section": "前言 > 前言 > 目录 > 6. 尽可能使用pipeline操作：一次性的发送命令比一个个发要减少网络延迟和单个处理开销。一个性能测试结果为（注意并不是pipeli",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00045"
+  },
+  {
+    "content": "8. 如果要sort的集合非常大的话排序就会消耗很长时间。由于redis单线程的，所以长时间的排序操作会阻塞其他client的 请求。解决\n\n办法是通过主从复制机制将数据复制到多个slave上。然后我们只在slave上做排序操作。把可能的对排序结果缓存。另外就是一个方案\n办法是通过主从复制机制将数据复制到多个slave上。然后我们只在slave上做排序操作。把可能的对排序结果缓存。另外就是一个方案\n是就是采用sorted set对需要按某个顺序访问的集合建立索引。\n是就是采用sorted set对需要按某个顺序访问的集合建立索引。\n第 4 章 4. 开发设计规范 | 28",
+    "metadata": {
+      "page_num": 29,
+      "section": "前言 > 前言 > 目录 > 8. 如果要sort的集合非常大的话排序就会消耗很长时间。由于redis单线程的，所以长时间的排序操作会阻塞其他client的 请求。解决",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00046"
+  },
+  {
+    "content": "|  |\n| --- |\n| 127.0.0.1:6379> zrank topapp weixin (integer) 0 127.0.0.1:6379> zrange topapp 0 -1 1) \"weixin\" 2) \"QQ\" |\n| 33..需需要要精精准准设设定定过过期期时时间间的的应应用用 比如你可以把上面说到的 sorted set 的 score 值设置成过期时间的时间戳，那么就可以简单地通过过期时间排 序，定时清除过期数据了，不仅是清除 Redis中的过期数据，你完全可以把 Redis 里这个过期时间当成是对数据 库中数据的索引，用 Redis 来找出哪些数据需要过期删除，然后再精准地从数据库中删除相应的记录。 44..计计数数器器应应用用 Redis的命令都是原子性的，你可以轻松地利用 INCR，DECR 命令来构建计数器系统。 55..UUnniiqq 操操作作，，获获取取某某段段时时间间所所有有数数据据排排重重值值 这个使用Redis的 set数据结构最合适了，只需要不断地将数据往 set中扔就行了，set意为集合，所以会自动排 重。 66..实实时时系系统统，，反反垃垃圾圾系系统统 通过上面说到的 set功能，你可以知道一个终端用户是否进行了某个操作，可以找到其操作的集合并进行分析统 计对比等。 77..PPuubb//SSuubb 构构建建实实时时消消息息系系统统 Redis 的 Pub/Sub 系统可以构建实时的消息系统，比如很多用 Pub/Sub 构建的实时聊天系统的例子。 88..构构建建队队列列系系统统 使用list可以构建队列系统，使用 sorted set甚至可以构建有优先级的队列系统。 99..缓缓存存 性能优于Memcached，数据结构更多样化。作为RDBMS的前端挡箭牌，redis可以对一些使用频率极高的sql操作进 行cache，比如，我们可以根据sql的hash进行SQL结果的缓存： |\n| def get_results(sql): hash = md5.new(sql).digest() result = redis.get(hash) if result is None: result = db.execute(sql) redis.set(hash, result) # or use redis.setex to set a TTL for the key return result |\n| 1100..使使用用sseettbbiitt进进行行统统计计计计数数 下边的例子是记录UV |",
+    "metadata": {
+      "page_num": 30,
+      "section": "前言 > 前言 > 目录 > 8. 如果要sort的集合非常大的话排序就会消耗很长时间。由于redis单线程的，所以长时间的排序操作会阻塞其他client的 请求。解决",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00047"
+  },
+  {
+    "content": "1. 取最新 N 个数据的操作\n\n比如典型的取你网站的最新文章，通过下面方式，我们可以将最新的 5000条评论的ID放在Redis的List集合\n中，并将超出集合部分从数据库获取。\n使用LPUSH latest.comments命令，向 list集合中插入数据 插入完成后再用 LTRIM latest.comments 0 5000 命\n令使其永远只保存最近5000个 ID 然后我们在客户端获取某一页评论时可以用下面的逻辑\nFUNCTION get_latest_comments(start,num_items):\nid_list = redis.lrange(\"latest.comments\",start,start+num_items-1)\nIF id_list.length < num_items\nid_list = SQL_DB(\"SELECT ... ORDER BY time LIMIT ...\")\nEND\nRETURN id_list\nEND\n如果你还有不同的筛选维度，比如某个分类的最新 N 条，那么你可以再建一个按此分类的List，只存ID的话，Re\ndis是非常高效的。",
+    "metadata": {
+      "page_num": 30,
+      "section": "前言 > 前言 > 目录 > 1. 取最新 N 个数据的操作",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00048"
+  },
+  {
+    "content": "2. 排行榜应用，取 TOP N 操作\n\n这个需求与上面需求的不同之处在于，前面操作以时间为权重，这个是以某个条件为权重，比如按顶的次数排\n序，这时候就需要我们的 sorted set出马了，将你要排序的值设置成 sorted set的score，将具体的数据设置成\n相应的 value，每次只需要执行一条ZADD命令即可。\n127.0.0.1:6379> zdd topapp 1 weixin\n(error) ERR unknown command 'zdd'\n127.0.0.1:6379> zadd topapp 1 weixin\n(integer) 1\n127.0.0.1:6379> zadd topapp 1 QQ\n(integer) 1\n127.0.0.1:6379> zadd topapp 2 meituan\n(integer) 1\n127.0.0.1:6379> zincrby topapp 1 meituan\n\"3\"\n127.0.0.1:6379> zincrby topapp 1 QQ\n\"2\"\n127.0.0.1:6379> zrank topapp QQ\n(integer) 1\n3) \"meituan\"\n第 4 章 4. 开发设计规范 | 29",
+    "metadata": {
+      "page_num": 30,
+      "section": "前言 > 前言 > 目录 > 2. 排行榜应用，取 TOP N 操作",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00049"
+  },
+  {
+    "content": "|  |\n| --- |\n| #!/usr/bin/python import redis from bitarray import bitarray from datetime import date r=redis.Redis(host='localhost', port=6379, db=0) today=date.today().strftime('%Y-%m-%d') def bitcount(n): len(bin(n)-2) def setup(): r.delete('user:'+today) r.setbit('user:'+today,100,0) def setuniquser(uid): r.setbit('user:'+today,uid,1) def countuniquser(): a = bitarray() a.frombytes(r.get('user:'+today),) print a print a.count() if __name__=='__main__': setup() setuniquser(uid=0) countuniquser() |\n| 1111..维维护护好好友友关关系系 使用set进行是否为好友关系，共同好友等操作 1122..使使用用 RReeddiiss 实实现现自自动动补补全全功功能能 使用有序集合保存输入结果： |\n| ZADD word:a 0 apple 0 application 0 acfun 0 adobe ZADD word:ap 0 apple 0 application ZADD word:app 0 apple 0 application ZADD word:appl 0 apple 0 application ZADD word:apple 0 apple ZADD word:appli 0 application |\n| 再使用一个有序集合保存热度： |\n| ZADD word_scores 100 apple 80 adobe 70 application 60 acfun |\n|  |",
+    "metadata": {
+      "page_num": 31,
+      "section": "前言 > 前言 > 目录 > 2. 排行榜应用，取 TOP N 操作",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00050"
+  },
+  {
+    "content": "127.0.0.1:6379> zrank topapp weixin\n(integer) 0\n127.0.0.1:6379> zrange topapp 0 -1\n1) \"weixin\"\n2) \"QQ\"\n3.需要精准设定过期时间的应用\n3.需要精准设定过期时间的应用\n比如你可以把上面说到的 sorted set 的 score 值设置成过期时间的时间戳，那么就可以简单地通过过期时间排\n序，定时清除过期数据了，不仅是清除 Redis中的过期数据，你完全可以把 Redis 里这个过期时间当成是对数据\n库中数据的索引，用 Redis 来找出哪些数据需要过期删除，然后再精准地从数据库中删除相应的记录。\n4.计数器应用\n4.计数器应用\nRedis的命令都是原子性的，你可以轻松地利用 INCR，DECR 命令来构建计数器系统。\n5.Uniq 操作，获取某段时间所有数据排重值\n5.Uniq 操作，获取某段时间所有数据排重值\n这个使用Redis的 set数据结构最合适了，只需要不断地将数据往 set中扔就行了，set意为集合，所以会自动排\n重。\n6.实时系统，反垃圾系统\n6.实时系统，反垃圾系统\n通过上面说到的 set功能，你可以知道一个终端用户是否进行了某个操作，可以找到其操作的集合并进行分析统\n计对比等。\n7.Pub/Sub 构建实时消息系统\n7.Pub/Sub 构建实时消息系统\nRedis 的 Pub/Sub 系统可以构建实时的消息系统，比如很多用 Pub/Sub 构建的实时聊天系统的例子。\n8.构建队列系统\n8.构建队列系统\n使用list可以构建队列系统，使用 sorted set甚至可以构建有优先级的队列系统。\n9.缓存\n9.缓存\n性能优于Memcached，数据结构更多样化。作为RDBMS的前端挡箭牌，redis可以对一些使用频率极高的sql操作进\n行cache，比如，我们可以根据sql的hash进行SQL结果的缓存：\ndef get_results(sql):\nhash = md5.new(sql).digest()\nresult = redis.get(hash)\nif result is None:\nresult = db.execute(sql)\nredis.set(hash, result)\n# or use redis.setex to set a TTL for the key\nreturn result\n10.使用setbit进行统计计数\n10.使用setbit进行统计计数\n下边的例子是记录UV\n第 4 章 4. 开发设计规范 | 30",
+    "metadata": {
+      "page_num": 31,
+      "section": "前言 > 前言 > 目录 > 2. 排行榜应用，取 TOP N 操作",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00051"
+  },
+  {
+    "content": "| 取结果时采用交集操作： |\n| --- |\n| ZINTERSTORE word_result 2 word_scores word:a WEIGHTS 1 1 ZRANGE word_result 0 -1 withscores |\n| 1133.. 可可靠靠队队列列设设计计 • UUIDs as Surrogate Keys Our strategy spreads information about the state of an item in the queue across a number of Redis data structures, requiring the use of a per-item surrogate key to tie them together. The UUID is a good choice here because 1) they are quick to generate, and 2) can be gener ated by the clients in a decentralized manner. • Pending List The Pending List holds the generated UUIDs for the items that have been enqueued(), and are ready to be processed. It is a RedisList, pr esenting the generated UUIDs in FIFO order. • Values Hash The Values Hash holds the actual items th at have been enqueued. It is a Redis Hash, mapping the generated UUID to the binary form of the the item. This is the only representation of the original item that will appear in any of the data stru ctures. • Stats Hash The Stats Hash records some timestamps and counts for each of the items. Speci fically: • enqueue time • last dequeue time • dequeue count • last requeue time • last requeue coun t. It is a Redis Hash, mapping the generated UUID to a custom data structure that holds this data i n a packed, binary form. Why keep stats on a per-item basis? We find it really useful for debugging (e.g. do we have a bad apple item that is being continuously requeued?), and for understanding how far behind we are if queues start to back up. Furthermore, the cost is only ~40 bytes per item, muc h smaller than our typical queued items. • Working Set The Working Set holds the set of UUIDs that have been dequeued(), and are currently being processed. It is a Redis Sorted Set, and scores each of the UUIDs by a pre-calculated, millisecond timestamp. Any object that has exceeded its assigned timeout is considered abandoned, and is available to be reclaimed. • Delay Set The Delay Set holds the set of UUIDs that have been requeued() with a per-item deferment. It is a Redis Sorted Set, and |",
+    "metadata": {
+      "page_num": 32,
+      "section": "前言 > 前言 > 目录 > 2. 排行榜应用，取 TOP N 操作",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00052"
+  },
+  {
+    "content": "#!/usr/bin/python\nimport redis\nfrom bitarray import bitarray\nfrom datetime import date\nr=redis.Redis(host='localhost', port=6379, db=0)\ntoday=date.today().strftime('%Y-%m-%d')\ndef bitcount(n):\nlen(bin(n)-2)\ndef setup():\nr.delete('user:'+today)\nr.setbit('user:'+today,100,0)\ndef setuniquser(uid):\nr.setbit('user:'+today,uid,1)\ndef countuniquser():\na = bitarray()\na.frombytes(r.get('user:'+today),)\nprint a\nprint a.count()\nif __name__=='__main__':\nsetup()\nsetuniquser(uid=0)\ncountuniquser()\n11.维护好友关系\n11.维护好友关系\n使用set进行是否为好友关系，共同好友等操作\n12.使用 Redis 实现自动补全功能\n12.使用 Redis 实现自动补全功能\n使用有序集合保存输入结果：\nZADD word:a 0 apple 0 application 0 acfun 0 adobe\nZADD word:ap 0 apple 0 application\nZADD word:app 0 apple 0 application\nZADD word:appl 0 apple 0 application\nZADD word:apple 0 apple\nZADD word:appli 0 application\n再使用一个有序集合保存热度：\nZADD word_scores 100 apple 80 adobe 70 application 60 acfun\n第 4 章 4. 开发设计规范 | 31",
+    "metadata": {
+      "page_num": 32,
+      "section": "前言 > 前言 > 目录 > 2. 排行榜应用，取 TOP N 操作",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00053"
+  },
+  {
+    "content": "取结果时采用交集操作：\nZINTERSTORE word_result 2 word_scores word:a WEIGHTS 1 1\nZRANGE word_result 0 -1 withscores",
+    "metadata": {
+      "page_num": 33,
+      "section": "前言 > 前言 > 目录 > 2. 排行榜应用，取 TOP N 操作",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00054"
+  },
+  {
+    "content": "• UUIDs as Surrogate Keys Our strategy spreads information about the state of an item in the queue\nacross a number of Redis data structures, requiring the use of a per-item surrogate key to tie them\ntogether. The UUID is a good choice here because 1) they are quick to generate, and 2) can be gener\nated by the clients in a decentralized manner. • Pending List The Pending List holds the generated\nUUIDs for the items that have been enqueued(), and are ready to be processed. It is a RedisList, pr\nesenting the generated UUIDs in FIFO order. • Values Hash The Values Hash holds the actual items th\nat have been enqueued. It is a Redis Hash, mapping the generated UUID to the binary form of the the\nitem. This is the only representation of the original item that will appear in any of the data stru\nctures. • Stats Hash The Stats Hash records some timestamps and counts for each of the items. Speci\nfically: • enqueue time • last dequeue time • dequeue count • last requeue time • last requeue coun\nt. It is a Redis Hash, mapping the generated UUID to a custom data structure that holds this data i\nn a packed, binary form. Why keep stats on a per-item basis? We find it really useful for debugging\n(e.g. do we have a bad apple item that is being continuously requeued?), and for understanding how\nfar behind we are if queues start to back up. Furthermore, the cost is only ~40 bytes per item, muc\nh smaller than our typical queued items. • Working Set The Working Set holds the set of UUIDs that\nhave been dequeued(), and are currently being processed. It is a Redis Sorted Set, and scores each\nof the UUIDs by a pre-calculated, millisecond timestamp. Any object that has exceeded its assigned\ntimeout is considered abandoned, and is available to be reclaimed. • Delay Set The Delay Set holds\nthe set of UUIDs that have been requeued() with a per-item deferment. It is a Redis Sorted Set, and\n第 4 章 4. 开发设计规范 | 32",
+    "metadata": {
+      "page_num": 33,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00055"
+  },
+  {
+    "content": "| 44..77 客客户户端端推推荐荐 |\n| --- |\n| 44..77..11 RReeddiiss--PPyytthhoonn驱驱动动的的安安装装和和使使用用 |\n| unzip redis-py-master.zip cd redis-py-master/ sudo python setup.py install |\n| 完成后import redis即可。 44..77..22 RReeddiiss--JJaavvaa客客户户端端推推荐荐 1. Jedis ：https://github.com/xetorthio/jedis 重点推荐 2. Spring Data redis ：https://github.com/spring-projects/spring-data-redis 使用Spring框架时推荐 3. Redisson ：https://github.com/mrniko/redisson 分布式锁、阻塞队列的时重点推荐 44..77..33 RReeddiiss--CC客客户户端端推推荐荐 Hiredis是redis数据库一个官方推荐的C语言redis client库。 |",
+    "metadata": {
+      "page_num": 34,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00056"
+  },
+  {
+    "content": "scores each of the UUIDs by a pre-calculated, millisecond timestamp. Once the deferment timestamp h\nas expired, the item will be returned to the Pending List. Why support per-item deferment? We have\na number of use cases where we might want to backoff specific pieces of work — maybe an underlying\nresource is too busy — without backing off the entire queue. Per-item deferment lets us say, “req\nueue this item, but don’t make it available for dequeue for another n seconds.”\n第 4 章 4. 开发设计规范 | 33",
+    "metadata": {
+      "page_num": 34,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00057"
+  },
+  {
+    "content": "|  |\n| --- |\n| 55 |",
+    "metadata": {
+      "page_num": 35,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00058"
+  },
+  {
+    "content": "4.7 客户端推荐\n4.7 客户端推荐\n4.7.1 Redis-Python驱动的安装和使用\n4.7.1 Redis-Python驱动的安装和使用\nunzip redis-py-master.zip\ncd redis-py-master/\nsudo python setup.py install\n完成后import redis即可。\n4.7.2 Redis-Java客户端推荐\n4.7.2 Redis-Java客户端推荐\n1.\nJedis ：https://github.com/xetorthio/jedis 重点推荐\n2.\nSpring Data redis ：https://github.com/spring-projects/spring-data-redis 使用Spring框架时推荐\n3.\nRedisson ：https://github.com/mrniko/redisson 分布式锁、阻塞队列的时重点推荐\n4.7.3 Redis-C客户端推荐\n4.7.3 Redis-C客户端推荐\nHiredis是redis数据库一个官方推荐的C语言redis client库。\n第 4 章 4. 开发设计规范 | 34\n\n[扫描页，OCR 失败，内容跳过]",
+    "metadata": {
+      "page_num": 35,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": true,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00059"
+  },
+  {
+    "content": "| 22..22 网网卡卡RRPPSS设设置置 |\n| --- |\n| RPS就是让网卡使用多核CPU的。传统方法就是网卡多队列（RSS，需要硬件和驱动支持），RPS则是在系统层实现 了分发和均衡。如果对redis网络处理能力要求高或者在生产上发现cpu0的，可以在OS层面打开这个内核功能。 设置脚本： |\n| #!/bin/bash # Enable RPS (Receive Packet Steering) rfc=32768 cc=$(grep -c processor /proc/cpuinfo) rsfe=$(echo $cc*$rfc | bc) sysctl -w net.core.rps_sock_flow_entries=$rsfe for fileRps in $(ls /sys/class/net/eth*/queues/rx-*/rps_cpus) do echo fff > $fileRps done for fileRfc in $(ls /sys/class/net/eth*/queues/rx-*/rps_flow_cnt) do echo $rfc > $fileRfc done tail /sys/class/net/eth*/queues/rx-*/{rps_cpus,rps_flow_cnt} |\n|  |",
+    "metadata": {
+      "page_num": 37,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00060"
+  },
+  {
+    "content": "2.1 内存、CPU规划\n2.1 内存、CPU规划\n一定要设置最大内存maxmemory参数，否则物理内存用爆了就会大量使用Swap，写RDB文件时的速度很慢。注意这\n个参数指的是info中的used_memory，在一些不利于jmalloc的时候，内存碎片会很大。\n多留55%内存是最安全的。重写AOF文件和RDB文件的进程(即使不做持久化，复制到Slave的时候也要写RDB)会fork\n出一条新进程来，采用了操作系统的Copy-On-Write策略(子进程与父进程共享Page。如果父进程的Page-每页4K有\n修改，父进程自己创建那个Page的副本，不会影响到子进程)。\n另外，需要考虑内存碎片，假设碎片为1.2，则如果机器为64G，那么64*45%/1.2 = 24G作为maxmemory是比较安全\n的规划。\n留意Console打出来的报告，如\"RDB: 1215 MB of memory used by copy-on-write\"。在系统极度繁忙时，如果父\n进程的所有Page在子进程写RDB过程中都被修改过了，就需要两倍内存。\n按照Redis启动时的提醒，设置\necho \"vm.overcommit_memory = 1\" >>  /etc/sysctl.conf\n使得fork()一条10G的进程时，因为COW策略而不一定需要有10G的free memory。\n另外，记得关闭THP，这个默认的Linux内存页面大小分配策略会导致RDB时出现巨大的latency和巨大的内存占\n用。关闭方法为：\necho never > /sys/kernel/mm/transparent_hugepage/enabled\necho never > /sys/kernel/mm/transparent_hugepage/defrag\n当最大内存到达时，按照配置的Policy进行处理， 默认策略为volatile-lru，对设置了expire time的key进行LR\nU清除(不是按实际expire time)。如果沒有数据设置了expire time或者policy为noeviction，则直接报错，但此\n时系统仍支持get之类的读操作。 另外还有几种policy，比如volatile-ttl按最接近expire time的，allkeys-lr\nu对所有key都做LRU。注意在一般的缓存系统中，如果没有设置超时时间，则lru的策略需要设置为allkeys-lr\nu，并且应用需要做好未命中的异常处理。特殊的，当redis当做DB时，请使用noneviction策略，但是需要对系统\n内存监控加强粒度。\nCPU不求核数多，但求主频高，Cache大，因为redis主处理模式是单进程的。同时避免使用虚拟机。\n第 5 章 5. 上线部署规划 | 36",
+    "metadata": {
+      "page_num": 37,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00061"
+  },
+  {
+    "content": "| 22..33 服服务务器器部部署署位位置置 |\n| --- |\n| 尽可能把client和server部署在同一台机器上，比如都部署在app server，或者一个网段中，减少网络延迟对于r edis的影响。 如果是同一台机器，又想榨干redis性能可以考虑采用UNIX domain sockets配置方式，配置方式如下 # 0 = do n ot listen on a port port 0 |\n| # listen on localhost only bind 127.0.0.1 # create a unix domain socket to listen on unixsocket /tmp/redis.sock # set permissions for the socket unixsocketperm 755 |\n| 这样的配置方式在没有大量pipeline下会有一定性能提升，具体请参见http://redis.io/topics/benchmarks： 另外，对于混合部署即redis和应用部署在同一台服务器上，那么可能会出现如下的情况： 出现瞬时 Redis 大量连接和处理超时，应用业务线程被阻塞，导致服务拒绝，过一段时间可能又自动恢复 了。这种瞬时故障非常难抓现场，一天来上几发就会给人业务不稳定的感受，而一般基础机器指标的监控周期在 分钟级。瞬时故障可能发生在监控的采集间隙，所以只好上脚本在秒级监控日志，发现瞬时出现大量 Redis 超 时错误，就收集当时应用的 JVM 堆栈、内存和机器 CPU Load 等各项指标。终于发现瞬时故障时刻 Redis 机器 CPU Load 出现瞬间飙升几百的现象，应用和 Redis 混合部署时应用可能瞬间抢占了全部 CPU 导致 Redis 没有 CPU 资源可用。而应用处理业务的逻辑又可能需要访问 Redis，而 Redis 又没有 CPU 资源可用导致超时，这不 就像一个死锁么。搞清楚了原因其实解决方法也简单，就是分离应用和 Redis 的部署，各自资源隔离 出处： http://mp.weixin.qq.com/s?__biz=MzAxMTEyOTQ5OQ==&mid=402004912&idx=1&sn=7517696a86f54262e60 e1b5636d6cbe0&3rd=MzA3MDU4NTYzMw==&scene=6#rd 因此在混合部署下要对极限性能进行监控，提前将可能出现性能问题的应用迁移出来。 |",
+    "metadata": {
+      "page_num": 38,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00062"
+  },
+  {
+    "content": "2.2 网卡RPS设置\n2.2 网卡RPS设置\nRPS就是让网卡使用多核CPU的。传统方法就是网卡多队列（RSS，需要硬件和驱动支持），RPS则是在系统层实现\n了分发和均衡。如果对redis网络处理能力要求高或者在生产上发现cpu0的，可以在OS层面打开这个内核功能。\n设置脚本：\n#!/bin/bash\n# Enable RPS (Receive Packet Steering)\nrfc=32768\ncc=$(grep -c processor /proc/cpuinfo)\nrsfe=$(echo $cc*$rfc | bc)\nsysctl -w net.core.rps_sock_flow_entries=$rsfe\nfor fileRps in $(ls /sys/class/net/eth*/queues/rx-*/rps_cpus)\ndo\necho fff > $fileRps\ndone\nfor fileRfc in $(ls /sys/class/net/eth*/queues/rx-*/rps_flow_cnt)\ndo\necho $rfc > $fileRfc\ndone\ntail /sys/class/net/eth*/queues/rx-*/{rps_cpus,rps_flow_cnt}\n第 5 章 5. 上线部署规划 | 37",
+    "metadata": {
+      "page_num": 38,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00063"
+  },
+  {
+    "content": "| 22..44 持持久久化化设设置置 |\n| --- |\n| RDB和AOF两者毫无关系，完全独立运行，如果使用了AOF，重启时只会从AOF文件载入数据，不会再管RDB文件。在 配置上有三种选择：不持久化，RDB，RDB+AOF。官方不推荐只开启AOF（因为恢复太慢另外如果aof引擎有bu g），除非明显的读多写少的应用。 开启AOF时应当关闭AOF自动rewrite，并在crontab中启动在业务低峰时段进 行的bgrewrite。 如果在一台机器上部署多个redis实例，则关闭RDB和AOF的自动保存（save \"\", auto-aof-rewr ite-percentage 0），通过crontab定时调用保存： |\n| m h * * * redis-cli -p <port> BGSAVE m h */4 * * redis-cli -p <port> BGREWRITEAOF |\n| 持久化的部署规划上，如果为主从复制关系，建议主关闭持久化。 |",
+    "metadata": {
+      "page_num": 39,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00064"
+  },
+  {
+    "content": "2.3 服务器部署位置\n2.3 服务器部署位置\n尽可能把client和server部署在同一台机器上，比如都部署在app server，或者一个网段中，减少网络延迟对于r\nedis的影响。\n如果是同一台机器，又想榨干redis性能可以考虑采用UNIX domain sockets配置方式，配置方式如下 # 0 = do n\not listen on a port port 0\n# listen on localhost only\nbind 127.0.0.1\n# create a unix domain socket to listen on\nunixsocket /tmp/redis.sock\n# set permissions for the socket\nunixsocketperm 755\n这样的配置方式在没有大量pipeline下会有一定性能提升，具体请参见http://redis.io/topics/benchmarks：\n另外，对于混合部署即redis和应用部署在同一台服务器上，那么可能会出现如下的情况：\n出现瞬时 Redis 大量连接和处理超时，应用业务线程被阻塞，导致服务拒绝，过一段时间可能又自动恢复\n了。这种瞬时故障非常难抓现场，一天来上几发就会给人业务不稳定的感受，而一般基础机器指标的监控周期在\n分钟级。瞬时故障可能发生在监控的采集间隙，所以只好上脚本在秒级监控日志，发现瞬时出现大量 Redis 超\n时错误，就收集当时应用的 JVM 堆栈、内存和机器 CPU Load 等各项指标。终于发现瞬时故障时刻 Redis 机器\nCPU Load 出现瞬间飙升几百的现象，应用和 Redis 混合部署时应用可能瞬间抢占了全部 CPU 导致 Redis 没有\nCPU 资源可用。而应用处理业务的逻辑又可能需要访问 Redis，而 Redis 又没有 CPU 资源可用导致超时，这不\n就像一个死锁么。搞清楚了原因其实解决方法也简单，就是分离应用和 Redis 的部署，各自资源隔离\n出处： http://mp.weixin.qq.com/s?__biz=MzAxMTEyOTQ5OQ==&mid=402004912&idx=1&sn=7517696a86f54262e60\ne1b5636d6cbe0&3rd=MzA3MDU4NTYzMw==&scene=6#rd\n因此在混合部署下要对极限性能进行监控，提前将可能出现性能问题的应用迁移出来。\n第 5 章 5. 上线部署规划 | 38",
+    "metadata": {
+      "page_num": 39,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00065"
+  },
+  {
+    "content": "| 22..55 多多实实例例配配置置 |\n| --- |\n| 如果一台机器上防止多个redis实例，为了防止上下文切换导致的开销，可以采用taskset。taskset是LINUX提供 的一个命令(ubuntu系统可能需要自行安装，schedutils package)。他可以让某个程序运行在某个（或）某些CPU 上。 1）显示进程运行的CPU （6137为redis-server的进程号） |\n| [redis@hadoop1 ~]$ taskset -p 6137 pid 6137's current affinity mask: f |\n| 显示结果的f实际上是二进制4个低位均为1的bitmask，每一个1对应于1个CPU，表示该进程在4个CPU上运行 2）指定进程运行在某个特定的CPU上 |\n| [redis@hadoop1 ~]$ taskset -pc 3 6137 pid 6137's current affinity list: 0-3 pid 6137's new affinity list: 3 |\n| 注：3表示CPU将只会运行在第4个CPU上（从0开始计数）。 3）进程启动时指定CPU |\n| taskset -c 1 ./redis-server ../redis.conf |\n| 参数：OPTIONS -p, --pid operate on an existing PID and not launch a new task -c, --cpu-list specify a numerical list of processors instead of a bitmask. The list may contain mu ltiple items, separated by comma, and ranges. For example, 0,5,7,9-11. |",
+    "metadata": {
+      "page_num": 40,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00066"
+  },
+  {
+    "content": "2.4 持久化设置\n2.4 持久化设置\nRDB和AOF两者毫无关系，完全独立运行，如果使用了AOF，重启时只会从AOF文件载入数据，不会再管RDB文件。在\n配置上有三种选择：不持久化，RDB，RDB+AOF。官方不推荐只开启AOF（因为恢复太慢另外如果aof引擎有bu\ng），除非明显的读多写少的应用。 开启AOF时应当关闭AOF自动rewrite，并在crontab中启动在业务低峰时段进\n行的bgrewrite。 如果在一台机器上部署多个redis实例，则关闭RDB和AOF的自动保存（save \"\", auto-aof-rewr\nite-percentage 0），通过crontab定时调用保存：\nm h * * * redis-cli -p <port> BGSAVE\nm h */4 * * redis-cli -p <port> BGREWRITEAOF\n持久化的部署规划上，如果为主从复制关系，建议主关闭持久化。\n第 5 章 5. 上线部署规划 | 39",
+    "metadata": {
+      "page_num": 40,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00067"
+  },
+  {
+    "content": "| 22..66 具具体体设设置置参参数数 |\n| --- |\n| 详见我行自制安装包conf目录中的各个配置文件和上线前检查表格。 redis参数设置技巧列表： 1. Daemonize 这个参数在使用supervisord这种进程管理工具时一定要设置为no，否 则无法使用这些工具将redis启动。 1. Dir RDB的位置，一定要事先创建好，并且启动redis 的用户对此目录要有读写权限。 2. Include 如果是多实例的话可以将公共的设置放在一个conf文件中，然后引用即可： include /redis/conf/ redis-common.conf |",
+    "metadata": {
+      "page_num": 41,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00068"
+  },
+  {
+    "content": "2.5 多实例配置\n2.5 多实例配置\n如果一台机器上防止多个redis实例，为了防止上下文切换导致的开销，可以采用taskset。taskset是LINUX提供\n的一个命令(ubuntu系统可能需要自行安装，schedutils package)。他可以让某个程序运行在某个（或）某些CPU\n上。\n1）显示进程运行的CPU （6137为redis-server的进程号）\n[redis@hadoop1 ~]$ taskset  -p 6137\npid 6137's current affinity mask: f\n显示结果的f实际上是二进制4个低位均为1的bitmask，每一个1对应于1个CPU，表示该进程在4个CPU上运行\n2）指定进程运行在某个特定的CPU上\n[redis@hadoop1 ~]$ taskset -pc 3 6137\npid 6137's current affinity list: 0-3\npid 6137's new affinity list: 3\n注：3表示CPU将只会运行在第4个CPU上（从0开始计数）。\n3）进程启动时指定CPU\ntaskset -c 1 ./redis-server ../redis.conf\n参数：OPTIONS -p, --pid operate on an existing PID and not launch a new task\n-c, --cpu-list specify a numerical list of processors instead of a bitmask. The list may contain mu\nltiple items, separated by comma, and ranges. For example, 0,5,7,9-11.\n第 5 章 5. 上线部署规划 | 40",
+    "metadata": {
+      "page_num": 41,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00069"
+  },
+  {
+    "content": "| 22..77 其其他他好好用用的的配配置置技技巧巧 |\n| --- |\n| 22..77..11 使使用用ssuuppeerrvviissoorrdd进进行行进进程程管管理理 Supervisord是一个优秀的进程管理工具，一般在部署redis时采用它来进行redis、sentinel等进程的管理，一个 已经在生产环境采用的supervisord配置文件如下： ; Sample supervisor config file. ; ; For more informa tion on the config file, please see: ; http://supervisord.org/configuration.html ; ; Notes: ; - She ll expansion (\"~\" or \"$HOME\") is not supported. Environment ; variables can be expanded using this syntax: \"%(ENV_HOME)s\". ; - Comments must have a leading space: \"a=b ;comment\" not \"a=b;comment\". |\n| [unix_http_server] file=/smsred/redis-3.0.4/run/supervisor.sock ; (the path to the socket file) ;chmod=0700 ; socket file mode (default 0700) ;chown=nobody:nogroup ; socket file uid:gid owner ;username=user ; (default is no username (open server)) ;password=123 ; (default is no password (open server)) ;[inet_http_server] ; inet (TCP) server disabled by default ;port=127.0.0.1:9001 ; (ip_address:port specifier, *:port for all iface) ;username=user ; (default is no username (open server)) ;password=123 ; (default is no password (open server)) [supervisord] logfile=/smsred/redis-3.0.4/log/supervisord.log ; (main log file;default $CWD/supervisord.log) logfile_maxbytes=50MB ; (max main logfile bytes b4 rotation;default 50MB) logfile_backups=10 ; (num of main logfile rotation backups;default 10) loglevel=info ; (log level;default info; others: debug,warn,trace) pidfile=/smsred/redis-3.0.4/run/supervisord.pid ; (supervisord pidfile;default supervisord.pid) nodaemon=false ; (start in foreground if true;default false) minfds=1024 ; (min. avail startup file descriptors;default 1024) minprocs=200 ; (min. avail process descriptors;default 200) ;umask=022 ; (process file creation umask;default 022) ;user=chrism ; (default is current user, required if root) ;identifier=supervisor ; (supervisord identifier, default is 'supervisor') ;directory=/tmp ; (default is not to cd during start) ;nocleanup=true ; (don't clean up tempfiles at start;default false) ;childlogdir=/tmp ; ('AUTO' child log dir, default $TEMP) ;environment=KEY=\"value\" ; (key value pairs to add to environment) ;strip_ansi=false ; (strip ansi escape codes in logs; def. false) ; the below section must remain in the config file for RPC |\n|  |",
+    "metadata": {
+      "page_num": 42,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00070"
+  },
+  {
+    "content": "2.6 具体设置参数\n2.6 具体设置参数\n详见我行自制安装包conf目录中的各个配置文件和上线前检查表格。\nredis参数设置技巧列表： 1. Daemonize 这个参数在使用supervisord这种进程管理工具时一定要设置为no，否\n则无法使用这些工具将redis启动。\n1.\nDir RDB的位置，一定要事先创建好，并且启动redis 的用户对此目录要有读写权限。\n2.\nInclude 如果是多实例的话可以将公共的设置放在一个conf文件中，然后引用即可： include /redis/conf/\nredis-common.conf\n第 5 章 5. 上线部署规划 | 41",
+    "metadata": {
+      "page_num": 42,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00071"
+  },
+  {
+    "content": "|  |\n| --- |\n| ; (supervisorctl/web interface) to work, additional interfaces may be ; added by defining them in separate rpcinterface: sections [rpcinterface:supervisor] supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface [supervisorctl] serverurl=unix:///smsred/redis-3.0.4/run/supervisor.sock ; use a unix:// URL for a unix socket ;serverurl=http://127.0.0.1:9001 ; use an http:// url to specify an inet socket ;username=chris ; should be same as http_username if set ;password=123 ; should be same as http_password if set ;prompt=mysupervisor ; cmd line prompt (default \"supervisor\") ;history_file=~/.sc_history ; use readline history if available ; The below sample program section shows all possible program subsection values, ; create one or more 'real' program: sections to be able to control them under ; supervisor. ;[program:theprogramname] ;command=/bin/cat ; the program (relative uses PATH, can take args) ;process_name=%(program_name)s ; process_name expr (default %(program_name)s) ;numprocs=1 ; number of processes copies to start (def 1) ;directory=/tmp ; directory to cwd to before exec (def no cwd) ;umask=022 ; umask for process (default None) ;priority=999 ; the relative start priority (default 999) ;autostart=true ; start at supervisord start (default: true) ;autorestart=unexpected ; whether/when to restart (default: unexpected) ;startsecs=1 ; number of secs prog must stay running (def. 1) ;startretries=3 ; max # of serial start failures (default 3) ;exitcodes=0,2 ; 'expected' exit codes for process (default 0,2) ;stopsignal=QUIT ; signal used to kill process (default TERM) ;stopwaitsecs=10 ; max num secs to wait b4 SIGKILL (default 10) ;stopasgroup=false ; send stop signal to the UNIX process group (default false) ;killasgroup=false ; SIGKILL the UNIX process group (def false) ;user=chrism ; setuid to this UNIX account to run the program ;redirect_stderr=true ; redirect proc stderr to stdout (default false) ;stdout_logfile=/a/path ; stdout log path, NONE for none; default AUTO ;stdout_logfile_maxbytes=1MB ; max # logfile bytes b4 rotation (default 50MB) ;stdout_logfile_backups=10 ; # of stdout logfile backups (default 10) ;stdout_capture_maxbytes=1MB ; number of bytes in 'capturemode' (default 0) ;stdout_events_enabled=false ; emit events on stdout writes (default false) ;stderr_logfile=/a/path ; stderr log path, NONE for none; default AUTO ;stderr_logfile_maxbytes=1MB ; max # logfile bytes b4 rotation (default 50MB) ;stderr_logfile_backups=10 ; # of stderr logfile backups (default 10) ;stderr_capture_maxbytes=1MB ; number of bytes in 'capturemode' (default 0) ;stderr_events_enabled=false ; emit events on stderr writes (default false) |\n|  |",
+    "metadata": {
+      "page_num": 43,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00072"
+  },
+  {
+    "content": "2.7 其他好用的配置技巧\n2.7 其他好用的配置技巧\n2.7.1 使用supervisord进行进程管理\n2.7.1 使用supervisord进行进程管理\nSupervisord是一个优秀的进程管理工具，一般在部署redis时采用它来进行redis、sentinel等进程的管理，一个\n已经在生产环境采用的supervisord配置文件如下： ; Sample supervisor config file. ; ; For more informa\ntion on the config file, please see: ; http://supervisord.org/configuration.html ; ; Notes: ; - She\nll expansion (\"~\" or \"$HOME\") is not supported. Environment ; variables can be expanded using this\nsyntax: \"%(ENV_HOME)s\". ; - Comments must have a leading space: \"a=b ;comment\" not \"a=b;comment\".\n[unix_http_server]\nfile=/smsred/redis-3.0.4/run/supervisor.sock ; (the path to the socket file)\n;chmod=0700 ; socket file mode (default 0700)\n;chown=nobody:nogroup ; socket file uid:gid owner\n;username=user ; (default is no username (open server))\n;password=123 ; (default is no password (open server))\n;[inet_http_server] ; inet (TCP) server disabled by default\n;port=127.0.0.1:9001 ; (ip_address:port specifier, *:port for all iface)\n;username=user ; (default is no username (open server))\n;password=123 ; (default is no password (open server))\n[supervisord]\nlogfile=/smsred/redis-3.0.4/log/supervisord.log ; (main log file;default $CWD/supervisord.log)\nlogfile_maxbytes=50MB ; (max main logfile bytes b4 rotation;default 50MB)\nlogfile_backups=10 ; (num of main logfile rotation backups;default 10)\nloglevel=info ; (log level;default info; others: debug,warn,trace)\npidfile=/smsred/redis-3.0.4/run/supervisord.pid ; (supervisord pidfile;default supervisord.pid)\nnodaemon=false ; (start in foreground if true;default false)\nminfds=1024 ; (min. avail startup file descriptors;default 1024)\nminprocs=200 ; (min. avail process descriptors;default 200)\n;umask=022 ; (process file creation umask;default 022)\n;user=chrism ; (default is current user, required if root)\n;identifier=supervisor ; (supervisord identifier, default is 'supervisor')\n;directory=/tmp ; (default is not to cd during start)\n;nocleanup=true ; (don't clean up tempfiles at start;default false)\n;childlogdir=/tmp ; ('AUTO' child log dir, default $TEMP)\n;environment=KEY=\"value\" ; (key value pairs to add to environment)\n;strip_ansi=false ; (strip ansi escape codes in logs; def. false)\n; the below section must remain in the config file for RPC\n第 5 章 5. 上线部署规划 | 42",
+    "metadata": {
+      "page_num": 43,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00073"
+  },
+  {
+    "content": "|  |\n| --- |\n| ;environment=A=\"1\",B=\"2\" ; process environment additions (def no adds) ;serverurl=AUTO ; override serverurl computation (childutils) ; The below sample eventlistener section shows all possible ; eventlistener subsection values, create one or more 'real' ; eventlistener: sections to be able to handle event notifications ; sent by supervisor. ;[eventlistener:theeventlistenername] ;command=/bin/eventlistener ; the program (relative uses PATH, can take args) ;process_name=%(program_name)s ; process_name expr (default %(program_name)s) ;numprocs=1 ; number of processes copies to start (def 1) ;events=EVENT ; event notif. types to subscribe to (req'd) ;buffer_size=10 ; event buffer queue size (default 10) ;directory=/tmp ; directory to cwd to before exec (def no cwd) ;umask=022 ; umask for process (default None) ;priority=-1 ; the relative start priority (default -1) ;autostart=true ; start at supervisord start (default: true) ;autorestart=unexpected ; whether/when to restart (default: unexpected) ;startsecs=1 ; number of secs prog must stay running (def. 1) ;startretries=3 ; max # of serial start failures (default 3) ;exitcodes=0,2 ; 'expected' exit codes for process (default 0,2) ;stopsignal=QUIT ; signal used to kill process (default TERM) ;stopwaitsecs=10 ; max num secs to wait b4 SIGKILL (default 10) ;stopasgroup=false ; send stop signal to the UNIX process group (default false) ;killasgroup=false ; SIGKILL the UNIX process group (def false) ;user=chrism ; setuid to this UNIX account to run the program ;redirect_stderr=true ; redirect proc stderr to stdout (default false) ;stdout_logfile=/a/path ; stdout log path, NONE for none; default AUTO ;stdout_logfile_maxbytes=1MB ; max # logfile bytes b4 rotation (default 50MB) ;stdout_logfile_backups=10 ; # of stdout logfile backups (default 10) ;stdout_events_enabled=false ; emit events on stdout writes (default false) ;stderr_logfile=/a/path ; stderr log path, NONE for none; default AUTO ;stderr_logfile_maxbytes=1MB ; max # logfile bytes b4 rotation (default 50MB) ;stderr_logfile_backups ; # of stderr logfile backups (default 10) ;stderr_events_enabled=false ; emit events on stderr writes (default false) ;environment=A=\"1\",B=\"2\" ; process environment additions ;serverurl=AUTO ; override serverurl computation (childutils) ; The below sample group section shows all possible group values, ; create one or more 'real' group: sections to create \"heterogeneous\" ; process groups. ;[group:thegroupname] ;programs=progname1,progname2 ; each refers to 'x' in [program:x] definitions |\n|  |",
+    "metadata": {
+      "page_num": 44,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00074"
+  },
+  {
+    "content": "; (supervisorctl/web interface) to work, additional interfaces may be\n; added by defining them in separate rpcinterface: sections\n[rpcinterface:supervisor]\nsupervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface\n[supervisorctl]\nserverurl=unix:///smsred/redis-3.0.4/run/supervisor.sock ; use a unix:// URL for a unix socket\n;serverurl=http://127.0.0.1:9001 ; use an http:// url to specify an inet socket\n;username=chris ; should be same as http_username if set\n;password=123 ; should be same as http_password if set\n;prompt=mysupervisor ; cmd line prompt (default \"supervisor\")\n;history_file=~/.sc_history ; use readline history if available\n; The below sample program section shows all possible program subsection values,\n; create one or more 'real' program: sections to be able to control them under\n; supervisor.\n;[program:theprogramname]\n;command=/bin/cat ; the program (relative uses PATH, can take args)\n;process_name=%(program_name)s ; process_name expr (default %(program_name)s)\n;numprocs=1 ; number of processes copies to start (def 1)\n;directory=/tmp ; directory to cwd to before exec (def no cwd)\n;umask=022 ; umask for process (default None)\n;priority=999 ; the relative start priority (default 999)\n;autostart=true ; start at supervisord start (default: true)\n;autorestart=unexpected ; whether/when to restart (default: unexpected)\n;startsecs=1 ; number of secs prog must stay running (def. 1)\n;startretries=3 ; max # of serial start failures (default 3)\n;exitcodes=0,2 ; 'expected' exit codes for process (default 0,2)\n;stopsignal=QUIT ; signal used to kill process (default TERM)\n;stopwaitsecs=10 ; max num secs to wait b4 SIGKILL (default 10)\n;stopasgroup=false ; send stop signal to the UNIX process group (default false)\n;killasgroup=false ; SIGKILL the UNIX process group (def false)\n;user=chrism ; setuid to this UNIX account to run the program\n;redirect_stderr=true ; redirect proc stderr to stdout (default false)\n;stdout_logfile=/a/path ; stdout log path, NONE for none; default AUTO\n;stdout_logfile_maxbytes=1MB ; max # logfile bytes b4 rotation (default 50MB)\n;stdout_logfile_backups=10 ; # of stdout logfile backups (default 10)\n;stdout_capture_maxbytes=1MB ; number of bytes in 'capturemode' (default 0)\n;stdout_events_enabled=false ; emit events on stdout writes (default false)\n;stderr_logfile=/a/path ; stderr log path, NONE for none; default AUTO\n;stderr_logfile_maxbytes=1MB ; max # logfile bytes b4 rotation (default 50MB)\n;stderr_logfile_backups=10 ; # of stderr logfile backups (default 10)\n;stderr_capture_maxbytes=1MB ; number of bytes in 'capturemode' (default 0)\n;stderr_events_enabled=false ; emit events on stderr writes (default false)\n第 5 章 5. 上线部署规划 | 43",
+    "metadata": {
+      "page_num": 44,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00075"
+  },
+  {
+    "content": "|  |\n| --- |\n| ;priority=999 ; the relative start priority (default 999) ; The [include] section can just contain the \"files\" setting. This ; setting can list multiple files (separated by whitespace or ; newlines). It can also contain wildcards. The filenames are ; interpreted as relative to this file. Included files *cannot* ; include files themselves. ;[include] ;files = relative/directory/*.ini [program:redis-1xxx] command=/smsred/redis-3.0.4/bin/redis-server /smsred/redis-3.0.4/conf/redis-1xxx.conf autostart=true autorestart=false user=smsred stdout_logfile=/smsred/redis-3.0.4/log/redis-1xxx.out.log stderr_logfile=/smsred/redis-3.0.4/log/redis-1xxx.err.log priority=1000 [program:redis-1xxx] command=/smsred/redis-3.0.4/bin/redis-server /smsred/redis-3.0.4/conf/redis-1xxx.conf autostart=true autorestart=false user=smsred stdout_logfile=/smsred/redis-3.0.4/log/redis-1xxx.out.log stderr_logfile=/smsred/redis-3.0.4/log/redis-1xxx.err.log priority=1000 [program:redis-1xxx] command=/smsred/redis-3.0.4/bin/redis-server /smsred/redis-3.0.4/conf/redis-1xxx.conf autostart=true autorestart=false user=smsred stdout_logfile=/smsred/redis-3.0.4/log/redis-1xxx.out.log stderr_logfile=/smsred/redis-3.0.4/log/redis-1xxx.err.log priority=1000 [program:redis-sentinel] command =/smsred/redis-3.0.4/bin/redis-sentinel /smsred/redis-3.0.4/conf/sentinel.conf autostart=true autorestart=true startsecs=3 |\n|  |",
+    "metadata": {
+      "page_num": 45,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00076"
+  },
+  {
+    "content": ";environment=A=\"1\",B=\"2\" ; process environment additions (def no adds)\n;serverurl=AUTO ; override serverurl computation (childutils)\n; The below sample eventlistener section shows all possible\n; eventlistener subsection values, create one or more 'real'\n; eventlistener: sections to be able to handle event notifications\n; sent by supervisor.\n;[eventlistener:theeventlistenername]\n;command=/bin/eventlistener ; the program (relative uses PATH, can take args)\n;process_name=%(program_name)s ; process_name expr (default %(program_name)s)\n;numprocs=1 ; number of processes copies to start (def 1)\n;events=EVENT ; event notif. types to subscribe to (req'd)\n;buffer_size=10 ; event buffer queue size (default 10)\n;directory=/tmp ; directory to cwd to before exec (def no cwd)\n;umask=022 ; umask for process (default None)\n;priority=-1 ; the relative start priority (default -1)\n;autostart=true ; start at supervisord start (default: true)\n;autorestart=unexpected ; whether/when to restart (default: unexpected)\n;startsecs=1 ; number of secs prog must stay running (def. 1)\n;startretries=3 ; max # of serial start failures (default 3)\n;exitcodes=0,2 ; 'expected' exit codes for process (default 0,2)\n;stopsignal=QUIT ; signal used to kill process (default TERM)\n;stopwaitsecs=10 ; max num secs to wait b4 SIGKILL (default 10)\n;stopasgroup=false ; send stop signal to the UNIX process group (default false)\n;killasgroup=false ; SIGKILL the UNIX process group (def false)\n;user=chrism ; setuid to this UNIX account to run the program\n;redirect_stderr=true ; redirect proc stderr to stdout (default false)\n;stdout_logfile=/a/path ; stdout log path, NONE for none; default AUTO\n;stdout_logfile_maxbytes=1MB ; max # logfile bytes b4 rotation (default 50MB)\n;stdout_logfile_backups=10 ; # of stdout logfile backups (default 10)\n;stdout_events_enabled=false ; emit events on stdout writes (default false)\n;stderr_logfile=/a/path ; stderr log path, NONE for none; default AUTO\n;stderr_logfile_maxbytes=1MB ; max # logfile bytes b4 rotation (default 50MB)\n;stderr_logfile_backups ; # of stderr logfile backups (default 10)\n;stderr_events_enabled=false ; emit events on stderr writes (default false)\n;environment=A=\"1\",B=\"2\" ; process environment additions\n;serverurl=AUTO ; override serverurl computation (childutils)\n; The below sample group section shows all possible group values,\n; create one or more 'real' group: sections to create \"heterogeneous\"\n; process groups.\n;[group:thegroupname]\n;programs=progname1,progname2 ; each refers to 'x' in [program:x] definitions\n第 5 章 5. 上线部署规划 | 44",
+    "metadata": {
+      "page_num": 45,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00077"
+  },
+  {
+    "content": "| 22..77..22 使使用用aalliiaass方方便便操操作作 如果开多实例，那么shell下进行操作的次数会很多，因此你需要一些alias进行命令的缩短，这个技巧并不高 深，但是很实用。一个实例如下： |\n| --- |\n| alias cli1='$HOME/redis-3.0.4/bin/redis-cli -a xxx -p 1xx' alias cli2='$HOME/redis-3.0.4/bin/redis-cli -a xxx -p 1xx' alias cli3='$HOME/redis-3.0.4/bin/redis-cli -a xxx -p 1xx' alias clis='$HOME/redis-3.0.4/bin/redis-cli -p 26379' alias sctl='supervisorctl -c $HOME/redis-3.0.4/conf/redis-supervisord.conf ' alias sstart='supervisord -c $HOME/redis-3.0.4/conf/redis-supervisord.conf' alias see='pdsh -R ssh -w MSMSRED[1-3],PSMSRED1,PSMSAPP1 \"/usr/local/bin/supervisorctl -c /smsred/redis-3 |\n| 22..77..33 使使用用ppddsshh//ppddccpp进进行行多多机机器器操操作作 Pdsh/pdcp是一个python ssh多机操作的工具，在部署中可以采用它进行多机的同一操作批量执行，注意编译的时 候把ssh编译进去，在执行时指定ssh模式，一个查看多机supervisord管理进程的命令实例如下： |\n| pdsh -R ssh -w MSMSRED[1-3],PSMSRED1,PSMSAPP1 \"/usr/local/bin/supervisorctl -c /smsred/redis-3.0.4/conf/r |\n| 前提是你这些机器已经建立了ssh互信。建立互信可以用下边这个脚本 |\n| #!/bin/bash #2015-12-08 #author gnuhpc expect -c \"spawn ssh-keygen -t rsa expect { \\\":\\\" {send \\\"\\r\\\"; exp_continue} \\\"*(y/n)*\\\" {send \\\"y\\r\\\"; exp_continue} } \" for p in $(cat ip.cfg) do ip=$(echo \"$p\"|cut -f1 -d\":\") username=$(echo \"$p\"|cut -f2 -d\":\") password=$(echo \"$p\"|cut -f3 -d\":\") echo $password expect -c \" spawn ssh-copy-id ${username}@$ip |",
+    "metadata": {
+      "page_num": 46,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00078"
+  },
+  {
+    "content": ";priority=999 ; the relative start priority (default 999)\n; The [include] section can just contain the \"files\" setting. This\n; setting can list multiple files (separated by whitespace or\n; newlines). It can also contain wildcards. The filenames are\n; interpreted as relative to this file. Included files *cannot*\n; include files themselves.\n;[include]\n;files = relative/directory/*.ini\n[program:redis-1xxx]\ncommand=/smsred/redis-3.0.4/bin/redis-server /smsred/redis-3.0.4/conf/redis-1xxx.conf\nautostart=true\nautorestart=false\nuser=smsred\nstdout_logfile=/smsred/redis-3.0.4/log/redis-1xxx.out.log\nstderr_logfile=/smsred/redis-3.0.4/log/redis-1xxx.err.log\npriority=1000\n[program:redis-1xxx]\ncommand=/smsred/redis-3.0.4/bin/redis-server /smsred/redis-3.0.4/conf/redis-1xxx.conf\nautostart=true\nautorestart=false\nuser=smsred\nstdout_logfile=/smsred/redis-3.0.4/log/redis-1xxx.out.log\nstderr_logfile=/smsred/redis-3.0.4/log/redis-1xxx.err.log\npriority=1000\n[program:redis-1xxx]\ncommand=/smsred/redis-3.0.4/bin/redis-server /smsred/redis-3.0.4/conf/redis-1xxx.conf\nautostart=true\nautorestart=false\nuser=smsred\nstdout_logfile=/smsred/redis-3.0.4/log/redis-1xxx.out.log\nstderr_logfile=/smsred/redis-3.0.4/log/redis-1xxx.err.log\npriority=1000\n[program:redis-sentinel]\ncommand =/smsred/redis-3.0.4/bin/redis-sentinel /smsred/redis-3.0.4/conf/sentinel.conf\nautostart=true\nautorestart=true\nstartsecs=3\n第 5 章 5. 上线部署规划 | 45",
+    "metadata": {
+      "page_num": 46,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00079"
+  },
+  {
+    "content": "|  |\n| --- |\n| expect { \\\"*yes/no*\\\" {send \\\"yes\\r\\\"; exp_continue} \\\"*(y/n)*\\\" {send \\\"y\\r\\\"; exp_continue} \\\"*password*\\\" {send \\\"$password\\r\\\"; exp_continue} \\\"*Password*\\\" {send \\\"$password\\r\\\"; exp_continue} } \" expect -c \" spawn ssh ${username}@$ip \"hostname\" expect { \\\"*yes/no*\\\" {send \\\"yes\\r\\\"; exp_continue} \\\"*password*\\\" {send \\\"$password\\r\\\"; exp_continue} \\\"*(y/n)*\\\" {send \\\"y\\r\\\"; exp_continue} \\\"*Password*\\\" {send \\\"$password\\r\\\";} } \" done |\n| 指定一个ip.cfg，里面的格式为：IP（主机名也行，只要能解析）:用户名:密码 例如： |\n| xxxx.139:username:password xxxx.140:username:password xxxx.141:username:password xxxx.142:username:password xxxx.137:username:password |\n| 2.7.4 使用脚本进行sentinel配置文件的备份 Sentinel在启动、切换时会对config文件进行rewrite，在上线前或者某些手动维护后你可能希望把conf文件都变 为最初，当系统中有很多redis实例时，这个手工操作会让人疯掉，那不妨写个脚本在配置好sentinel和redis后 不启动先备份一下，测试完毕后再恢复。 一个简单的备份脚本如下： |\n| backupconf.sh #!/bin/bash for i in `find ~/redis-3.0.4/conf -name *.conf` do cp -v $i ${i}.bak done |\n| 恢复脚本： |\n| recoveryconf.sh #!/bin/bash for i in `find ~/redis-3.0.4/conf -name *.conf.bak` |\n|  |",
+    "metadata": {
+      "page_num": 47,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00080"
+  },
+  {
+    "content": "2.7.2 使用alias方便操作\n2.7.2 使用alias方便操作\n如果开多实例，那么shell下进行操作的次数会很多，因此你需要一些alias进行命令的缩短，这个技巧并不高\n深，但是很实用。一个实例如下：\nalias cli1='$HOME/redis-3.0.4/bin/redis-cli -a xxx -p 1xx'\nalias cli2='$HOME/redis-3.0.4/bin/redis-cli -a xxx -p 1xx'\nalias cli3='$HOME/redis-3.0.4/bin/redis-cli -a xxx -p 1xx'\nalias clis='$HOME/redis-3.0.4/bin/redis-cli -p 26379'\nalias sctl='supervisorctl -c $HOME/redis-3.0.4/conf/redis-supervisord.conf '\nalias sstart='supervisord -c $HOME/redis-3.0.4/conf/redis-supervisord.conf'\nalias see='pdsh -R ssh -w MSMSRED[1-3],PSMSRED1,PSMSAPP1 \"/usr/local/bin/supervisorctl -c /smsred/redis-3.0.4/conf/redi\n2.7.3 使用pdsh/pdcp进行多机器操作\n2.7.3 使用pdsh/pdcp进行多机器操作\nPdsh/pdcp是一个python ssh多机操作的工具，在部署中可以采用它进行多机的同一操作批量执行，注意编译的时\n候把ssh编译进去，在执行时指定ssh模式，一个查看多机supervisord管理进程的命令实例如下：\npdsh -R ssh -w MSMSRED[1-3],PSMSRED1,PSMSAPP1 \"/usr/local/bin/supervisorctl -c /smsred/redis-3.0.4/conf/redis-superviso\n前提是你这些机器已经建立了ssh互信。建立互信可以用下边这个脚本\n#!/bin/bash\n#2015-12-08\n#author gnuhpc\nexpect -c \"spawn ssh-keygen -t rsa\nexpect {\n\\\":\\\" {send \\\"\\r\\\"; exp_continue}\n\\\"*(y/n)*\\\" {send \\\"y\\r\\\"; exp_continue}\nfor p in $(cat ip.cfg)\ndo\nip=$(echo \"$p\"|cut -f1 -d\":\")\nusername=$(echo \"$p\"|cut -f2 -d\":\")\npassword=$(echo \"$p\"|cut -f3 -d\":\")\necho $password\nexpect -c \"\nspawn ssh-copy-id ${username}@$ip\n第 5 章 5. 上线部署规划 | 46",
+    "metadata": {
+      "page_num": 47,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00081"
+  },
+  {
+    "content": "|  |\n| --- |\n| do cp -v $i ${i%.*} done |\n|  |",
+    "metadata": {
+      "page_num": 48,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00082"
+  },
+  {
+    "content": "expect {\n\\\"*yes/no*\\\" {send \\\"yes\\r\\\"; exp_continue}\n\\\"*(y/n)*\\\" {send \\\"y\\r\\\"; exp_continue}\n\\\"*password*\\\" {send \\\"$password\\r\\\"; exp_continue}\n\\\"*Password*\\\" {send \\\"$password\\r\\\"; exp_continue}\nexpect -c \"\nspawn ssh ${username}@$ip \"hostname\"\nexpect {\n\\\"*yes/no*\\\" {send \\\"yes\\r\\\"; exp_continue}\n\\\"*password*\\\" {send \\\"$password\\r\\\"; exp_continue}\n\\\"*(y/n)*\\\" {send \\\"y\\r\\\"; exp_continue}\n\\\"*Password*\\\" {send \\\"$password\\r\\\";}\ndone\n指定一个ip.cfg，里面的格式为：IP（主机名也行，只要能解析）:用户名:密码 例如：\nxxxx.139:username:password\nxxxx.140:username:password\nxxxx.141:username:password\nxxxx.142:username:password\nxxxx.137:username:password\n2.7.4 使用脚本进行sentinel配置文件的备份\nSentinel在启动、切换时会对config文件进行rewrite，在上线前或者某些手动维护后你可能希望把conf文件都变\n为最初，当系统中有很多redis实例时，这个手工操作会让人疯掉，那不妨写个脚本在配置好sentinel和redis后\n不启动先备份一下，测试完毕后再恢复。\n一个简单的备份脚本如下：\nbackupconf.sh\n#!/bin/bash\nfor i in `find ~/redis-3.0.4/conf -name *.conf`\ndo\ncp -v $i ${i}.bak\ndone\n恢复脚本：\nrecoveryconf.sh\n#!/bin/bash\nfor i in `find ~/redis-3.0.4/conf -name *.conf.bak`\n第 5 章 5. 上线部署规划 | 47",
+    "metadata": {
+      "page_num": 48,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00083"
+  },
+  {
+    "content": "|  |\n| --- |\n| 66 |",
+    "metadata": {
+      "page_num": 49,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00084"
+  },
+  {
+    "content": "| 33..22 停停止止 |\n| --- |\n|  |\n| redis-cli shutdown |\n| sentinel方法一样，只是需要执行sentinel的连接端口 注意：正确关闭服务器方式是redis-cli shutdown 或者 kill，都会graceful shutdown，保证写RDB文件以及将 AOF文件fsync到磁盘，不会丢失数据。 如果是粗暴的Ctrl+C，或者kill -9 就可能丢失。如果有配置save，还 希望在shutdown时进行RDB写入，那么请使用shutdown save命令。 |",
+    "metadata": {
+      "page_num": 51,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00085"
+  },
+  {
+    "content": "3.1 启动\n3.1 启动\n3.1.1 启动redis\n3.1.1 启动redis\n$ redis-server redis.conf\n常见选项： ./redis-server (run the server with default conf) ./redis-server /etc/redis/6379.conf\n./redis-server --port 7777 ./redis-server --port 7777 --slaveof 127.0.0.1 8888 ./redis-server /etc/\nmyredis.conf --loglevel verbose\n3.1.2 启动redis-sentinel\n3.1.2 启动redis-sentinel\n./redis-server /etc/sentinel.conf –sentinel\n./redis-sentinel /etc/sentinel.conf\n部署后可以使用sstart对redis 和sentinel进行拉起，使用sctl进行supervisorctl的控制。（两个alias）\n第 6 章 6. 常见运维操作 | 50",
+    "metadata": {
+      "page_num": 51,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00086"
+  },
+  {
+    "content": "| 33..33 查查看看和和修修改改配配置置 |\n| --- |\n| 查看： |\n| config get ：获取服务器配置信息。 redis 127.0.0.1:6379> config get dir config get *：查看所有配置 |\n| 修改： |\n| 临时设置：config set 永久设置：config rewrite，将目前服务器的参数配置写入redis conf. |\n|  |",
+    "metadata": {
+      "page_num": 52,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00087"
+  },
+  {
+    "content": "3.2 停止\n3.2 停止\nredis-cli shutdown\nsentinel方法一样，只是需要执行sentinel的连接端口\n注意：正确关闭服务器方式是redis-cli shutdown 或者 kill，都会graceful shutdown，保证写RDB文件以及将\nAOF文件fsync到磁盘，不会丢失数据。 如果是粗暴的Ctrl+C，或者kill -9 就可能丢失。如果有配置save，还\n希望在shutdown时进行RDB写入，那么请使用shutdown save命令。\n第 6 章 6. 常见运维操作 | 51",
+    "metadata": {
+      "page_num": 52,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00088"
+  },
+  {
+    "content": "| 33..44 批批量量执执行行操操作作 |\n| --- |\n| 使用telnet也可以连接redis-server。并且在脚本中使用nc命令进行redis操作也是很有效的： |\n| gnuhpc@gnuhpc:~$ (echo -en \"ping\\r\\nset key abc\\r\\nget key\\r\\n\";sleep 1) | nc 127.0.0.1 6379 +PONG +OK $3 abc |\n| 另一个方式是使用pipeline： |\n| 在一个脚本中批量执行多个写入操作: 先把插入操作放入操作文本insert.dat： set a b set 1 2 set h w set f u 然后执行命令:cat insert.bat | ./redis-cli --pipe，或者如下脚本： #!/bin/sh host=$1 port=$； password=$3 cat insert.dat | ./redis-cli -h $host -p $port -a $password --pipe |\n|  |",
+    "metadata": {
+      "page_num": 53,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00089"
+  },
+  {
+    "content": "3.3 查看和修改配置\n3.3 查看和修改配置\n查看：\nconfig get ：获取服务器配置信息。\nredis 127.0.0.1:6379> config get dir\nconfig get *：查看所有配置\n修改：\n临时设置：config set\n永久设置：config rewrite，将目前服务器的参数配置写入redis conf.\n第 6 章 6. 常见运维操作 | 52",
+    "metadata": {
+      "page_num": 53,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00090"
+  },
+  {
+    "content": "| 33..55 选选择择数数据据库库 |\n| --- |\n|  |\n| select db-index |\n| 默认连接的数据库所有是0,默认数据库数是16个。返回1表示成功，0失败 3.6 清空数据库 |\n| flushdb |\n| 删除当前选择数据库中的所有 key。生产上已经禁止。 |\n| flushall |\n| 删除所有的数据库。生产上已经禁止。 |",
+    "metadata": {
+      "page_num": 54,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00091"
+  },
+  {
+    "content": "3.4 批量执行操作\n3.4 批量执行操作\n使用telnet也可以连接redis-server。并且在脚本中使用nc命令进行redis操作也是很有效的：\ngnuhpc@gnuhpc:~$ (echo -en \"ping\\r\\nset key abc\\r\\nget key\\r\\n\";sleep 1) | nc 127.0.0.1 6379\n+PONG\n+OK\n$3\nabc\n另一个方式是使用pipeline：\n在一个脚本中批量执行多个写入操作:\n先把插入操作放入操作文本insert.dat：\nset a b\nset 1 2\nset h w\nset f u\n然后执行命令:cat insert.bat | ./redis-cli --pipe，或者如下脚本：\n#!/bin/sh\nhost=$1\nport=$；\npassword=$3\ncat insert.dat | ./redis-cli -h $host -p $port -a $password --pipe\n第 6 章 6. 常见运维操作 | 53",
+    "metadata": {
+      "page_num": 54,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00092"
+  },
+  {
+    "content": "| 33..77 重重命命名名命命令令 |\n| --- |\n|  |\n| rename-command |\n| 例如：rename-command FLUSHALL \"\"。必须重启。 |",
+    "metadata": {
+      "page_num": 55,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00093"
+  },
+  {
+    "content": "3.5 选择数据库\n3.5 选择数据库\nselect db-index\n默认连接的数据库所有是0,默认数据库数是16个。返回1表示成功，0失败\n3.6 清空数据库\nflushdb\n删除当前选择数据库中的所有 key。生产上已经禁止。\nflushall\n删除所有的数据库。生产上已经禁止。\n第 6 章 6. 常见运维操作 | 54",
+    "metadata": {
+      "page_num": 55,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00094"
+  },
+  {
+    "content": "| 33..88 执执行行lluuaa脚脚本本 |\n| --- |\n|  |\n| --eval |\n| 例如： redis-cli --eval myscript.lua key1 key2 , arg1 arg2 arg3 |",
+    "metadata": {
+      "page_num": 56,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00095"
+  },
+  {
+    "content": "| 33..99 设设置置密密码码 |\n| --- |\n|  |\n| config set requirepass [passw0rd] |\n|  |",
+    "metadata": {
+      "page_num": 57,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00096"
+  },
+  {
+    "content": "3.8 执行lua脚本\n3.8 执行lua脚本\n--eval\n例如： redis-cli --eval myscript.lua key1 key2 , arg1 arg2 arg3\n第 6 章 6. 常见运维操作 | 56",
+    "metadata": {
+      "page_num": 57,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00097"
+  },
+  {
+    "content": "| 33..1100 验验证证密密码码 |\n| --- |\n|  |\n| auth passw0rd |\n|  |",
+    "metadata": {
+      "page_num": 58,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00098"
+  },
+  {
+    "content": "| 33..1111 性性能能测测试试命命令令 |\n| --- |\n|  |\n| redis-benchmark -q -r 100000 -n 100000 -c 50 |\n| 比如：开100条线程(默认50)，SET 1千万次(key在0-1千万间随机)，key长21字节，value长256字节的数据。-r指 的是使用随机key的范围。 |\n| redis-benchmark -t SET -c 100 -n 10000000 -r 10000000 -d 256 |\n| 也可以直接执行lua脚本模拟客户端 |\n| redis-benchmark -n 100000 -q script load \"redis.call('set','foo','bar')\" |\n| 注意：Redis-Benchmark的测试结果提供了一个保证你的 Redis-Server 不会运行在非正常状态下的基准点，但是 你永远不要把它作为一个真实的“压力测试”。压力测试需要反应出应用的运行方式，并且需要一个尽可能的和 生产相似的环境。 Redis-benchmark还有一个作用就是灌数据，例如下列测试场景，我们对某个系统常用redis API进行测试，下列 是一个测试hget、hset的过程，我们首先利用rraanndd__iinntt进行随机整数获取，对myhash这个key进行测试数据灌 入（这也就测试了hset性能），然后再对其进行hget： |\n| MSMSAPP1:/tmp # ./redis-benchmark -a pass -h 40.XXX.XXX.141 -p 16XXXX -r 500000 -n 500000 hset myhash __r ====== hset myhash __rand_int__ __rand_int__ ====== 500000 requests completed in 18.74 seconds 50 parallel clients 3 bytes payload keep alive: 1 23.53% <= 1 milliseconds 95.84% <= 2 milliseconds 97.62% <= 3 milliseconds 97.71% <= 4 milliseconds 97.80% <= 5 milliseconds 97.84% <= 6 milliseconds 97.84% <= 8 milliseconds 97.85% <= 9 milliseconds 97.85% <= 10 milliseconds 97.85% <= 11 milliseconds 97.86% <= 12 milliseconds 97.88% <= 13 milliseconds 97.90% <= 14 milliseconds 97.92% <= 15 milliseconds |\n|  |",
+    "metadata": {
+      "page_num": 59,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00099"
+  },
+  {
+    "content": "|  |\n| --- |\n| 97.94% <= 16 milliseconds 97.94% <= 20 milliseconds 97.95% <= 21 milliseconds 97.95% <= 22 milliseconds 97.99% <= 23 milliseconds 98.01% <= 24 milliseconds 98.11% <= 25 milliseconds 98.43% <= 26 milliseconds 98.85% <= 27 milliseconds 99.17% <= 28 milliseconds 99.43% <= 29 milliseconds 99.54% <= 30 milliseconds 99.68% <= 31 milliseconds 99.77% <= 32 milliseconds 99.81% <= 33 milliseconds 99.85% <= 34 milliseconds 99.85% <= 35 milliseconds 99.87% <= 36 milliseconds 99.88% <= 37 milliseconds 99.89% <= 38 milliseconds 99.90% <= 39 milliseconds 99.90% <= 40 milliseconds 99.91% <= 44 milliseconds 99.91% <= 45 milliseconds 99.91% <= 46 milliseconds 99.92% <= 47 milliseconds 99.92% <= 48 milliseconds 99.93% <= 49 milliseconds 99.93% <= 50 milliseconds 99.95% <= 51 milliseconds 99.96% <= 52 milliseconds 99.96% <= 53 milliseconds 99.97% <= 54 milliseconds 99.98% <= 55 milliseconds 100.00% <= 55 milliseconds 26679.47 requests per second MSMSAPP1:/tmp # ./redis-benchmark -a pass 40.XXX.XXX.141 -p 16XXXX -r 500000 -n 500000 hget myhash __rand ====== hget myhash __rand_int__ __rand_int__ ====== 500000 requests completed in 13.83 seconds 50 parallel clients 3 bytes payload keep alive: 1 74.29% <= 1 milliseconds |\n|  |",
+    "metadata": {
+      "page_num": 60,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00100"
+  },
+  {
+    "content": "3.11 性能测试命令\n3.11 性能测试命令\nredis-benchmark -q -r 100000 -n 100000 -c 50\n比如：开100条线程(默认50)，SET 1千万次(key在0-1千万间随机)，key长21字节，value长256字节的数据。-r指\n的是使用随机key的范围。\nredis-benchmark -t SET -c 100 -n 10000000 -r 10000000 -d 256\n也可以直接执行lua脚本模拟客户端\nredis-benchmark -n 100000 -q script load \"redis.call('set','foo','bar')\"\n注意：Redis-Benchmark的测试结果提供了一个保证你的 Redis-Server 不会运行在非正常状态下的基准点，但是\n你永远不要把它作为一个真实的“压力测试”。压力测试需要反应出应用的运行方式，并且需要一个尽可能的和\n生产相似的环境。\nRedis-benchmark还有一个作用就是灌数据，例如下列测试场景，我们对某个系统常用redis API进行测试，下列\n是一个测试hget、hset的过程，我们首先利用rand_int\nrand_int进行随机整数获取，对myhash这个key进行测试数据灌\n入（这也就测试了hset性能），然后再对其进行hget：\nMSMSAPP1:/tmp # ./redis-benchmark -a pass -h 40.XXX.XXX.141 -p 16XXXX -r 500000 -n 500000 hset myhash __rand_int__ __ra\n====== hset myhash __rand_int__ __rand_int__ ======\n500000 requests completed in 18.74 seconds\n50 parallel clients\n3 bytes payload\nkeep alive: 1\n23.53% <= 1 milliseconds\n95.84% <= 2 milliseconds\n97.62% <= 3 milliseconds\n97.71% <= 4 milliseconds\n97.80% <= 5 milliseconds\n97.84% <= 6 milliseconds\n97.84% <= 8 milliseconds\n97.85% <= 9 milliseconds\n97.85% <= 10 milliseconds\n97.85% <= 11 milliseconds\n97.86% <= 12 milliseconds\n97.88% <= 13 milliseconds\n97.90% <= 14 milliseconds\n97.92% <= 15 milliseconds\n第 6 章 6. 常见运维操作 | 59",
+    "metadata": {
+      "page_num": 60,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00101"
+  },
+  {
+    "content": "|  |\n| --- |\n| 98.29% <= 2 milliseconds 98.45% <= 3 milliseconds 98.45% <= 4 milliseconds 98.45% <= 5 milliseconds 98.46% <= 11 milliseconds 98.46% <= 12 milliseconds 98.48% <= 15 milliseconds 98.49% <= 16 milliseconds 98.50% <= 22 milliseconds 98.50% <= 23 milliseconds 98.57% <= 24 milliseconds 98.81% <= 25 milliseconds 99.16% <= 26 milliseconds 99.45% <= 27 milliseconds 99.71% <= 28 milliseconds 99.84% <= 29 milliseconds 99.91% <= 30 milliseconds 99.94% <= 31 milliseconds 99.94% <= 32 milliseconds 99.95% <= 33 milliseconds 99.96% <= 34 milliseconds 99.96% <= 44 milliseconds 99.96% <= 45 milliseconds 99.97% <= 49 milliseconds 99.97% <= 50 milliseconds 99.99% <= 55 milliseconds 100.00% <= 56 milliseconds 100.00% <= 56 milliseconds 36145.45 requests per second |\n| 注意：上述测试由于是取的随机值，因此hget可能没有命中，同时payload比较小，所以这是个极限性能。 另外，还有一个工具是RedisLab放出来的，我并没有进行测试 参见：https://github.com/RedisLabs/memtier_b enchmark |",
+    "metadata": {
+      "page_num": 61,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00102"
+  },
+  {
+    "content": "97.94% <= 16 milliseconds\n97.94% <= 20 milliseconds\n97.95% <= 21 milliseconds\n97.95% <= 22 milliseconds\n97.99% <= 23 milliseconds\n98.01% <= 24 milliseconds\n98.11% <= 25 milliseconds\n98.43% <= 26 milliseconds\n98.85% <= 27 milliseconds\n99.17% <= 28 milliseconds\n99.43% <= 29 milliseconds\n99.54% <= 30 milliseconds\n99.68% <= 31 milliseconds\n99.77% <= 32 milliseconds\n99.81% <= 33 milliseconds\n99.85% <= 34 milliseconds\n99.85% <= 35 milliseconds\n99.87% <= 36 milliseconds\n99.88% <= 37 milliseconds\n99.89% <= 38 milliseconds\n99.90% <= 39 milliseconds\n99.90% <= 40 milliseconds\n99.91% <= 44 milliseconds\n99.91% <= 45 milliseconds\n99.91% <= 46 milliseconds\n99.92% <= 47 milliseconds\n99.92% <= 48 milliseconds\n99.93% <= 49 milliseconds\n99.93% <= 50 milliseconds\n99.95% <= 51 milliseconds\n99.96% <= 52 milliseconds\n99.96% <= 53 milliseconds\n99.97% <= 54 milliseconds\n99.98% <= 55 milliseconds\n100.00% <= 55 milliseconds\n26679.47 requests per second\nMSMSAPP1:/tmp # ./redis-benchmark -a pass 40.XXX.XXX.141 -p 16XXXX -r 500000 -n 500000 hget myhash __rand_int__ __rand_\n====== hget myhash __rand_int__ __rand_int__ ======\n500000 requests completed in 13.83 seconds\n50 parallel clients\n3 bytes payload\nkeep alive: 1\n74.29% <= 1 milliseconds\n第 6 章 6. 常见运维操作 | 60",
+    "metadata": {
+      "page_num": 61,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00103"
+  },
+  {
+    "content": "| 33..1122 RReeddiiss--ccllii命命令令行行其其他他操操作作 |\n| --- |\n| 11.. eecchhoo ：：在在命命令令行行打打印印一一些些内内容容 redis 127.0.0.1:6379> echo HongWan \"HongWan\" 22.. qquuiitt ：：退退出出连连接接。。 redis 127.0.0.1:6379> quit 33.. --xx选选项项从从标标准准输输入入（（ssttddiinn））读读取取最最后后一一个个参参数数。。 比比如如从从管管道道中中读读取取输输入入：： echo -en \"chen.qun\" | redis-cli -x set name 44.. --rr --ii -r 选项重复执行一个命令指定的次数。 -i 设置命令执行的间隔。 比如查看redis每秒执行的commands（qps） redis-cli -r 100 -i 1 info stats | grep instantaneous_ops_per_sec 这个选项在编写一些脚本时非常有用 55.. --cc：：开开启启rreeiiddiiss cclluusstteerr模模式式，，连连接接rreeddiiss cclluusstteerr节节点点时时候候使使用用。。 66.. ----rrddbb：：获获取取指指定定rreeddiiss实实例例的的rrddbb文文件件,,保保存存到到本本地地。。 redis-cli -h 192.168.44.16 -p 6379 --rdb 6379.rdb 77.. ----ssllaavvee 模拟slave从master上接收到的commands。slave上接收到的commands都是update操作，记录数据的更新行为。 88.. ----ppiippee 这个一个非常有用的参数。发送原始的redis protocl格式数据到服务器端执行。比如下面的形式的数据（linux 服务器上需要用unix2dos转化成dos文件）。 linux下默认的换行是\\n,windows系统的换行符是\\r\\n，redis使用 的是\\r\\n. echo -en '*3\\r\\n$3\\r\\nSET\\r\\n$3\\r\\nkey\\r\\n$5\\r\\nvalue\\r\\n' | redis-cli --pipe 99.. --aa 如果开启了requirepass，那么你如果希望调用或者自己编写一些外部脚本通过redis-cli进行操作或者监控redi s，那么这个选项可以让你不用再手动输入auth。这个选项很普遍，但是往往被人忽视。 |",
+    "metadata": {
+      "page_num": 62,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00104"
+  },
+  {
+    "content": "98.29% <= 2 milliseconds\n98.45% <= 3 milliseconds\n98.45% <= 4 milliseconds\n98.45% <= 5 milliseconds\n98.46% <= 11 milliseconds\n98.46% <= 12 milliseconds\n98.48% <= 15 milliseconds\n98.49% <= 16 milliseconds\n98.50% <= 22 milliseconds\n98.50% <= 23 milliseconds\n98.57% <= 24 milliseconds\n98.81% <= 25 milliseconds\n99.16% <= 26 milliseconds\n99.45% <= 27 milliseconds\n99.71% <= 28 milliseconds\n99.84% <= 29 milliseconds\n99.91% <= 30 milliseconds\n99.94% <= 31 milliseconds\n99.94% <= 32 milliseconds\n99.95% <= 33 milliseconds\n99.96% <= 34 milliseconds\n99.96% <= 44 milliseconds\n99.96% <= 45 milliseconds\n99.97% <= 49 milliseconds\n99.97% <= 50 milliseconds\n99.99% <= 55 milliseconds\n100.00% <= 56 milliseconds\n100.00% <= 56 milliseconds\n36145.45 requests per second\n注意：上述测试由于是取的随机值，因此hget可能没有命中，同时payload比较小，所以这是个极限性能。\n另外，还有一个工具是RedisLab放出来的，我并没有进行测试 参见：https://github.com/RedisLabs/memtier_b\nenchmark\n第 6 章 6. 常见运维操作 | 61",
+    "metadata": {
+      "page_num": 62,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00105"
+  },
+  {
+    "content": "| 66..1133 持持久久化化与与备备份份恢恢复复 |\n| --- |\n| 33..1133..11 RRDDBB相相关关操操作作 BGSAVE：后台子进程进行RDB持久化 SAVE：主进程进行RDB，生产环境千万别用，服务器将无法响应任何操作。 L ASTSAVE： 返回上一次成功SAVE的Unix时间 动态关闭RDB： |\n| redis-cli config set save \"\" |\n| 动态设置RDB： |\n| redis-cli config set save \"900 1\" |\n| 永久关闭RDB： |\n| sed -e '/save/ s/^#*/#/' -i /etc/redis/redis.conf |\n| 永久设置RDB： |\n| 在redis.conf中设置save选项 |\n| 查看RDB是否打开： |\n| redis-cli config get save |\n| 空的即是关闭，有数字的都是打开的。 33..1133..22 AAOOFF相相关关操操作作 |\n| BGREWRITEAOF |\n| 在后台执行一个 AOF文件重写操作 动态关闭AOF： |\n| redis-cli config set appendonly no |\n| 动态打开AOF： |\n| redis-cli config set appendonly yes |\n|  |",
+    "metadata": {
+      "page_num": 63,
+      "section": "前言 > 前言 > 目录 > 13. 可靠队列设计",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00106"
+  },
+  {
+    "content": "4. -r -i\n\n-r 选项重复执行一个命令指定的次数。 -i 设置命令执行的间隔。 比如查看redis每秒执行的commands（qps）\nredis-cli -r 100 -i 1 info stats | grep instantaneous_ops_per_sec 这个选项在编写一些脚本时非常有用",
+    "metadata": {
+      "page_num": 63,
+      "section": "前言 > 前言 > 目录 > 4. -r -i",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00107"
+  },
+  {
+    "content": "8. --pipe\n\n这个一个非常有用的参数。发送原始的redis protocl格式数据到服务器端执行。比如下面的形式的数据（linux\n服务器上需要用unix2dos转化成dos文件）。 linux下默认的换行是\\n,windows系统的换行符是\\r\\n，redis使用\n的是\\r\\n. echo -en '*3\\r\\n$3\\r\\nSET\\r\\n$3\\r\\nkey\\r\\n$5\\r\\nvalue\\r\\n' | redis-cli --pipe",
+    "metadata": {
+      "page_num": 63,
+      "section": "前言 > 前言 > 目录 > 8. --pipe",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00108"
+  },
+  {
+    "content": "9. -a\n\n如果开启了requirepass，那么你如果希望调用或者自己编写一些外部脚本通过redis-cli进行操作或者监控redi\ns，那么这个选项可以让你不用再手动输入auth。这个选项很普遍，但是往往被人忽视。\n第 6 章 6. 常见运维操作 | 62",
+    "metadata": {
+      "page_num": 63,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "title",
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00109"
+  },
+  {
+    "content": "| 永久关闭RDB： |\n| --- |\n| sed -e '/appendonly/ s/^#*/#/' -i /etc/redis/redis.conf （默认是关闭的） |\n| 永久打开RDB： |\n| 将appendonly yes设置在redis.conf中 |\n| 33..1133..33 备备份份 对于RDB和AOF，都是直接拷贝文件即可，可以设定crontab进行定时备份： cp /var/lib/redis/dump.rdb /somew here/safe/dump.$(date +%Y%m%d%H%M).rdb 33..1133..44 恢恢复复 如果只使用了RDB，则首先将redis-server停掉，删除dump.rdb，最后将备份的dump.rdb文件拷贝回data目录并修 改相关属主保证其属主和redis-server启动用户一致，然后启动redis-server。 如果是RDB+AOF的持久化，只需要将aof文件放入data目录，启动redis-server，查看是否恢复，如无法恢复则应 该将aof关闭后重启，redis就会从rdb进行恢复了，随后调用命令BGREWRITEAOF进行AOF文件写入，在info的aof_r ewrite_in_progress为0后一个新的aof文件就生成了，此时再将配置文件的aof打开，再次重启redis-server就可 以恢复了。注意先不要将dump.rdb放入data目录，否则会因为aof文件万一不可用，则rdb也不会被恢复进内 存，此时如果有新的请求进来后则原先的rdb文件被重写。 如果只配置了AOF，重启时加载AOF文件恢复数据。 恢复速度参见新浪的测试结果： |",
+    "metadata": {
+      "page_num": 64,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00110"
+  },
+  {
+    "content": "6.13 持久化与备份恢复\n6.13 持久化与备份恢复\n3.13.1 RDB相关操作\n3.13.1 RDB相关操作\nBGSAVE：后台子进程进行RDB持久化 SAVE：主进程进行RDB，生产环境千万别用，服务器将无法响应任何操作。 L\nASTSAVE： 返回上一次成功SAVE的Unix时间\n动态关闭RDB：\nredis-cli config set save \"\"\n动态设置RDB：\nredis-cli config set save \"900 1\"\n永久关闭RDB：\nsed -e '/save/ s/^#*/#/' -i /etc/redis/redis.conf\n永久设置RDB：\n在redis.conf中设置save选项\n查看RDB是否打开：\nredis-cli config get save\n空的即是关闭，有数字的都是打开的。\n3.13.2 AOF相关操作\n3.13.2 AOF相关操作\nBGREWRITEAOF\n在后台执行一个 AOF文件重写操作\n动态关闭AOF：\nredis-cli config set appendonly no\n动态打开AOF：\nredis-cli config set appendonly yes\n第 6 章 6. 常见运维操作 | 63",
+    "metadata": {
+      "page_num": 64,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00111"
+  },
+  {
+    "content": "| 这个结果是可信的，在一台SSD、4个CPU的虚拟机上测试为28.3G/s. 检查修复AOF文件： |\n| --- |\n| redis-check-aof data/appendonly.aof |\n|  |",
+    "metadata": {
+      "page_num": 65,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00112"
+  },
+  {
+    "content": "永久关闭RDB：\nsed -e '/appendonly/ s/^#*/#/' -i /etc/redis/redis.conf  （默认是关闭的）\n永久打开RDB：\n将appendonly yes设置在redis.conf中\n3.13.3 备份\n3.13.3 备份\n对于RDB和AOF，都是直接拷贝文件即可，可以设定crontab进行定时备份： cp /var/lib/redis/dump.rdb /somew\nhere/safe/dump.$(date +%Y%m%d%H%M).rdb\n3.13.4 恢复\n3.13.4 恢复\n如果只使用了RDB，则首先将redis-server停掉，删除dump.rdb，最后将备份的dump.rdb文件拷贝回data目录并修\n改相关属主保证其属主和redis-server启动用户一致，然后启动redis-server。\n如果是RDB+AOF的持久化，只需要将aof文件放入data目录，启动redis-server，查看是否恢复，如无法恢复则应\n该将aof关闭后重启，redis就会从rdb进行恢复了，随后调用命令BGREWRITEAOF进行AOF文件写入，在info的aof_r\newrite_in_progress为0后一个新的aof文件就生成了，此时再将配置文件的aof打开，再次重启redis-server就可\n以恢复了。注意先不要将dump.rdb放入data目录，否则会因为aof文件万一不可用，则rdb也不会被恢复进内\n存，此时如果有新的请求进来后则原先的rdb文件被重写。\n如果只配置了AOF，重启时加载AOF文件恢复数据。\n恢复速度参见新浪的测试结果：\n第 6 章 6. 常见运维操作 | 64",
+    "metadata": {
+      "page_num": 65,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00113"
+  },
+  {
+    "content": "|  |\n| --- |\n| 77 |",
+    "metadata": {
+      "page_num": 66,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00114"
+  },
+  {
+    "content": "这个结果是可信的，在一台SSD、4个CPU的虚拟机上测试为28.3G/s.\n检查修复AOF文件：\nredis-check-aof data/appendonly.aof\n第 6 章 6. 常见运维操作 | 65\n\n[扫描页，OCR 失败，内容跳过]",
+    "metadata": {
+      "page_num": 66,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": true,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00115"
+  },
+  {
+    "content": "|  |\n| --- |\n| 88 |",
+    "metadata": {
+      "page_num": 68,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00116"
+  },
+  {
+    "content": "4.1 将key从当前数据库移动到指定数据库\n4.1 将key从当前数据库移动到指定数据库\nmove key db-index\n返回1成功。0 如果key不存在，或者已经在指定数据库中\n第 7 章 7. 数据迁移 | 67\n\n[扫描页，OCR 失败，内容跳过]",
+    "metadata": {
+      "page_num": 68,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": true,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00117"
+  },
+  {
+    "content": "| 66..22 并并发发延延迟迟检检查查 |\n| --- |\n| top看到单个CPU 100%时，就是垂直扩展的时候了。如果需要让CPU使用率最大化，可以配置Redis实例数对应CPU 数, Redis实例数对应端口数(8核Cpu, 8个实例, 8个端口), 以提高并发。单机测试时, 单条数据在200字节, 测 试的结果为8~9万tps。（未实测）。 另外，对于命令的复杂度一定要关注。 |",
+    "metadata": {
+      "page_num": 70,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00118"
+  },
+  {
+    "content": "| 88..33 内内存存检检查查 |\n| --- |\n| 66..33..11 系系统统内内存存查查看看 script/下的memstat.sh或者ps_mem.py都可以查看系统的内存情况，两个工具都需要root权限。 66..33..22 系系统统sswwaapp内内存存查查看看 |\n| #!/bin/bash # Get current swap usage for all running processes # Erik Ljungstrom 27/05/2011 # Modified by Mikko Rantalainen 2012-08-09 # Pipe the output to \"sort -nk3\" to get sorted output # Modified by Marc Methot 2014-09-18 # removed the need for sudo SUM=0 OVERALL=0 for DIR in `find /proc/ -maxdepth 1 -type d -regex \"^/proc/[0-9]+\"` do PID=`echo $DIR | cut -d / -f 3` PROGNAME=`ps -p $PID -o comm --no-headers` for SWAP in `grep VmSwap $DIR/status 2>/dev/null | awk '{ print $2 }'` do let SUM=$SUM+$SWAP done if (( $SUM > 0 )); then echo \"PID=$PID swapped $SUM KB ($PROGNAME)\" fi let OVERALL=$OVERALL+$SUM SUM=0 done echo \"Overall swap used: $OVERALL KB\" |\n| 66..33..33 iinnffoo查查看看内内存存 used_memory:859192 数据结构的空间 used_memory_rss:7634944 实占空间 mem_fragmentation_ratio:8.89 前2者 的比例,1.N为佳,如果此值过大,说明redis的内存的碎片化严重,可以导出再导入一次. |",
+    "metadata": {
+      "page_num": 71,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00119"
+  },
+  {
+    "content": "6.2 并发延迟检查\n6.2 并发延迟检查\ntop看到单个CPU 100%时，就是垂直扩展的时候了。如果需要让CPU使用率最大化，可以配置Redis实例数对应CPU\n数, Redis实例数对应端口数(8核Cpu, 8个实例, 8个端口), 以提高并发。单机测试时, 单条数据在200字节, 测\n试的结果为8~9万tps。（未实测）。 另外，对于命令的复杂度一定要关注。\n第 8 章 8. 数据迁移 | 70",
+    "metadata": {
+      "page_num": 71,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00120"
+  },
+  {
+    "content": "| 66..33..44 dduummpp..rrddbb文文件件成成生生内内存存报报告告（（rrddbb--ttooooll）） |\n| --- |\n| # rdb -c memory ./dump.rdb > redis_memory_report.csv # sort -t, -k4nr redis_memory_report.csv |\n| 66..33..55 qquueerryy在在线线分分析析 |\n| redis-cli MONITOR | head -n 5000 | ./redis-faina.py |\n| 66..33..66 内内存存抽抽样样分分析析 |\n| /redis/script/redis-sampler.rb 127.0.0.1 6379 0 10000 /redis/script/redis-audit.rb 127.0.0.1 6379 0 10000 |\n| 66..33..77 统统计计生生产产上上比比较较大大的的kkeeyy |\n| ./redis-cli --bigkeys |\n| 对redis中的key进行采样，寻找较大的keys。是用的是scan方式，不用担心会阻塞redis很长时间不能处理其他的 请求。执行的结果可以用于分析redis的内存的只用状态，每种类型key的平均大小。 66..33..88 查查看看kkeeyy内内部部结结构构和和编编码码等等信信息息 |\n| debug object |\n| 查看一个key内部信息，比如refcount、encoding、serializedlength等，结果如下 Value at:0x7f21b9479850 r efcount:1 encoding:raw serializedlength:6 lru:8462202 lru_seconds_idle:215 66..33..99 RRssss增增加加，，内内存存碎碎片片增增加加 此时可以选择时间进行redis服务器的重新启动，并且注意在rss突然降低观察是否swap被使用，以确定并非是因 为swap而导致的rss降低。 一个典型的例子是：http://grokbase.com/t/gg/redis-db/14ag5n9qhv/redis-memory-fragmentation-ratio-rea ched-5000 |",
+    "metadata": {
+      "page_num": 72,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00121"
+  },
+  {
+    "content": "8.3 内存检查\n8.3 内存检查\n6.3.1 系统内存查看\n6.3.1 系统内存查看\nscript/下的memstat.sh或者ps_mem.py都可以查看系统的内存情况，两个工具都需要root权限。\n6.3.2 系统swap内存查看\n6.3.2 系统swap内存查看\n#!/bin/bash\n# Get current swap usage for all running processes\n# Erik Ljungstrom 27/05/2011\n# Modified by Mikko Rantalainen 2012-08-09\n# Pipe the output to \"sort -nk3\" to get sorted output\n# Modified by Marc Methot 2014-09-18\n# removed the need for sudo\nSUM=0\nOVERALL=0\nfor DIR in `find /proc/ -maxdepth 1 -type d -regex \"^/proc/[0-9]+\"`\ndo\nPID=`echo $DIR | cut -d / -f 3`\nPROGNAME=`ps -p $PID -o comm --no-headers`\nfor SWAP in `grep VmSwap $DIR/status 2>/dev/null | awk '{ print $2 }'`\ndo\nlet SUM=$SUM+$SWAP\ndone\nif (( $SUM > 0 )); then\necho \"PID=$PID swapped $SUM KB ($PROGNAME)\"\nfi\nlet OVERALL=$OVERALL+$SUM\nSUM=0\ndone\necho \"Overall swap used: $OVERALL KB\"\n6.3.3 info查看内存\n6.3.3 info查看内存\nused_memory:859192 数据结构的空间\nused_memory_rss:7634944 实占空间\nmem_fragmentation_ratio:8.89 前2者\n的比例,1.N为佳,如果此值过大,说明redis的内存的碎片化严重,可以导出再导入一次.\n第 8 章 8. 数据迁移 | 71",
+    "metadata": {
+      "page_num": 72,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00122"
+  },
+  {
+    "content": "|  |\n| --- |\n| 99 |",
+    "metadata": {
+      "page_num": 73,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00123"
+  },
+  {
+    "content": "6.3.4 dump.rdb文件成生内存报告（rdb-tool）\n6.3.4 dump.rdb文件成生内存报告（rdb-tool）\n# rdb -c memory ./dump.rdb > redis_memory_report.csv\n# sort -t, -k4nr redis_memory_report.csv\n6.3.5 query在线分析\n6.3.5 query在线分析\nredis-cli MONITOR | head -n 5000 | ./redis-faina.py\n6.3.6 内存抽样分析\n6.3.6 内存抽样分析\n/redis/script/redis-sampler.rb 127.0.0.1 6379 0 10000\n/redis/script/redis-audit.rb  127.0.0.1 6379 0 10000\n6.3.7 统计生产上比较大的key\n6.3.7 统计生产上比较大的key\n./redis-cli --bigkeys\n对redis中的key进行采样，寻找较大的keys。是用的是scan方式，不用担心会阻塞redis很长时间不能处理其他的\n请求。执行的结果可以用于分析redis的内存的只用状态，每种类型key的平均大小。\n6.3.8 查看key内部结构和编码等信息\n6.3.8 查看key内部结构和编码等信息\ndebug object\n查看一个key内部信息，比如refcount、encoding、serializedlength等，结果如下 Value at:0x7f21b9479850 r\nefcount:1 encoding:raw serializedlength:6 lru:8462202 lru_seconds_idle:215\n6.3.9 Rss增加，内存碎片增加\n6.3.9 Rss增加，内存碎片增加\n此时可以选择时间进行redis服务器的重新启动，并且注意在rss突然降低观察是否swap被使用，以确定并非是因\n为swap而导致的rss降低。\n一个典型的例子是：http://grokbase.com/t/gg/redis-db/14ag5n9qhv/redis-memory-fragmentation-ratio-rea\nched-5000\n第 8 章 8. 数据迁移 | 72",
+    "metadata": {
+      "page_num": 73,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00124"
+  },
+  {
+    "content": "| 77..22 模模拟拟宕宕机机 |\n| --- |\n|  |\n| redis-cli debug segfault |\n|  |",
+    "metadata": {
+      "page_num": 75,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00125"
+  },
+  {
+    "content": "| 77..33 模模拟拟hhaanngg |\n| --- |\n|  |\n| redis-cli -p 6379 DEBUG sleep 30 |\n|  |",
+    "metadata": {
+      "page_num": 76,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00126"
+  },
+  {
+    "content": "| 77..44 快快速速产产生生测测试试数数据据 |\n| --- |\n|  |\n| debug populate |\n| 测试利器，快速产生大量的key |\n| 127.0.0.1:6379> debug populate 10000 OK 127.0.0.1:6379> dbsize (integer) 10000 |\n|  |",
+    "metadata": {
+      "page_num": 77,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00127"
+  },
+  {
+    "content": "| 77..55 模模拟拟RRDDBB llooaadd情情形形 |\n| --- |\n|  |\n| debug reload |\n| save当前的rdb文件，并清空当前数据库，重新加载rdb，加载与启动时加载类似，加载过程中只能服务部分只读 请求（比如info、ping等）： rdbSave(); emptyDb(); rdbLoad(); |",
+    "metadata": {
+      "page_num": 78,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00128"
+  },
+  {
+    "content": "7.4 快速产生测试数据\n7.4 快速产生测试数据\ndebug populate\n测试利器，快速产生大量的key\n127.0.0.1:6379> debug populate 10000\nOK\n127.0.0.1:6379> dbsize\n(integer) 10000\n第 9 章 9. 测试方法 | 77",
+    "metadata": {
+      "page_num": 78,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00129"
+  },
+  {
+    "content": "| 77..66 模模拟拟AAOOFF加加载载情情形形 |\n| --- |\n|  |\n| debug loadaof |\n| 清空当前数据库，重新从aof文件里加载数据库 emptyDb(); loadAppendOnlyFile(); |",
+    "metadata": {
+      "page_num": 79,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00130"
+  },
+  {
+    "content": "7.5 模拟RDB load情形\n7.5 模拟RDB load情形\ndebug reload\nsave当前的rdb文件，并清空当前数据库，重新加载rdb，加载与启动时加载类似，加载过程中只能服务部分只读\n请求（比如info、ping等）： rdbSave(); emptyDb(); rdbLoad();\n第 9 章 9. 测试方法 | 78",
+    "metadata": {
+      "page_num": 79,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00131"
+  },
+  {
+    "content": "|  |\n| --- |\n| 1100 |",
+    "metadata": {
+      "page_num": 80,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00132"
+  },
+  {
+    "content": "7.6 模拟AOF加载情形\n7.6 模拟AOF加载情形\ndebug loadaof\n清空当前数据库，重新从aof文件里加载数据库 emptyDb(); loadAppendOnlyFile();\n第 9 章 9. 测试方法 | 79\n\n[扫描页，OCR 失败，内容跳过]",
+    "metadata": {
+      "page_num": 80,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": true,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00133"
+  },
+  {
+    "content": "| 99..11 SShheellll提提权权问问题题 |\n| --- |\n| 问题报告：http://drops.wooyun.org/papers/3062 问题分析：Redis 安全模型的观念是: “请不要将Redis暴露在公开网络中, 因为让不受信任的客户接触到Redis 是非常危险的” 。The Redis security model is: “it’s totally insecure to let untrusted clients acc ess the system, please protect it from the outside world yourself”. 因此最近爆出的问题也非redis本 身产品问题，属于不当配置。 问题规避： 1. 使用redis单独用户和组进行安全部署，并且在OS层面禁止此用户ssh登陆，这就从根本上防止了root用户启 停redis带来的风险。 2. 修改默认端口，降低网络简单扫描危害。 3. 修改绑定地址，如果是本地访问要求绑定本地回环。 4. 要求设置密码，并对配置文件访问权限进行控制，因为密码在其中是明文。 5. HA环境下主从均要求设置密码。 另外，我们建议在网络防火墙层面进行保护，杜绝任何部署在外网直接可以 访问的redis的出现。 |",
+    "metadata": {
+      "page_num": 82,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "table"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00134"
+  },
+  {
+    "content": "Redis是一个弱安全的组件，只有一个简单的明文密码，因此在保护上需要对其他多方面的措施，另外，很多所谓\n安全问题不是redis本身造成的，而是误用的结果。\n第 10 章 9. Redis安全问题 | 81\n\n9.1 Shell提权问题\n9.1 Shell提权问题\n问题报告：http://drops.wooyun.org/papers/3062\n问题分析：Redis 安全模型的观念是: “请不要将Redis暴露在公开网络中, 因为让不受信任的客户接触到Redis\n是非常危险的” 。The Redis security model is: “it’s totally insecure to let untrusted clients acc\ness the system, please protect it from the outside world yourself”. 因此最近爆出的问题也非redis本\n身产品问题，属于不当配置。\n问题规避：\n1.\n使用redis单独用户和组进行安全部署，并且在OS层面禁止此用户ssh登陆，这就从根本上防止了root用户启\n停redis带来的风险。\n2.\n修改默认端口，降低网络简单扫描危害。\n3.\n修改绑定地址，如果是本地访问要求绑定本地回环。\n4.\n要求设置密码，并对配置文件访问权限进行控制，因为密码在其中是明文。\n5.\nHA环境下主从均要求设置密码。 另外，我们建议在网络防火墙层面进行保护，杜绝任何部署在外网直接可以\n访问的redis的出现。\n第 10 章 9. Redis安全问题 | 82",
+    "metadata": {
+      "page_num": 82,
+      "section": "前言 > 前言 > 目录 > 9. -a",
+      "block_types": [
+        "text"
+      ],
+      "is_ocr": false,
+      "stock_code": "unknown",
+      "year": "unknown",
+      "strategy": "semantic",
+      "source_file": "Redis开发运维实践指南 - v1.0.json"
+    },
+    "chunk_id": "unknown_unknown_00135"
+  }
+]

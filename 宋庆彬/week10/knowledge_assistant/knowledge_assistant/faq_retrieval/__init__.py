@@ -1,0 +1,2 @@
+"""FAQ retrieval components."""
+
