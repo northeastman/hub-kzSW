@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReAct Financial Agent — 多轮对话</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #0f1117;
+    color: #e2e8f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: #1a1d27;
+    border-bottom: 1px solid #2d3148;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  header h1 { font-size: 17px; font-weight: 600; color: #a78bfa; }
+  header .subtitle { font-size: 12px; color: #64748b; margin-top: 2px; }
+  .header-actions { display: flex; gap: 8px; align-items: center; }
+  .clear-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid #3d4163;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .clear-btn:hover { border-color: #f87171; color: #f87171; }
+  .turn-hint {
+    font-size: 11px;
+    color: #64748b;
+    background: #1e2235;
+    border: 1px solid #2d3148;
+    border-radius: 12px;
+    padding: 4px 10px;
+  }
+
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 920px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 16px 16px 0;
+    min-height: 0;
+  }
+
+  /* 对话区 */
+  #chatArea {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scrollbar-width: thin;
+    scrollbar-color: #3d4163 transparent;
+  }
+
+  .empty-hint {
+    margin: auto;
+    text-align: center;
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.8;
+    padding: 40px 20px;
+  }
+  .empty-hint strong { color: #94a3b8; }
+
+  /* 一轮对话 */
+  .turn {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: fadeIn 0.25s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; } }
+
+  .user-bubble {
+    align-self: flex-end;
+    max-width: 85%;
+    background: #2d1f5e;
+    border: 1px solid #4c1d95;
+    border-radius: 14px 14px 4px 14px;
+    padding: 10px 14px;
+    font-size: 14px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+
+  .assistant-block {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .steps-wrap { display: flex; flex-direction: column; gap: 8px; }
+
+  .step-card {
+    background: #1a1d27;
+    border: 1px solid #2d3148;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .step-badge {
+    background: #2d3148;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .step-title { font-size: 13px; font-weight: 500; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .step-toggle { color: #64748b; font-size: 12px; }
+  .step-toggle.open::before { content: "▲"; }
+  .step-toggle:not(.open)::before { content: "▼"; }
+  .step-body { padding: 0 14px 12px; }
+  .step-body.collapsed { display: none; }
+
+  .thought-block  { border-left: 3px solid #38bdf8; padding-left: 12px; margin-bottom: 8px; }
+  .action-block   { border-left: 3px solid #fbbf24; padding-left: 12px; margin-bottom: 8px; }
+  .obs-block      { border-left: 3px solid #34d399; padding-left: 12px; }
+  .block-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+  }
+  .thought-block  .block-label { color: #38bdf8; }
+  .action-block   .block-label { color: #fbbf24; }
+  .obs-block      .block-label { color: #34d399; }
+  .block-content {
+    font-size: 13px;
+    line-height: 1.55;
+    color: #cbd5e1;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .obs-block .block-content {
+    max-height: 160px;
+    overflow-y: auto;
+    background: #0d1017;
+    border-radius: 4px;
+    padding: 6px 10px;
+    scrollbar-width: thin;
+  }
+  .tool-pill {
+    display: inline-block;
+    background: #2d1f5e;
+    border: 1px solid #4c1d95;
+    border-radius: 4px;
+    padding: 1px 8px;
+    font-size: 12px;
+    color: #a78bfa;
+    font-family: monospace;
+    margin-bottom: 4px;
+  }
+  .args-code {
+    background: #0f1117;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-family: monospace;
+    font-size: 12px;
+    color: #94a3b8;
+  }
+  .fc-thought-note { font-size: 12px; color: #475569; font-style: italic; }
+
+  .final-card {
+    background: #1a1d27;
+    border: 1px solid #4c1d95;
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .final-card h3 { color: #a78bfa; font-size: 13px; margin-bottom: 8px; }
+  .final-card .answer-text {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #e2e8f0;
+    white-space: pre-wrap;
+  }
+  .meta-row {
+    margin-top: 10px;
+    font-size: 11px;
+    color: #475569;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .error-card {
+    background: #1a1d27;
+    border: 1px solid #7f1d1d;
+    border-radius: 10px;
+    padding: 14px;
+    color: #f87171;
+    font-size: 13px;
+  }
+
+  /* 底部输入 */
+  .composer {
+    flex-shrink: 0;
+    background: #1a1d27;
+    border: 1px solid #2d3148;
+    border-radius: 12px 12px 0 0;
+    padding: 14px 16px 16px;
+    margin-top: 8px;
+  }
+  .mode-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .mode-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid #3d4163;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .mode-btn.active {
+    background: #7c3aed;
+    border-color: #7c3aed;
+    color: #fff;
+  }
+  .input-row { display: flex; gap: 10px; }
+  textarea {
+    flex: 1;
+    background: #0f1117;
+    border: 1px solid #2d3148;
+    border-radius: 8px;
+    color: #e2e8f0;
+    padding: 10px 14px;
+    font-size: 14px;
+    resize: none;
+    min-height: 52px;
+    max-height: 120px;
+    outline: none;
+    font-family: inherit;
+  }
+  textarea:focus { border-color: #7c3aed; }
+  .send-btn {
+    padding: 0 22px;
+    background: #7c3aed;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .send-btn:hover:not(:disabled) { background: #6d28d9; }
+  .send-btn:disabled { background: #3d4163; cursor: not-allowed; }
+
+  .examples { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .example-chip {
+    background: #1e2235;
+    border: 1px solid #2d3148;
+    border-radius: 14px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: #94a3b8;
+    cursor: pointer;
+  }
+  .example-chip:hover { border-color: #7c3aed; color: #a78bfa; }
+  .example-chip.followup { border-style: dashed; }
+
+  .status-bar {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0 0;
+    font-size: 12px;
+    color: #94a3b8;
+  }
+  .status-bar.visible { display: flex; }
+  .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid #3d4163;
+    border-top-color: #7c3aed;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>⚡ ReAct Financial Agent</h1>
+    <div class="subtitle">多轮对话 · Thought → Action → Observation | 可追问「那茅台呢？」</div>
+  </div>
+  <div class="header-actions">
+    <span class="turn-hint" id="turnHint">第 0 轮</span>
+    <button class="clear-btn" onclick="clearChat()">清空对话</button>
+  </div>
+</header>
+
+<div class="main">
+  <div id="chatArea">
+    <div class="empty-hint" id="emptyHint">
+      先问：<strong>宁德时代2021-2023年的营收复合增长率是多少？</strong><br>
+      再追问：<strong>那茅台呢？</strong> — Agent 会结合上文理解完整意图
+    </div>
+  </div>
+
+  <div class="composer">
+    <div class="mode-toggle">
+      <span style="font-size:12px;color:#64748b;">实现：</span>
+      <button class="mode-btn active" data-mode="manual" onclick="setMode('manual',this)">手写 Prompt 解析</button>
+      <button class="mode-btn" data-mode="fc" onclick="setMode('fc',this)">Function Calling</button>
+    </div>
+    <div class="input-row">
+      <textarea id="question" placeholder="输入问题，或追问「那茅台呢？」…" rows="2"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendQuery()">发 送</button>
+    </div>
+    <div class="examples">
+      <span style="font-size:11px;color:#475569;">示例：</span>
+      <span class="example-chip" onclick="setQuestion(this.textContent)">宁德时代2021-2023年营收复合增长率是多少？</span>
+      <span class="example-chip followup" onclick="setQuestion(this.textContent)">那茅台呢？</span>
+      <span class="example-chip" onclick="setQuestion(this.textContent)">茅台和五粮液2023年毛利率差多少？</span>
+      <span class="example-chip followup" onclick="setQuestion(this.textContent)">换成宁德时代和海康威视呢？</span>
+    </div>
+    <div class="status-bar" id="statusBar">
+      <div class="spinner"></div>
+      <span id="statusText">正在思考...</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  let currentMode = 'manual';
+  let isRunning = false;
+  // 发给后端的多轮历史：[{role, content}, ...]
+  let chatHistory = [];
+
+  function setMode(mode, btn) {
+    currentMode = mode;
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function setQuestion(text) {
+    document.getElementById('question').value = text;
+    document.getElementById('question').focus();
+  }
+
+  function updateTurnHint() {
+    const n = Math.floor(chatHistory.length / 2);
+    document.getElementById('turnHint').textContent = `已完成 ${n} 轮`;
+  }
+
+  function clearChat() {
+    if (isRunning) return;
+    chatHistory = [];
+    document.getElementById('chatArea').innerHTML = `
+      <div class="empty-hint" id="emptyHint">
+        先问：<strong>宁德时代2021-2023年的营收复合增长率是多少？</strong><br>
+        再追问：<strong>那茅台呢？</strong> — Agent 会结合上文理解完整意图
+      </div>`;
+    updateTurnHint();
+  }
+
+  function hideEmpty() {
+    const el = document.getElementById('emptyHint');
+    if (el) el.remove();
+  }
+
+  function setStatus(text, visible) {
+    document.getElementById('statusText').textContent = text;
+    document.getElementById('statusBar').classList.toggle('visible', visible);
+  }
+
+  function setSendEnabled(enabled) {
+    const btn = document.getElementById('sendBtn');
+    btn.disabled = !enabled;
+    btn.textContent = enabled ? '发 送' : '运行中...';
+    isRunning = !enabled;
+  }
+
+  function esc(s) {
+    return String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function createStepCard(stepData) {
+    const card = document.createElement('div');
+    card.className = 'step-card';
+    const isManual = currentMode === 'manual';
+
+    const header = document.createElement('div');
+    header.className = 'step-header';
+    header.innerHTML = `
+      <span class="step-badge">Step ${stepData.step}</span>
+      <span class="step-title">🔧 ${esc(stepData.action)}(${esc(JSON.stringify(stepData.action_input||{}))})</span>
+      <span class="step-toggle open"></span>`;
+
+    const body = document.createElement('div');
+    body.className = 'step-body';
+
+    if (isManual && stepData.thought) {
+      body.innerHTML += `
+        <div class="thought-block">
+          <div class="block-label">Thought</div>
+          <div class="block-content">${esc(stepData.thought)}</div>
+        </div>`;
+    } else if (!isManual) {
+      body.innerHTML += `
+        <div class="thought-block">
+          <div class="block-label">Thought</div>
+          <div class="fc-thought-note">Function Calling 版：模型内部推理，不可见</div>
+        </div>`;
+    }
+
+    body.innerHTML += `
+      <div class="action-block">
+        <div class="block-label">Action</div>
+        <span class="tool-pill">${esc(stepData.action)}</span>
+        <div class="args-code">${esc(JSON.stringify(stepData.action_input||{}, null, 2))}</div>
+      </div>
+      <div class="obs-block">
+        <div class="block-label">Observation</div>
+        <div class="block-content">${esc((stepData.observation||'').replace(/\n{3,}/g, '\n\n').trim())}</div>
+      </div>`;
+
+    header.addEventListener('click', () => {
+      body.classList.toggle('collapsed');
+      header.querySelector('.step-toggle').classList.toggle('open');
+    });
+
+    card.appendChild(header);
+    card.appendChild(body);
+    return card;
+  }
+
+  function createFinalCard(answer, totalSteps, elapsedS) {
+    const card = document.createElement('div');
+    card.className = 'final-card';
+    card.innerHTML = `
+      <h3>✅ Final Answer</h3>
+      <div class="answer-text">${esc(answer)}</div>
+      <div class="meta-row">
+        <span>共 ${totalSteps} 步</span>
+        <span>耗时 ~${elapsedS}s</span>
+        <span>${currentMode === 'manual' ? '手写Prompt解析' : 'Function Calling'}</span>
+      </div>`;
+    return card;
+  }
+
+  function createErrorCard(msg) {
+    const card = document.createElement('div');
+    card.className = 'error-card';
+    card.textContent = '⚠️ ' + msg;
+    return card;
+  }
+
+  async function sendQuery() {
+    if (isRunning) return;
+    const question = document.getElementById('question').value.trim();
+    if (!question) return;
+
+    hideEmpty();
+    setSendEnabled(false);
+    setStatus('正在连接...', true);
+    document.getElementById('question').value = '';
+
+    const chatArea = document.getElementById('chatArea');
+    const turn = document.createElement('div');
+    turn.className = 'turn';
+
+    const userBubble = document.createElement('div');
+    userBubble.className = 'user-bubble';
+    userBubble.textContent = question;
+    turn.appendChild(userBubble);
+
+    const assistantBlock = document.createElement('div');
+    assistantBlock.className = 'assistant-block';
+    const stepsWrap = document.createElement('div');
+    stepsWrap.className = 'steps-wrap';
+    assistantBlock.appendChild(stepsWrap);
+    turn.appendChild(assistantBlock);
+    chatArea.appendChild(turn);
+    userBubble.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    const endpoint = `/query/${currentMode}`;
+    const startTime = Date.now();
+    let actionStepCount = 0;
+    let finalAnswer = null;
+
+    // 发送此前历史（不含本轮问题）
+    const historyPayload = chatHistory.map(h => ({ role: h.role, content: h.content }));
+
+    try {
+      const resp = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question,
+          max_steps: 10,
+          history: historyPayload,
+        }),
+      });
+
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          let data;
+          try { data = JSON.parse(line.slice(6)); } catch { continue; }
+
+          if (data.type === 'start') {
+            const hint = data.history_turns > 0
+              ? `🧠 结合上文（${data.history_turns} 轮）思考中...`
+              : '🧠 思考中...';
+            setStatus(hint, true);
+
+          } else if (data.type === 'action') {
+            actionStepCount++;
+            setStatus(`Step ${data.step}：调用 ${data.action}...`, true);
+            const card = createStepCard(data);
+            stepsWrap.appendChild(card);
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+          } else if (data.type === 'final') {
+            finalAnswer = data.answer;
+            const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+            const card = createFinalCard(data.answer, actionStepCount, elapsed);
+            assistantBlock.appendChild(card);
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            setStatus('完成', false);
+
+          } else if (data.type === 'max_steps' || data.type === 'error') {
+            const card = createErrorCard(data.answer || data.observation || '未知错误');
+            assistantBlock.appendChild(card);
+            setStatus('', false);
+
+          } else if (data.type === 'done') {
+            setStatus('', false);
+          }
+        }
+      }
+
+      // 本轮成功后写入历史，供下一轮追问
+      if (finalAnswer) {
+        chatHistory.push({ role: 'user', content: question });
+        chatHistory.push({ role: 'assistant', content: finalAnswer });
+        updateTurnHint();
+      }
+    } catch (err) {
+      assistantBlock.appendChild(createErrorCard(`请求失败: ${err.message}`));
+      setStatus('', false);
+    } finally {
+      setSendEnabled(true);
+      document.getElementById('question').focus();
+    }
+  }
+
+  document.getElementById('question').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendQuery();
+    }
+  });
+
+  updateTurnHint();
+</script>
+</body>
+</html>
