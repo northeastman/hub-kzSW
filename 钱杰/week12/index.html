@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReAct 金融助手 · 多轮对话</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f7fa;
+    color: #1a1a1a;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── 顶部栏 ─────────────────────────────────── */
+  header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  header h1 { font-size: 18px; font-weight: 600; }
+  header .controls { display: flex; gap: 10px; align-items: center; }
+  header select, header button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  header select { background: white; color: #333; }
+  header button {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.4);
+    transition: background 0.2s;
+  }
+  header button:hover { background: rgba(255,255,255,0.35); }
+  .session-info { font-size: 12px; opacity: 0.85; }
+
+  /* ── 消息区 ─────────────────────────────────── */
+  main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .msg {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+  }
+  .msg.user { align-items: flex-end; }
+  .msg.assistant { align-items: flex-start; }
+
+  .bubble {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .msg.user .bubble {
+    background: #667eea;
+    color: white;
+    border-bottom-right-radius: 4px;
+  }
+  .msg.assistant .bubble {
+    background: white;
+    color: #1a1a1a;
+    border: 1px solid #e4e7ed;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  /* ── ReAct 步骤（可折叠）────────────────────── */
+  .react-steps {
+    width: 100%;
+    max-width: 80%;
+    margin-top: 6px;
+    background: #fafbfc;
+    border: 1px dashed #d0d7de;
+    border-radius: 8px;
+    font-size: 12px;
+  }
+  .react-steps summary {
+    padding: 6px 10px;
+    cursor: pointer;
+    color: #6a737d;
+    user-select: none;
+  }
+  .react-steps summary:hover { color: #0366d6; }
+  .react-body { padding: 8px 12px; }
+  .step {
+    margin-bottom: 8px;
+    padding: 6px 8px;
+    background: white;
+    border-left: 3px solid #0366d6;
+    border-radius: 3px;
+  }
+  .step.thought { border-left-color: #17a2b8; }
+  .step.action  { border-left-color: #ffc107; }
+  .step.obs     { border-left-color: #28a745; }
+  .step.final   { border-left-color: #6f42c1; }
+  .step.error   { border-left-color: #dc3545; }
+  .step .label { font-weight: 600; color: #586069; }
+  .step .content { color: #24292e; margin-top: 2px; }
+
+  /* ── 输入区 ─────────────────────────────────── */
+  footer {
+    background: white;
+    border-top: 1px solid #e4e7ed;
+    padding: 14px 20px;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .input-row { display: flex; gap: 10px; }
+  .input-row textarea {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #d0d7de;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    min-height: 44px;
+    max-height: 120px;
+    transition: border-color 0.2s;
+  }
+  .input-row textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+  }
+  .input-row button {
+    padding: 0 20px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .input-row button:hover:not(:disabled) { background: #5568d3; }
+  .input-row button:disabled {
+    background: #c0c4cc;
+    cursor: not-allowed;
+  }
+
+  /* ── 状态提示 ───────────────────────────────── */
+  .status {
+    font-size: 12px;
+    color: #909399;
+    margin-top: 6px;
+    text-align: right;
+  }
+  .typing {
+    display: inline-block;
+    width: 8px;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* ── 欢迎语 ─────────────────────────────────── */
+  .welcome {
+    text-align: center;
+    color: #909399;
+    margin-top: 80px;
+    font-size: 14px;
+  }
+  .welcome h2 {
+    font-size: 22px;
+    color: #606266;
+    margin-bottom: 10px;
+  }
+  .examples {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+  .examples button {
+    background: white;
+    border: 1px solid #d0d7de;
+    color: #606266;
+    padding: 8px 16px;
+    border-radius: 16px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .examples button:hover {
+    border-color: #667eea;
+    color: #667eea;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🤖 ReAct 金融助手 · 多轮对话</h1>
+  <div class="controls">
+    <span class="session-info" id="sessionInfo">未创建会话</span>
+    <select id="modeSelect">
+      <option value="manual">手写 Prompt 解析</option>
+      <option value="fc">Function Calling</option>
+    </select>
+    <button id="newSessionBtn">新建会话</button>
+  </div>
+</header>
+
+<main id="chatArea">
+  <div class="welcome" id="welcome">
+    <h2>👋 欢迎使用多轮金融分析助手</h2>
+    <p>支持上下文连续追问，例如先问"茅台毛利率"，再问"那五粮液呢？"</p>
+    <div class="examples">
+      <button onclick="useExample('贵州茅台2023年毛利率是多少？')">贵州茅台2023年毛利率是多少？</button>
+      <button onclick="useExample('那五粮液呢？')">那五粮液呢？</button>
+      <button onclick="useExample('两家差多少个百分点？')">两家差多少个百分点？</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="input-row">
+    <textarea id="questionInput" placeholder="输入问题，Enter 发送，Shift+Enter 换行..." rows="1"></textarea>
+    <button id="sendBtn" disabled>发送</button>
+  </div>
+  <div class="status" id="statusLine"></div>
+</footer>
+
+<script>
+// ── 全局状态 ─────────────────────────────────────
+let sessionId = null;
+let isStreaming = false;
+
+const chatArea   = document.getElementById('chatArea');
+const questionInput = document.getElementById('questionInput');
+const sendBtn    = document.getElementById('sendBtn');
+const modeSelect = document.getElementById('modeSelect');
+const newSessionBtn = document.getElementById('newSessionBtn');
+const sessionInfo = document.getElementById('sessionInfo');
+const statusLine  = document.getElementById('statusLine');
+const welcome = document.getElementById('welcome');
+
+// ── 初始化：自动创建会话 ─────────────────────────
+async function initSession() {
+  try {
+    const resp = await fetch('/session/new', { method: 'POST' });
+    const data = await resp.json();
+    sessionId = data.session_id;
+    sessionInfo.textContent = `会话 ${sessionId.slice(0, 8)}...`;
+    sendBtn.disabled = false;
+  } catch (e) {
+    statusLine.textContent = '会话创建失败：' + e.message;
+  }
+}
+
+newSessionBtn.addEventListener('click', async () => {
+  if (isStreaming) return;
+  // 清空聊天区
+  chatArea.innerHTML = '';
+  chatArea.appendChild(welcome);
+  welcome.style.display = 'block';
+  await initSession();
+});
+
+// ── 输入框自适应高度 & 回车发送 ──────────────────
+questionInput.addEventListener('input', () => {
+  questionInput.style.height = 'auto';
+  questionInput.style.height = Math.min(questionInput.scrollHeight, 120) + 'px';
+});
+questionInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+sendBtn.addEventListener('click', sendMessage);
+
+function useExample(text) {
+  questionInput.value = text;
+  questionInput.focus();
+}
+
+// ── 渲染消息 ─────────────────────────────────────
+function addUserMessage(text) {
+  welcome.style.display = 'none';
+  const div = document.createElement('div');
+  div.className = 'msg user';
+  div.innerHTML = `<div class="bubble">${escapeHtml(text)}</div>`;
+  chatArea.appendChild(div);
+  scrollToBottom();
+}
+
+function addAssistantPlaceholder() {
+  const div = document.createElement('div');
+  div.className = 'msg assistant';
+  div.innerHTML = `
+    <div class="bubble" id="pendingAnswer">思考中<span class="typing">▋</span></div>
+    <details class="react-steps" id="pendingSteps" open>
+      <summary>ReAct 推理步骤（实时）</summary>
+      <div class="react-body"></div>
+    </details>
+  `;
+  chatArea.appendChild(div);
+  scrollToBottom();
+  return div;
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+function scrollToBottom() {
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+// ── 发送消息（SSE 流式接收）──────────────────────
+async function sendMessage() {
+  const question = questionInput.value.trim();
+  if (!question || !sessionId || isStreaming) return;
+
+  isStreaming = true;
+  sendBtn.disabled = true;
+  questionInput.value = '';
+  questionInput.style.height = 'auto';
+
+  addUserMessage(question);
+  const msgDiv = addAssistantPlaceholder();
+  const answerEl = msgDiv.querySelector('#pendingAnswer');
+  const stepsEl  = msgDiv.querySelector('#pendingSteps .react-body');
+
+  let stepCount = 0;
+
+  try {
+    const resp = await fetch(`/chat/${modeSelect.value}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id: sessionId,
+        question: question,
+        max_steps: 10,
+      }),
+    });
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+
+      // SSE 以 \n\n 分隔事件
+      const parts = buffer.split('\n\n');
+      buffer = parts.pop(); // 最后一段可能不完整
+
+      for (const part of parts) {
+        const line = part.trim();
+        if (!line.startsWith('data: ')) continue;
+        const data = JSON.parse(line.slice(6));
+        handleSSE(data, answerEl, stepsEl);
+      }
+    }
+  } catch (e) {
+    answerEl.textContent = '❌ 请求失败：' + e.message;
+  } finally {
+    // 如果最终答案还是"思考中"，说明没收到 final 事件
+    if (answerEl.textContent.startsWith('思考中')) {
+      answerEl.textContent = '⚠️ 未收到最终答案（可能达到最大步数）';
+    }
+    isStreaming = false;
+    sendBtn.disabled = false;
+    questionInput.focus();
+  }
+}
+
+function handleSSE(data, answerEl, stepsEl) {
+  const t = data.type;
+
+  if (t === 'start') {
+    statusLine.textContent = `▶ 开始推理（携带 ${data.history_turns} 轮历史）...`;
+    return;
+  }
+
+  if (t === 'done') {
+    statusLine.textContent = '✓ 完成';
+    return;
+  }
+
+  if (t === 'error') {
+    const div = document.createElement('div');
+    div.className = 'step error';
+    div.innerHTML = `<span class="label">❌ 错误：</span><div class="content">${escapeHtml(data.message || data.observation || '')}</div>`;
+    stepsEl.appendChild(div);
+    return;
+  }
+
+  if (t === 'action') {
+    stepCount = data.step;
+    // Thought
+    if (data.thought) {
+      const d = document.createElement('div');
+      d.className = 'step thought';
+      d.innerHTML = `<span class="label">🧠 Thought (Step ${data.step})：</span><div class="content">${escapeHtml(data.thought)}</div>`;
+      stepsEl.appendChild(d);
+    }
+    // Action
+    const d2 = document.createElement('div');
+    d2.className = 'step action';
+    d2.innerHTML = `<span class="label">🔧 Action (Step ${data.step})：</span><div class="content">${escapeHtml(data.action)}(${escapeHtml(JSON.stringify(data.action_input))})</div>`;
+    stepsEl.appendChild(d2);
+    // Observation
+    const d3 = document.createElement('div');
+    d3.className = 'step obs';
+    const obsText = (data.observation || '').slice(0, 400);
+    d3.innerHTML = `<span class="label">👁 Observation：</span><div class="content">${escapeHtml(obsText)}</div>`;
+    stepsEl.appendChild(d3);
+    scrollToBottom();
+    return;
+  }
+
+  if (t === 'final') {
+    // Thought（如果有）
+    if (data.thought) {
+      const d = document.createElement('div');
+      d.className = 'step thought';
+      d.innerHTML = `<span class="label">🧠 Thought：</span><div class="content">${escapeHtml(data.thought)}</div>`;
+      stepsEl.appendChild(d);
+    }
+    // 最终答案
+    answerEl.textContent = data.answer;
+    answerEl.style.background = '#f0fff4';
+    answerEl.style.borderColor = '#28a745';
+    // 折叠步骤
+    const details = stepsEl.parentElement;
+    details.open = false;
+    details.querySelector('summary').textContent = `ReAct 推理步骤（共 ${data.step} 步，点击展开）`;
+    scrollToBottom();
+    return;
+  }
+
+  if (t === 'max_steps') {
+    answerEl.textContent = data.answer;
+    answerEl.style.background = '#fff5f5';
+    answerEl.style.borderColor = '#dc3545';
+    return;
+  }
+}
+
+// ── 启动 ─────────────────────────────────────────
+initSession();
+</script>
+
+</body>
+</html>
