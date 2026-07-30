@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+    </pattern>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+    <marker id="arrow-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee"/>
+    </marker>
+    <marker id="arrow-emerald" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34d399"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#a78bfa"/>
+    </marker>
+    <marker id="arrow-rose" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fb7185"/>
+    </marker>
+  </defs>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap');
+    text { font-family: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', monospace; }
+  </style>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#0f172a"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+
+  <!-- Title -->
+  <text x="40" y="36" fill="#f1f5f9" font-size="16" font-weight="700">Skills Harness · Four-Stage Loading Pipeline</text>
+  <text x="40" y="54" fill="#94a3b8" font-size="9" font-weight="400">Discovery → Validation → Registration → Activation</text>
+
+  <!-- Stage Region Boundaries -->
+  <rect x="40" y="80" width="200" height="400" rx="6" fill="rgba(8,51,68,0.15)" stroke="#22d3ee" stroke-width="1" stroke-dasharray="8,4"/>
+  <text x="140" y="100" fill="#22d3ee" font-size="11" font-weight="600" text-anchor="middle">① DISCOVERY</text>
+
+  <rect x="270" y="80" width="200" height="400" rx="6" fill="rgba(136,19,55,0.12)" stroke="#fb7185" stroke-width="1" stroke-dasharray="8,4"/>
+  <text x="370" y="100" fill="#fb7185" font-size="11" font-weight="600" text-anchor="middle">② VALIDATION</text>
+
+  <rect x="500" y="80" width="200" height="400" rx="6" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="1" stroke-dasharray="8,4"/>
+  <text x="600" y="100" fill="#34d399" font-size="11" font-weight="600" text-anchor="middle">③ REGISTRATION</text>
+
+  <rect x="730" y="80" width="200" height="400" rx="6" fill="rgba(76,29,149,0.15)" stroke="#a78bfa" stroke-width="1" stroke-dasharray="8,4"/>
+  <text x="830" y="100" fill="#a78bfa" font-size="11" font-weight="600" text-anchor="middle">④ ACTIVATION</text>
+
+  <!-- Inter-stage Arrows (drawn before components so they sit behind) -->
+  <line x1="240" y1="200" x2="270" y2="200" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+  <line x1="240" y1="300" x2="270" y2="300" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+  <line x1="240" y1="400" x2="270" y2="400" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+
+  <line x1="470" y1="200" x2="500" y2="200" stroke="#fb7185" stroke-width="1.5" marker-end="url(#arrow-rose)"/>
+  <line x1="470" y1="300" x2="500" y2="300" stroke="#fb7185" stroke-width="1.5" marker-end="url(#arrow-rose)"/>
+  <line x1="470" y1="400" x2="500" y2="400" stroke="#fb7185" stroke-width="1.5" marker-end="url(#arrow-rose)"/>
+
+  <line x1="700" y1="200" x2="730" y2="200" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow-emerald)"/>
+  <line x1="700" y1="300" x2="730" y2="300" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow-emerald)"/>
+  <line x1="700" y1="400" x2="730" y2="400" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow-emerald)"/>
+
+  <!-- Stage 1: Discovery Components -->
+  <rect x="60" y="170" width="160" height="60" rx="4" fill="#0f172a"/>
+  <rect x="60" y="170" width="160" height="60" rx="4" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.2"/>
+  <text x="140" y="195" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Skill Registry</text>
+  <text x="140" y="212" fill="#94a3b8" font-size="8" text-anchor="middle">scan manifest.json</text>
+
+  <rect x="60" y="270" width="160" height="60" rx="4" fill="#0f172a"/>
+  <rect x="60" y="270" width="160" height="60" rx="4" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.2"/>
+  <text x="140" y="295" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Manifest Scanner</text>
+  <text x="140" y="312" fill="#94a3b8" font-size="8" text-anchor="middle">enumerate skill files</text>
+
+  <rect x="60" y="370" width="160" height="60" rx="4" fill="#0f172a"/>
+  <rect x="60" y="370" width="160" height="60" rx="4" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.2"/>
+  <text x="140" y="395" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Config Loader</text>
+  <text x="140" y="412" fill="#94a3b8" font-size="8" text-anchor="middle">resolve harness.yaml</text>
+
+  <!-- Stage 2: Validation Components -->
+  <rect x="290" y="170" width="160" height="60" rx="4" fill="#0f172a"/>
+  <rect x="290" y="170" width="160" height="60" rx="4" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1.2"/>
+  <text x="370" y="195" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Schema Validator</text>
+  <text x="370" y="212" fill="#94a3b8" font-size="8" text-anchor="middle">JSON schema check</text>
+
+  <rect x="290" y="270" width="160" height="60" rx="4" fill="#0f172a"/>
+  <rect x="290" y="270" width="160" height="60" rx="4" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1.2"/>
+  <text x="370" y="295" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Dependency Resolver</text>
+  <text x="370" y="312" fill="#94a3b8" font-size="8" text-anchor="middle">topological sort</text>
+
+  <rect x="290" y="370" width="160" height="60" rx="4" fill="#0f172a"/>
+  <rect x="290" y="370" width="160" height="60" rx="4" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1.2"/>
+  <text x="370" y="395" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Type Checker</text>
+  <text x="370" y="412" fill="#94a3b8" font-size="8" text-anchor="middle">signature verify</text>
+
+  <!-- Stage 3: Registration Components -->
+  <rect x="520" y="170" width="160" height="60" rx="4" fill="#0f172a"/>
+  <rect x="520" y="170" width="160" height="60" rx="4" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.2"/>
+  <text x="600" y="195" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Harness Core</text>
+  <text x="600" y="212" fill="#94a3b8" font-size="8" text-anchor="middle">register() dispatch</text>
+
+  <rect x="520" y="270" width="160" height="60" rx="4" fill="#0f172a"/>
+  <rect x="520" y="270" width="160" height="60" rx="4" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.2"/>
+  <text x="600" y="295" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Skill Index</text>
+  <text x="600" y="312" fill="#94a3b8" font-size="8" text-anchor="middle">name → handle map</text>
+
+  <rect x="520" y="370" width="160" height="60" rx="4" fill="#0f172a"/>
+  <rect x="520" y="370" width="160" height="60" rx="4" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.2"/>
+  <text x="600" y="395" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Hook Registry</text>
+  <text x="600" y="412" fill="#94a3b8" font-size="8" text-anchor="middle">bind lifecycle hooks</text>
+
+  <!-- Stage 4: Activation Components -->
+  <rect x="750" y="170" width="160" height="60" rx="4" fill="#0f172a"/>
+  <rect x="750" y="170" width="160" height="60" rx="4" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.2"/>
+  <text x="830" y="195" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Runtime Loader</text>
+  <text x="830" y="212" fill="#94a3b8" font-size="8" text-anchor="middle">lazy init on invoke</text>
+
+  <rect x="750" y="270" width="160" height="60" rx="4" fill="#0f172a"/>
+  <rect x="750" y="270" width="160" height="60" rx="4" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.2"/>
+  <text x="830" y="295" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Active Pool</text>
+  <text x="830" y="312" fill="#94a3b8" font-size="8" text-anchor="middle">warm instances</text>
+
+  <rect x="750" y="370" width="160" height="60" rx="4" fill="#0f172a"/>
+  <rect x="750" y="370" width="160" height="60" rx="4" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.2"/>
+  <text x="830" y="395" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Event Bus</text>
+  <text x="830" y="412" fill="#94a3b8" font-size="8" text-anchor="middle">emit onReady()</text>
+
+  <!-- Stage transition labels -->
+  <text x="255" y="155" fill="#64748b" font-size="7" text-anchor="middle">candidates</text>
+  <text x="485" y="155" fill="#64748b" font-size="7" text-anchor="middle">verified</text>
+  <text x="715" y="155" fill="#64748b" font-size="7" text-anchor="middle">indexed</text>
+
+  <!-- Legend -->
+  <g transform="translate(40, 500)">
+    <text x="0" y="0" fill="#94a3b8" font-size="9" font-weight="600">LEGEND</text>
+    <rect x="0" y="8" width="12" height="12" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1"/>
+    <text x="18" y="18" fill="#94a3b8" font-size="8">Discovery</text>
+    <rect x="90" y="8" width="12" height="12" fill="rgba(136,19,55,0.4)" stroke="#fb7185" stroke-width="1"/>
+    <text x="108" y="18" fill="#94a3b8" font-size="8">Validation</text>
+    <rect x="180" y="8" width="12" height="12" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1"/>
+    <text x="198" y="18" fill="#94a3b8" font-size="8">Registration</text>
+    <rect x="285" y="8" width="12" height="12" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1"/>
+    <text x="303" y="18" fill="#94a3b8" font-size="8">Activation</text>
+  </g>
+</svg>
