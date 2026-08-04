@@ -1,0 +1,4 @@
+# 实现代码审查功能，渐进式加载skill。使用deepseek系列模型，需要配置以下环境变量
+export OPENAI_API_KEY=sk-xxx         # deepseek api key
+export BASE_URL=https://api.deepseek.com    # deepseek url
+export MODEL_ID=deepseek-v4-flash    # deepseek 模型
