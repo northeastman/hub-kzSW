@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill 创建与使用心得 · 部门分享</title>
+<style>
+:root{
+  --paper:#f7f4ee; --ink:#1a1815; --sub:#57534c; --faint:#928c81;
+  --line:#ded8cd; --line2:#c9c2b4;
+  --accent:#b3462f;     /* 砖红 · 主强调 */
+  --accent2:#2f5d50;    /* 墨绿 · 次强调 */
+  --gold:#a67c1a;
+  --serif:"Songti SC","STSong","SimSun","Noto Serif SC",Georgia,serif;
+  --sans:"Microsoft YaHei","PingFang SC","Hiragino Sans GB",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono","Consolas",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:14.5px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:840px;margin:0 auto;padding:0 32px 56px}
+
+/* ---- masthead ---- */
+.mast{border-bottom:2.5px solid var(--ink);padding:22px 0 12px;
+  display:flex;justify-content:space-between;align-items:flex-end}
+.mast .brand{font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.mast .iss{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--faint)}
+
+/* ---- headline block ---- */
+.head{padding:34px 0 26px;border-bottom:1px solid var(--line)}
+.head .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent2);margin-bottom:14px}
+.head h1{font-family:var(--serif);font-size:46px;font-weight:900;line-height:1.1;letter-spacing:-.5px;max-width:12em}
+.head h1 em{font-style:italic;color:var(--accent)}
+.head .standfirst{font-family:var(--serif);font-size:17px;color:var(--sub);margin-top:18px;max-width:32em;line-height:1.6}
+.head .byline{margin-top:18px;font-family:var(--mono);font-size:12px;color:var(--faint);
+  display:flex;gap:20px;flex-wrap:wrap}
+.head .byline b{color:var(--ink)}
+
+/* ---- article section ---- */
+.art{padding:30px 0;border-bottom:1px solid var(--line);display:grid;
+  grid-template-columns:76px 1fr;gap:4px 28px;align-items:start}
+.art .bignum{font-family:var(--serif);font-size:56px;font-weight:900;line-height:.8;color:var(--accent);
+  border-top:3px solid var(--ink);padding-top:10px}
+.art:nth-child(even) .bignum{color:var(--accent2)}
+.art .h{grid-column:2}
+.art .kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--faint);margin-bottom:6px}
+.art h2{font-family:var(--serif);font-size:26px;font-weight:800;line-height:1.2;letter-spacing:-.3px;margin-bottom:4px}
+.art h2 .tag{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--accent);
+  vertical-align:middle;margin-left:10px;letter-spacing:.02em}
+.art .body{grid-column:2;margin-top:8px}
+.art .body p{margin:8px 0;color:#2c2822}
+.art .body p:first-child::first-letter{font-family:var(--serif);font-size:40px;font-weight:900;
+  float:left;line-height:.9;padding:4px 9px 0 0;color:var(--accent)}
+.kw{font-weight:800;color:var(--ink);border-bottom:2px solid rgba(179,70,47,.28)}
+
+/* pull list */
+.plist{list-style:none;margin:12px 0 2px;border-left:2px solid var(--line2);padding-left:0}
+.plist li{position:relative;padding:5px 0 5px 26px;color:var(--sub);font-size:14px}
+.plist li::before{content:"—";position:absolute;left:8px;color:var(--accent2);font-weight:700}
+
+/* stat strip */
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:16px 0 2px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.strip div{padding:12px 8px;text-align:center;border-left:1px solid var(--line)}
+.strip div:first-child{border-left:none}
+.strip b{display:block;font-family:var(--serif);font-size:26px;font-weight:900;color:var(--accent)}
+.strip span{font-size:12px;color:var(--faint);margin-top:2px;display:block}
+
+/* flow steps */
+.steps{margin:14px 0 2px;display:grid;gap:0}
+.steprow{display:grid;grid-template-columns:44px 1fr;gap:18px;padding:12px 0;border-top:1px solid var(--line);align-items:baseline}
+.steprow:first-child{border-top:none}
+.steprow .sn{font-family:var(--serif);font-size:24px;font-weight:900;color:var(--accent2);line-height:1}
+.steprow h4{font-family:var(--serif);font-size:17px;font-weight:800;margin-bottom:2px}
+.steprow p{font-size:13.5px;color:var(--sub);margin:0}
+.cmd{margin-top:14px;background:#efe9df;border:1px solid var(--line2);border-radius:4px;padding:12px 16px;
+  font-family:var(--mono);font-size:13px;color:var(--ink);overflow-x:auto}
+.cmd .p{color:var(--accent2);font-weight:700;margin-right:8px}
+
+/* tree */
+.tree{margin-top:16px;background:#efe9df;border:1px solid var(--line2);border-radius:4px;padding:16px 22px;
+  font-family:var(--mono);font-size:13.5px;line-height:1.9;white-space:pre;overflow-x:auto}
+.tree .main{color:var(--accent);font-weight:700}
+.tree .sub{color:var(--accent2);font-weight:700}
+.tree .cm{color:var(--faint)}
+
+/* security */
+.sec .body{grid-column:2}
+.warnbar{margin-top:4px;background:#fbeee9;border:1px solid #e3b5a7;border-left:4px solid var(--accent);
+  border-radius:4px;padding:12px 18px;margin-bottom:14px}
+.warnbar b{color:var(--accent)}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line2);border:1px solid var(--line2);border-radius:4px;overflow:hidden}
+.wgrid .cell{background:var(--paper);padding:12px 16px}
+.wgrid .cell .t{font-family:var(--serif);font-size:15px;font-weight:800;color:var(--accent);margin-bottom:2px}
+.wgrid .cell p{font-size:13px;color:var(--sub);margin:0;line-height:1.6}
+
+/* closing pull quote */
+.close{padding:40px 0 12px;text-align:center}
+.close .q{font-family:var(--serif);font-size:26px;font-weight:800;line-height:1.4;max-width:20em;margin:0 auto;
+  font-style:italic}
+.close .q em{color:var(--accent);font-style:italic}
+.close .dash{width:56px;height:3px;background:var(--ink);margin:20px auto 0}
+
+footer{text-align:center;color:var(--faint);font-size:11.5px;margin-top:22px;
+  font-family:var(--mono);letter-spacing:.1em;border-top:1px solid var(--line);padding-top:16px}
+
+.reveal{opacity:0;transform:translateY(14px);transition:.6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
+@media(max-width:720px){
+  .head h1{font-size:38px}
+  .art{grid-template-columns:1fr;gap:4px}
+  .art .bignum{border-top:none;font-size:56px;padding-top:0}
+  .art .h,.art .body,.sec .body{grid-column:1}
+  .strip,.wgrid{grid-template-columns:1fr}
+  .strip div{border-left:none;border-top:1px solid var(--line)}
+}
+@media print{body{background:#fff}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mast reveal">
+    <div class="brand">Field Notes · 应用软件部</div>
+    <div class="iss">2026 · AI 实践专栏</div>
+  </div>
+
+  <div class="head reveal">
+    <div class="kicker">On Building Skills</div>
+    <h1>重复的工作，<br>做成一次编写、<br><em>永久复用</em>的 Skill</h1>
+    <p class="standfirst">这是我用 Claude Code 做「工作总结看板」时沉淀的一份心得——关于什么该做成 Skill、自己的 Skill 如何越用越顺手、怎么把一段流程变成 Skill，以及一条不能绕过的安全底线。</p>
+    <div class="byline">
+      <span>共 <b>5</b> 篇</span>
+      <span>创建流程 <b>3</b> 步</span>
+      <span>用途 · <b>部门分享</b></span>
+    </div>
+  </div>
+
+  <!-- 01 -->
+  <div class="art reveal">
+    <div class="bignum">01</div>
+    <div class="h">
+      <div class="kicker">Why · 复用的价值</div>
+      <h2>重复的工作，一定要做成 Skill<span class="tag">省时 · 省力 · 省 Token</span></h2>
+    </div>
+    <div class="body">
+      <p>同一段脚本、同一套流程，如果每次都让大模型从头写一遍，不仅慢，还要把整段逻辑反复塞进上下文——<span class="kw">既费时间又费 Token</span>。做成 Skill 后，脚本已经躺在 scripts/ 里，直接执行即可，不必重新生成。</p>
+      <p>背后的关键机制是<span class="kw">渐进式披露</span>：平时只有一句话的描述留在上下文；真正触发时才加载正文；脚本和参考文档只在需要时才读取，甚至可以只执行不读取。上下文始终精简，成本自然可控。</p>
+      <div class="strip">
+        <div><b>1 次</b><span>脚本只需写一次</span></div>
+        <div><b>≈100 词</b><span>平时仅占一句描述</span></div>
+        <div><b>按需</b><span>正文与脚本延迟加载</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="art reveal">
+    <div class="bignum">02</div>
+    <div class="h">
+      <div class="kicker">How · 在使用中进化</div>
+      <h2>自己做的 Skill，最懂自己<span class="tag" style="color:var(--accent2)">越调越顺手</span></h2>
+    </div>
+    <div class="body">
+      <p>通用 Skill 只能给通用答案；<span class="kw">自己针对自己的任务打磨出来的 Skill，才真正贴合自己的工作方式</span>——文件命名习惯、常踩的坑、想要的输出格式，都能固化进去。</p>
+      <p>Skill 也不是写完就定稿，而是<span class="kw">在使用中不断完善</span>。每次实跑暴露的问题，都是一次改进机会；好的 Skill 是「用出来」的，不是「一次写死」的，慢慢就能调教成最适合自己任务的样子。</p>
+      <ul class="plist">
+        <li>实跑发现中文路径乱码 → 在脚本里加 UTF-8 修复</li>
+        <li>发现某月报告缺数据 → 补一条「宁可删模块也不编造」的规则</li>
+        <li>把只能用于个例的写法，泛化成对任意报告都成立的指引</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="art reveal">
+    <div class="bignum">03</div>
+    <div class="h">
+      <div class="kicker">Process · 三步创建</div>
+      <h2>怎么把一段流程做成 Skill</h2>
+    </div>
+    <div class="body">
+      <p>方法很朴素：<span class="kw">先手动把流程走通，再把这段成功的流程打包成 Skill，最后换真实输入反复迭代。</span></p>
+      <div class="steps">
+        <div class="steprow"><div class="sn">壹</div><div><h4>带着大模型走一遍</h4><p>先和大模型把完整流程手动跑通，拿到你真正想要的最终产物。</p></div></div>
+        <div class="steprow"><div class="sn">贰</div><div><h4>用 skill-creator 打包</h4><p>把刚才这段成功的流程，交给 skill-creator 插件整理成 Skill。</p></div></div>
+        <div class="steprow"><div class="sn">叁</div><div><h4>实跑 + 迭代</h4><p>换个真实输入跑一遍，根据结果反复完善，直到稳定好用。</p></div></div>
+      </div>
+      <div class="cmd"><span class="p">安装 ›</span>/plugin install skill-creator@claude-plugin-directory</div>
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <div class="art reveal">
+    <div class="bignum">04</div>
+    <div class="h">
+      <div class="kicker">Scale · 分而治之</div>
+      <h2>复杂场景：拆成主 Skill + 子 Skill</h2>
+    </div>
+    <div class="body">
+      <p>当一个任务涉及多个领域或多条分支，不要把所有逻辑硬塞进一个 SKILL.md。<span class="kw">主 Skill 负责判断和调度，子 Skill / 参考文档负责各自领域的细节</span>，大模型只在需要时读取对应那一份，既清晰又省上下文。</p>
+      <div class="tree"><span class="main">cloud-deploy/</span>          <span class="cm"># 主 Skill：负责判断与调度</span>
+├── SKILL.md
+└── <span class="sub">references/</span>         <span class="cm"># 子模块，按需读取</span>
+    ├── aws.md
+    ├── gcp.md
+    └── azure.md</div>
+    </div>
+  </div>
+
+  <!-- 05 -->
+  <div class="art sec reveal">
+    <div class="bignum">05</div>
+    <div class="h">
+      <div class="kicker">Caution · 安全底线</div>
+      <h2>别让 Skill 变成漏洞入口</h2>
+    </div>
+    <div class="body">
+      <div class="warnbar">Skill 里的脚本是会<b>真实执行</b>的，不像普通文档只是给人看。一个不小心，可能<b>泄露密钥、误删数据，甚至给攻击者留后门</b>。</div>
+      <div class="wgrid">
+        <div class="cell"><div class="t">泄露密钥</div><p>脚本读取 .env、凭证文件后若打印或外发，敏感信息就暴露了。</p></div>
+        <div class="cell"><div class="t">误删数据</div><p>递归删除、批量覆盖等高破坏操作，执行前务必确认范围。</p></div>
+        <div class="cell"><div class="t">留下后门</div><p>来路不明的 Skill 可能夹带恶意代码，安装前先看清它到底做了什么。</p></div>
+        <div class="cell"><div class="t">供应链风险</div><p>依赖用固定版本、选可信来源，警惕仿冒名的「李鬼」包。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="close reveal">
+    <p class="q">把每一次重复劳动，<br>都变成一个<em>越用越懂你</em>的 Skill。</p>
+    <div class="dash"></div>
+  </div>
+
+  <footer>SKILL · 创建与使用心得 · 应用软件部 · 分享文档</footer>
+
+</div>
+<script>
+(function(){var e=document.querySelectorAll('.reveal');
+if(!('IntersectionObserver'in window)||matchMedia('(prefers-reduced-motion:reduce)').matches){e.forEach(function(x){x.classList.add('in')});return;}
+var o=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');o.unobserve(x.target);}})},{threshold:.12});
+e.forEach(function(x){o.observe(x)});})();
+</script>
+</body>
+</html>
