@@ -1,0 +1,11 @@
+{
+  "name": "summarizer",
+  "version": "1.0.0",
+  "description": "总结、概括或压缩长文本，可通过 OpenAI 兼容接口生成摘要",
+  "keywords": ["摘要", "总结", "概括", "summarize", "summary"],
+  "instructions": "SKILL.md",
+  "handler": "handler.py:run",
+  "resources": ["style.txt"],
+  "enabled": true
+}
+

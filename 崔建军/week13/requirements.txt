@@ -1,0 +1,12 @@
+# Skill Harness 依赖
+
+# 核心依赖（LLM 调用）
+openai>=1.0.0
+
+# 可选依赖（API 服务）
+fastapi>=0.110.0
+uvicorn>=0.29.0
+
+# 开发依赖
+pytest>=8.0.0
+pytest-cov>=4.0.0

@@ -1,0 +1,175 @@
+======================================================================
+Week13 渐进式 Skill Harness 运行记录
+API Host : https://ws-an0d0vqov4zjj1qx.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
+Model    : qwen3.7-plus
+======================================================================
+
+
+### 实验 A：离线模式 — crazy 闪卡（规则匹配 + 脚本执行）
+
+======================================================================
+渐进式 Skill Harness 运行报告
+======================================================================
+Query: 给我做张 crazy 词的闪卡
+
+--- Stage 0: 索引（仅元数据）---
+Skills 数量: 2
+索引总字符: 446
+
+<available_skills>
+The following skills provide specialized capabilities.
+
+<skill>
+  <name>baoyu-diagram</name>
+  <description>创建专业的暗色主题 SVG 图表，支持任意类型——架构图、流程图、时序图、结构图、思维导图、时间线、概念示意图等。当用户要求任何类型的技术或概念图表、系统/流程/数据流可视化、组件关系、网络拓扑、决策树、组织架构图、状态机，或任何结构/逻辑/流程的视觉表达时使用。当用户说"画个图""画一个架构图""diagram""flowchart""sequence diagram""draw me a ..."或上传内容要求可视化时也触发。输出始终是一个独立的 .svg 文件。</description>
+</skill>
+
+<skill>
+  <name>flash-card</name>
+  <description>为一个英语单词生成静态 HTML 学习闪卡（含音标、词性、释义、3 条中英对照例句、近义词）。
+Use when the us
+...(truncated)
+
+--- Stage 1: 匹配 ---
+选中: flash-card | 方式: rule | 置信度: 0.60 | 规则命中: 闪卡
+
+--- Stage 2–3: 渐进加载 ---
+已加载路径: ['E:\\DeepLearning\\week13\\skills\\flash-card\\SKILL.md', 'scripts/make_flashcard.py']
+累计字符: 7061（含索引 446）
+
+--- Stage 4: 执行 ---
+  [OK] extract_word: 目标单词: crazy
+  [OK] reuse_json: 复用已有数据 E:\DeepLearning\week13\skills\flash-card\data\crazy.json
+  [OK] run_script: make_flashcard.py → E:\DeepLearning\week13\work13\output\crazy.html
+已生成: E:\DeepLearning\week13\work13\output\crazy.html
+结果: 已生成闪卡: E:\DeepLearning\week13\work13\output\crazy.html
+输出文件:
+  - E:\DeepLearning\week13\work13\output\crazy.html
+
+--- 完整阶段日志 ---
+[Stage 0 INDEX] 扫描 E:\DeepLearning\week13\skills → 2 个 skill，索引共 446 字符
+  · baoyu-diagram: 创建专业的暗色主题 SVG 图表，支持任意类型——架构图、流程图、时序图、结构图、思维导图、时间线、概念示意图等。当用户要求任何类型的技术或概念图表、系统/流程…
+  · flash-card: 为一个英语单词生成静态 HTML 学习闪卡（含音标、词性、释义、3 条中英对照例句、近义词）。
+Use when the user asks to make a…
+[Stage 1 MATCH] rule → flash-card (confidence=0.60, 规则命中: 闪卡)
+[Stage 2 BODY] 加载 SKILL.md → 1554 字符
+[Stage 3 RESOURCE] 预加载: scripts/make_flashcard.py
+[Stage 4 EXECUTE] 开始执行…
+  [OK] extract_word: 目标单词: crazy
+  [OK] reuse_json: 复用已有数据 E:\DeepLearning\week13\skills\flash-card\data\crazy.json
+  [OK] run_script: make_flashcard.py → E:\DeepLearning\week13\work13\output\crazy.html
+已生成: E:\DeepLearning\week13\work13\output\crazy.html
+[完成] 已生成闪卡: E:\DeepLearning\week13\work13\output\crazy.html
+======================================================================
+
+
+### 实验 B：LLM 模式 — thrill 闪卡（LLM 匹配可选 + 生成 JSON）
+
+======================================================================
+渐进式 Skill Harness 运行报告
+======================================================================
+Query: 帮我生成 thrill 单词的 flash card
+
+--- Stage 0: 索引（仅元数据）---
+Skills 数量: 2
+索引总字符: 446
+
+<available_skills>
+The following skills provide specialized capabilities.
+
+<skill>
+  <name>baoyu-diagram</name>
+  <description>创建专业的暗色主题 SVG 图表，支持任意类型——架构图、流程图、时序图、结构图、思维导图、时间线、概念示意图等。当用户要求任何类型的技术或概念图表、系统/流程/数据流可视化、组件关系、网络拓扑、决策树、组织架构图、状态机，或任何结构/逻辑/流程的视觉表达时使用。当用户说"画个图""画一个架构图""diagram""flowchart""sequence diagram""draw me a ..."或上传内容要求可视化时也触发。输出始终是一个独立的 .svg 文件。</description>
+</skill>
+
+<skill>
+  <name>flash-card</name>
+  <description>为一个英语单词生成静态 HTML 学习闪卡（含音标、词性、释义、3 条中英对照例句、近义词）。
+Use when the us
+...(truncated)
+
+--- Stage 1: 匹配 ---
+选中: flash-card | 方式: llm | 置信度: 1.00 | 用户明确要求为英语单词 'thrill' 生成 flash card（闪卡），完全符合 flash-card skill 的触发条件。
+
+--- Stage 2–3: 渐进加载 ---
+已加载路径: ['E:\\DeepLearning\\week13\\skills\\flash-card\\SKILL.md', 'scripts/make_flashcard.py']
+累计字符: 7061（含索引 446）
+
+--- Stage 4: 执行 ---
+  [OK] extract_word: 目标单词: thrill
+  [OK] reuse_json: 复用已有数据 E:\DeepLearning\week13\skills\flash-card\data\thrill.json
+  [OK] run_script: make_flashcard.py → E:\DeepLearning\week13\work13\output\thrill.html
+已生成: E:\DeepLearning\week13\work13\output\thrill.html
+结果: 已生成闪卡: E:\DeepLearning\week13\work13\output\thrill.html
+输出文件:
+  - E:\DeepLearning\week13\work13\output\thrill.html
+
+--- 完整阶段日志 ---
+[Stage 0 INDEX] 扫描 E:\DeepLearning\week13\skills → 2 个 skill，索引共 446 字符
+  · baoyu-diagram: 创建专业的暗色主题 SVG 图表，支持任意类型——架构图、流程图、时序图、结构图、思维导图、时间线、概念示意图等。当用户要求任何类型的技术或概念图表、系统/流程…
+  · flash-card: 为一个英语单词生成静态 HTML 学习闪卡（含音标、词性、释义、3 条中英对照例句、近义词）。
+Use when the user asks to make a…
+[Stage 1 MATCH] llm → flash-card (confidence=1.00, 用户明确要求为英语单词 'thrill' 生成 flash card（闪卡），完全符合 flash-card skill 的触发条件。)
+[Stage 2 BODY] 加载 SKILL.md → 1554 字符
+[Stage 3 RESOURCE] 预加载: scripts/make_flashcard.py
+[Stage 4 EXECUTE] 开始执行…
+  [OK] extract_word: 目标单词: thrill
+  [OK] reuse_json: 复用已有数据 E:\DeepLearning\week13\skills\flash-card\data\thrill.json
+  [OK] run_script: make_flashcard.py → E:\DeepLearning\week13\work13\output\thrill.html
+已生成: E:\DeepLearning\week13\work13\output\thrill.html
+[完成] 已生成闪卡: E:\DeepLearning\week13\work13\output\thrill.html
+======================================================================
+
+
+### 实验 C：架构图 — 渐进加载 reference + LLM SVG
+
+======================================================================
+渐进式 Skill Harness 运行报告
+======================================================================
+Query: 画一个 skills harness 四阶段加载的架构图
+
+--- Stage 0: 索引（仅元数据）---
+Skills 数量: 2
+索引总字符: 446
+
+<available_skills>
+The following skills provide specialized capabilities.
+
+<skill>
+  <name>baoyu-diagram</name>
+  <description>创建专业的暗色主题 SVG 图表，支持任意类型——架构图、流程图、时序图、结构图、思维导图、时间线、概念示意图等。当用户要求任何类型的技术或概念图表、系统/流程/数据流可视化、组件关系、网络拓扑、决策树、组织架构图、状态机，或任何结构/逻辑/流程的视觉表达时使用。当用户说"画个图""画一个架构图""diagram""flowchart""sequence diagram""draw me a ..."或上传内容要求可视化时也触发。输出始终是一个独立的 .svg 文件。</description>
+</skill>
+
+<skill>
+  <name>flash-card</name>
+  <description>为一个英语单词生成静态 HTML 学习闪卡（含音标、词性、释义、3 条中英对照例句、近义词）。
+Use when the us
+...(truncated)
+
+--- Stage 1: 匹配 ---
+选中: baoyu-diagram | 方式: rule | 置信度: 0.70 | 规则命中: 画一?个.*图
+
+--- Stage 2–3: 渐进加载 ---
+已加载路径: ['E:\\DeepLearning\\week13\\skills\\baoyu-diagram\\SKILL.md', 'references/architecture.md', 'scripts/main.ts']
+累计字符: 13029（含索引 446）
+
+--- Stage 4: 执行 ---
+  [OK] load_references: 按需加载: references/architecture.md, scripts/main.ts
+  [OK] llm_generate_svg: E:\DeepLearning\week13\work13\output\demo-diagram.svg
+结果: 已生成示意图: E:\DeepLearning\week13\work13\output\demo-diagram.svg
+输出文件:
+  - E:\DeepLearning\week13\work13\output\demo-diagram.svg
+
+--- 完整阶段日志 ---
+[Stage 0 INDEX] 扫描 E:\DeepLearning\week13\skills → 2 个 skill，索引共 446 字符
+  · baoyu-diagram: 创建专业的暗色主题 SVG 图表，支持任意类型——架构图、流程图、时序图、结构图、思维导图、时间线、概念示意图等。当用户要求任何类型的技术或概念图表、系统/流程…
+  · flash-card: 为一个英语单词生成静态 HTML 学习闪卡（含音标、词性、释义、3 条中英对照例句、近义词）。
+Use when the user asks to make a…
+[Stage 1 MATCH] rule → baoyu-diagram (confidence=0.70, 规则命中: 画一?个.*图)
+[Stage 2 BODY] 加载 SKILL.md → 7522 字符
+[Stage 3 RESOURCE] 预加载: references/architecture.md, scripts/main.ts
+[Stage 4 EXECUTE] 开始执行…
+  [OK] load_references: 按需加载: references/architecture.md, scripts/main.ts
+  [OK] llm_generate_svg: E:\DeepLearning\week13\work13\output\demo-diagram.svg
+[完成] 已生成示意图: E:\DeepLearning\week13\work13\output\demo-diagram.svg
+======================================================================

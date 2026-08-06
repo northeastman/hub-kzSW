@@ -1,0 +1,11 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "description": "安全计算数学表达式，支持加减乘除、乘方、取模和括号",
+  "keywords": ["计算", "算术", "数学", "calculator", "arithmetic"],
+  "instructions": "SKILL.md",
+  "handler": "handler.py:run",
+  "resources": ["examples.txt"],
+  "enabled": true
+}
+

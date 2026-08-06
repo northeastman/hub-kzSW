@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Skill Harness — 渐进式加载执行</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", "PingFang SC", sans-serif;
+    background: #0f172a; color: #e2e8f0; height: 100vh;
+    display: flex; flex-direction: column;
+  }
+  header {
+    padding: 14px 24px; background: #1e293b; border-bottom: 1px solid #334155;
+    display: flex; align-items: center; gap: 16px;
+  }
+  header h1 { font-size: 18px; font-weight: 600; color: #22d3ee; }
+  header .model { font-size: 12px; color: #94a3b8; }
+  header button {
+    margin-left: auto; padding: 6px 12px; background: #334155; color: #e2e8f0;
+    border: 1px solid #475569; border-radius: 6px; cursor: pointer; font-size: 12px;
+  }
+  header button:hover { background: #475569; }
+  .main { flex: 1; display: flex; overflow: hidden; }
+  /* 左侧聊天 */
+  .chat { flex: 1; display: flex; flex-direction: column; border-right: 1px solid #334155; }
+  .messages { flex: 1; overflow-y: auto; padding: 20px; }
+  .bubble {
+    max-width: 80%; padding: 10px 14px; border-radius: 10px; margin-bottom: 12px;
+    font-size: 14px; line-height: 1.5; white-space: pre-wrap; word-break: break-word;
+  }
+  .bubble.user { background: #1e40af; margin-left: auto; }
+  .bubble.assistant { background: #334155; }
+  .bubble.event {
+    background: #1e293b; border-left: 3px solid #22d3ee; font-size: 12px;
+    color: #94a3b8; font-family: "JetBrains Mono", monospace;
+  }
+  .bubble.event.tool { border-left-color: #fbbf24; }
+  .bubble.event.result { border-left-color: #34d399; }
+  .bubble.event.error { border-left-color: #fb7185; }
+  .bubble .tag {
+    display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 4px;
+    background: #475569; color: #e2e8f0; margin-right: 6px; vertical-align: middle;
+  }
+  .input-bar { padding: 14px 20px; background: #1e293b; border-top: 1px solid #334155; }
+  .input-bar input {
+    width: 100%; padding: 10px 14px; background: #0f172a; color: #e2e8f0;
+    border: 1px solid #475569; border-radius: 8px; font-size: 14px;
+  }
+  .input-bar input:focus { outline: none; border-color: #22d3ee; }
+  /* 右侧面板 */
+  .panel { width: 380px; overflow-y: auto; padding: 16px; background: #1e293b; }
+  .panel h2 { font-size: 14px; color: #22d3ee; margin-bottom: 10px; border-bottom: 1px solid #334155; padding-bottom: 6px; }
+  .panel h3 { font-size: 12px; color: #94a3b8; margin: 14px 0 6px; }
+  .skill-card {
+    background: #0f172a; border: 1px solid #334155; border-radius: 8px;
+    padding: 10px; margin-bottom: 8px; font-size: 12px;
+  }
+  .skill-card .name { font-weight: 600; color: #e2e8f0; }
+  .skill-card .desc { color: #94a3b8; margin: 4px 0; font-size: 11px; line-height: 1.4; }
+  .level-bar { display: flex; gap: 2px; margin-top: 6px; }
+  .level-bar .seg {
+    flex: 1; height: 4px; background: #334155; border-radius: 2px;
+  }
+  .level-bar .seg.on { background: #34d399; }
+  .level-label { font-size: 10px; color: #64748b; margin-top: 2px; }
+  .stat-row { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; color: #cbd5e1; }
+  .stat-row .v { color: #22d3ee; font-family: monospace; }
+  .usage-item { font-size: 11px; padding: 6px 8px; background: #0f172a; border-radius: 6px; margin-bottom: 4px; font-family: monospace; }
+  .usage-item .ok { color: #34d399; }
+  .usage-item .fail { color: #fb7185; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Skill Harness</h1>
+  <span class="model" id="modelInfo">加载中...</span>
+  <button onclick="loadStats()">刷新</button>
+  <button onclick="resetMemory()">清空记录</button>
+</header>
+<div class="main">
+  <div class="chat">
+    <div class="messages" id="messages">
+      <div class="bubble assistant">你好。试着说「给我做一张 happy 的闪卡」或「画一个微服务架构图」，观察右侧 skill 的渐进式加载过程。</div>
+    </div>
+    <div class="input-bar">
+      <input id="input" placeholder="输入消息，回车发送..." onkeydown="if(event.key==='Enter')send()">
+    </div>
+  </div>
+  <div class="panel">
+    <h2>已注册 Skills</h2>
+    <div id="skillsList"></div>
+    <h2>加载统计</h2>
+    <div id="stats"></div>
+    <h2>最近使用</h2>
+    <div id="usage"></div>
+  </div>
+</div>
+
+<script>
+const LEVEL_NAMES = ["SCAN", "META", "FULL", "ASSETS"];
+
+function addBubble(text, cls) {
+  const el = document.createElement('div');
+  el.className = 'bubble ' + cls;
+  el.innerHTML = text;
+  document.getElementById('messages').appendChild(el);
+  el.scrollIntoView({behavior: 'smooth'});
+}
+
+function addEvent(tag, text, cls='event') {
+  addBubble(`<span class="tag">${tag}</span>${text}`, cls);
+}
+
+async function loadStats() {
+  const [skillsR, statsR, usageR] = await Promise.all([
+    fetch('/skills').then(r=>r.json()),
+    fetch('/stats').then(r=>r.json()),
+    fetch('/usage').then(r=>r.json()),
+  ]);
+  // skills
+  const sl = document.getElementById('skillsList');
+  sl.innerHTML = skillsR.skills.map(s => {
+    const segs = [0,1,2,3].map(i => `<div class="seg ${i < s.level ? 'on':''}"></div>`).join('');
+    return `<div class="skill-card">
+      <div class="name">${s.name}</div>
+      <div class="desc">${s.description.slice(0,80)}...</div>
+      <div class="level-bar">${segs}</div>
+      <div class="level-label">Level ${s.level} · ${LEVEL_NAMES[s.level]}</div>
+    </div>`;
+  }).join('');
+  // stats
+  const st = document.getElementById('stats');
+  st.innerHTML = `
+    <div class="stat-row"><span>总 skill 数</span><span class="v">${statsR.registry.total}</span></div>
+    ${Object.entries(statsR.registry.by_level).map(([k,v])=>`<div class="stat-row"><span>${k}</span><span class="v">${v}</span></div>`).join('')}
+    <h3>使用频次</h3>
+    ${(statsR.memory||[]).map(m=>`<div class="stat-row"><span>${m.skill_name}</span><span class="v">${m.total}次 / 成功${m.success}</span></div>`).join('') || '<div class="stat-row"><span>暂无</span><span class="v">-</span></div>'}
+  `;
+  document.getElementById('modelInfo').textContent = statsR.model.display;
+  // usage
+  const us = document.getElementById('usage');
+  us.innerHTML = usageR.records.map(r => `<div class="usage-item">
+    <span class="${r.status==='success'?'ok':(r.status==='failed'?'fail':'')}>[${r.status}]</span>
+    <b>${r.skill_name}</b> · ${r.ts.slice(11,19)}
+    <div>${(r.user_input||'').slice(0,40)}</div>
+  </div>`).join('') || '<div class="usage-item">暂无记录</div>';
+}
+
+async function resetMemory() {
+  if (!confirm('确认清空所有使用记录？')) return;
+  await fetch('/reset', {method:'POST'});
+  loadStats();
+}
+
+async function send() {
+  const input = document.getElementById('input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  addBubble(msg, 'user');
+
+  const resp = await fetch('/chat', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({message: msg}),
+  });
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let finalSummary = '';
+
+  while (true) {
+    const {done, value} = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, {stream: true});
+    const parts = buffer.split('\n\n');
+    buffer = parts.pop();
+    for (const part of parts) {
+      const lines = part.split('\n');
+      let event = '', data = '';
+      for (const l of lines) {
+        if (l.startsWith('event: ')) event = l.slice(7);
+        if (l.startsWith('data: ')) data = l.slice(6);
+      }
+      if (!event) continue;
+      handleEvent(event, data);
+      loadStats();  // 每个事件后刷新右侧面板，直观看到 level 升级
+    }
+  }
+}
+
+function handleEvent(event, data) {
+  let d = {};
+  try { d = JSON.parse(data); } catch(e) {}
+  const map = {
+    intent_start:     ['意图', `开始匹配：${d.user_input}`, 'event'],
+    intent_candidates:['意图', `候选 ${d.count} 个：${(d.names||[]).join(', ')}`, 'event'],
+    intent_done:      ['意图', `命中 ${(d.matched||[]).length} 个：${(d.matched||[]).map(m=>m.name+'('+(m.score*100).toFixed(0)+'%)').join(', ')}`, 'event'],
+    intent_empty:     ['意图', '无候选 skill', 'error'],
+    intent_error:     ['意图', `匹配失败：${d.error}`, 'error'],
+    skill_selected:   ['选中', `${d.name}（${(d.score*100).toFixed(0)}%）—— ${d.reason}`, 'event'],
+    exec_start:       ['执行', `启动 ${d.skill}，输入：${d.input}`, 'event'],
+    exec_level_up:    ['升级', `→ Level ${d.level}（${d.body_chars||((d.scripts||[]).length+'脚本')+'资源'}）`, 'event'],
+    exec_step:        ['步骤', `Step ${d.step} · ${d.phase}`, 'event'],
+    exec_tool_call:   ['工具', `${d.tool}(${JSON.stringify(d.args).slice(0,100)})`, 'tool'],
+    exec_tool_result: ['观察', `${(d.observation||'').slice(0,150)}`, 'event'],
+    exec_script_start:['脚本', `${d.command}`, 'tool'],
+    exec_finish:      ['完成', d.summary, 'result'],
+    exec_done:        ['结束', `${d.status} · ${d.steps}步 · ${d.duration_ms}ms`, 'result'],
+    exec_error:       ['错误', d.error, 'error'],
+    fatal_error:      ['致命', d.error, 'error'],
+    no_skill:         ['跳过', d.message, 'event'],
+    result:           ['结果', d.summary || '（无输出）', 'result'],
+  };
+  const [tag, text, cls] = map[event] || [event, JSON.stringify(d), 'event'];
+  addEvent(tag, text, cls);
+  if (event === 'exec_finish' || event === 'result') {
+    if (d.summary) addBubble(d.summary, 'assistant');
+  }
+}
+
+loadStats();
+</script>
+</body>
+</html>
