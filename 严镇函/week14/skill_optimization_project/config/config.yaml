@@ -1,0 +1,17 @@
+#LLM配置
+llm:
+  api_key: ""
+  base_url: "https://api.deepseek.com"
+  model: "deepseek-chat"
+  max_tokens: 1024
+#技能配置
+experiment:
+  skill_v1_path : "skills/Universal_Learning_Mentor_Skill.md"
+  skill_v2_path : "skills/Universal_Learning_Mentor_Skill_v2.md"
+  tasks_path : "tasks/test_tasks.yaml"
+  logs_dir : "logs"
+
+#评估配置
+evaluation:
+  quality_weight: 0.6
+  token_weight: 0.4
