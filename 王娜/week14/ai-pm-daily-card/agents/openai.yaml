@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI产品经理每日知识卡"
+  short_description: "每日生成一张 AI 产品经理知识卡片与配套小红书发布文案"
+  default_prompt: "使用 $ai-pm-daily-card 生成今天的 AI 产品经理知识卡片和小红书发布包"
+
+policy:
+  allow_implicit_invocation: true
