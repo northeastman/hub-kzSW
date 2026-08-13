@@ -1,0 +1,20 @@
+﻿python : 未设置 TAVILY_API_KEY，使用 Mock 搜索
+所在位置 C:\Users\Administrator\AppData\Local\Temp\ps-script-2c92cd15-859f-4a06-8215-25b231a6c6fc.ps1:92 字符: 328
++ ... "; $env:AGENT_MODEL = "qwen3.7-plus"; python run_maas.py 2>&1 | Out-F ...
++                                           ~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (未设置 TAVILY_API_KEY，使用 Mock 搜索:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+未设置 TAVILY_API_KEY，使用 Mock 搜索
+未设置 TAVILY_API_KEY，使用 Mock 搜索
+未设置 TAVILY_API_KEY，使用 Mock 搜索
+未设置 TAVILY_API_KEY，使用 Mock 搜索
+未设置 TAVILY_API_KEY，使用 Mock 搜索
+未设置 TAVILY_API_KEY，使用 Mock 搜索
+未设置 TAVILY_API_KEY，使用 Mock 搜索
+未设置 TAVILY_API_KEY，使用 Mock 搜索
+未设置 TAVILY_API_KEY，使用 Mock 搜索
+未设置 TAVILY_API_KEY，使用 Mock 搜索
+未设置 TAVILY_API_KEY，使用 Mock 搜索
+未设置 TAVILY_API_KEY，使用 Mock 搜索
+未设置 TAVILY_API_KEY，使用 Mock 搜索

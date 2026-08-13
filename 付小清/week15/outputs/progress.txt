@@ -1,0 +1,11 @@
+[完成] 全部实验已跑完
+
+MaaS API 实测结果（qwen3.7-plus）：
+- 实验1 并行: 95.99s, dispatch 加速 2.22×, 3 subagent
+- 实验1 串行: 154.74s
+- 实验2 并行: 94.80s, dispatch 加速 1.70×, 2 subagent
+- 实验2 串行: 103.83s
+- 平均总墙钟: 并行 95.40s vs 串行 129.29s (加速 1.35×)
+- 平均 dispatch 加速: 1.96×
+
+详见 outputs/maas_eval.json 和 outputs/maas_output.txt
