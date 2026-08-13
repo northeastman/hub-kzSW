@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>爆款历史人物公众号文章 · 主/子Agent编排</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+         background: #0f1115; color: #e6e6e6; }
+  header { padding: 16px 24px; background: #161a22; border-bottom: 1px solid #232834; }
+  header h1 { margin: 0; font-size: 18px; font-weight: 600; }
+  header p { margin: 4px 0 0; font-size: 12px; color: #8a93a6; }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 20px; }
+  .bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+  .bar input { flex: 1; min-width: 260px; padding: 11px 14px; border-radius: 8px; border: 1px solid #2a3140;
+               background: #161a22; color: #e6e6e6; font-size: 14px; outline: none; }
+  .bar input:focus { border-color: #4a7cff; }
+  .bar button { padding: 11px 18px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px;
+                font-weight: 600; }
+  .btn-go { background: #4a7cff; color: #fff; }
+  .btn-rec { background: #2a3140; color: #e6e6e6; }
+  .btn-stop { background: #5a2a2a; color: #e6e6e6; }
+  .btn-go:disabled, .btn-rec:disabled, .btn-stop:disabled { opacity: .5; cursor: not-allowed; }
+  .hint { font-size: 12px; color: #8a93a6; margin-bottom: 14px; }
+  .hint b { color: #c8d0e0; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: #161a22; border: 1px solid #232834; border-radius: 12px; padding: 14px; }
+  .card h2 { margin: 0 0 10px; font-size: 14px; color: #9aa3b6; font-weight: 600;
+             display: flex; justify-content: space-between; align-items: center; }
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #232834; color: #8a93a6; }
+  /* main trace */
+  .main-trace { font-size: 13px; }
+  .step { border-left: 2px solid #2a3140; padding: 8px 0 8px 12px; margin-bottom: 6px; }
+  .step.final { border-left-color: #4a7cff; }
+  .step .tag { font-size: 11px; color: #6b7385; }
+  .step .th { color: #b8c0d0; margin: 2px 0; }
+  .step .act { color: #4a7cff; font-weight: 600; }
+  .step .obs { color: #7d8699; font-size: 12px; margin-top: 3px; white-space: pre-wrap; }
+  /* subagent columns */
+  .subs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; min-height: 120px; }
+  .sub { min-width: 220px; max-width: 260px; flex: 1; background: #0f1115; border: 1px solid #232834;
+         border-radius: 8px; padding: 10px; font-size: 12px; }
+  .sub .sub-h { color: #4a7cff; font-weight: 600; margin-bottom: 6px; font-size: 11px;
+                white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sub .sub-d { color: #6b7385; font-size: 11px; margin-bottom: 6px; }
+  .sub .s-step { color: #8a93a6; margin-bottom: 4px; }
+  .sub .s-step b { color: #c8d0e0; }
+  /* stats */
+  .stats { display: flex; gap: 14px; font-size: 13px; color: #9aa3b6; margin-top: 10px; flex-wrap: wrap; }
+  .stats b { color: #4a7cff; }
+  /* article */
+  .article { line-height: 1.85; font-size: 15px; color: #d8dde6; white-space: pre-wrap; }
+  .article-title { color: #4a7cff; font-weight: 600; }
+  .empty { color: #6b7385; font-size: 13px; }
+  /* history */
+  .hist { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { font-size: 12px; padding: 4px 10px; border-radius: 10px; background: #232834; color: #b8c0d0; cursor: default; }
+  .chip.clickable { cursor: pointer; }
+  .chip.clickable:hover { background: #3a4358; color: #fff; }
+  .chip.last { background: #4a7cff; color: #fff; }
+  pre.err { white-space: pre-wrap; color: #ff6b6b; font-size: 13px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>爆款历史人物公众号文章生成 · 主Agent编排并发子Agent</h1>
+  <p>输入历史人物名直接生成；或点「推荐下一篇」由主Agent据已写历史推荐<b>新人物</b>并生成(输入框留空=用上一篇作参考,填人名=以该人物作对比参考)。已写人物长期保存,重启不丢。</p>
+</header>
+<div class="wrap">
+  <div class="bar">
+    <input id="q" placeholder="人物名(如:苏轼)；推荐模式可留空" />
+    <button class="btn-go" id="go" onclick="start(false)">生成文章</button>
+    <button class="btn-rec" id="rec" onclick="start(true)">推荐下一篇并生成</button>
+    <button class="btn-stop" id="stop" onclick="stopGen()" disabled>停止</button>
+  </div>
+  <div class="hint">
+    两种模式：<b>A</b> 直接给人物名 → 主Agent派发3个子Agent并行收集素材 → 综合成文；
+    <b>B</b> 推荐下一篇 → 主Agent先调用 recommend_next_figure 选人 → 再并行收集素材 → 成文。
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>主 Agent ReAct 过程 <span class="badge" id="main-badge">等待</span></h2>
+      <div class="main-trace" id="main-trace"><div class="empty">输入人物名或点推荐后，这里显示主Agent的思考与动作…</div></div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="card">
+      <h2>并行子 Agent <span class="badge" id="sub-badge">0</span></h2>
+      <div class="subs" id="subs"><div class="empty">派发后这里并排显示各子Agent的实时步骤（多列同时滚动=并行）…</div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h2>生成文章 <span class="badge" id="art-badge">未生成</span></h2>
+    <div class="article" id="article"><div class="empty">文章将在此显示…</div></div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h2>已写人物历史 <span class="badge" id="hist-badge">0</span></h2>
+    <div class="hist" id="hist"><div class="empty">还没有写过人物…</div></div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let subMap = {};   // sid -> {el, topic}
+let curCtrl = null;  // 当前生成的 AbortController，供"停止"按钮中断
+
+function stopGen() {
+  if (curCtrl) { try { curCtrl.abort(); } catch(e) {} }
+}
+
+function start(recommend) {
+  const q = $('q').value.trim();
+  const mode = recommend ? 'recommend' : 'direct';
+  // 推荐模式：输入框为空则用上一篇作参考；输入框有人名则作"参考对比人物"。
+  // 直接模式：必须输入人物名。
+  if (!recommend && !q) { alert('请输入历史人物名'); return; }
+  $('go').disabled = $('rec').disabled = true;
+  $('stop').disabled = false;
+  // reset
+  $('main-trace').innerHTML = '';
+  $('subs').innerHTML = '';
+  $('article').innerHTML = '<div class="empty">生成中…</div>';
+  $('stats').innerHTML = '';
+  $('main-badge').textContent = '运行中';
+  $('sub-badge').textContent = '0';
+  subMap = {};
+
+  curCtrl = new AbortController();
+  fetchSSE(q, mode, curCtrl.signal);
+
+  async function fetchSSE(question, mode, signal) {
+    try {
+      const resp = await fetch('/query', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({question, mode}),
+        signal: signal
+      });
+      const reader = resp.body.getReader();
+      const dec = new TextDecoder();
+      let buf = '';
+      while (true) {
+        const {done, value} = await reader.read();
+        if (done) break;
+        buf += dec.decode(value, {stream: true});
+        let idx;
+        while ((idx = buf.indexOf('\n\n')) >= 0) {
+          const raw = buf.slice(0, idx); buf = buf.slice(idx + 2);
+          const line = raw.split('\n').find(l => l.startsWith('data: '));
+          if (!line) continue;
+          const ev = JSON.parse(line.slice(6));
+          handle(ev);
+        }
+      }
+    } catch (e) {
+      if (e.name === 'AbortError') {
+        $('article').innerHTML = '<pre class="err">已停止生成。</pre>';
+        $('main-badge').textContent = '已停止';
+      } else {
+        $('article').innerHTML = '<pre class="err">连接异常：'+esc(e.message)+'</pre>';
+      }
+    } finally {
+      $('go').disabled = $('rec').disabled = false;
+      $('stop').disabled = true;
+      curCtrl = null;
+    }
+  }
+}
+
+function handle(ev) {
+  if (ev.type === 'main_step') addMain(ev);
+  else if (ev.type === 'dispatch') onDispatch(ev);
+  else if (ev.type === 'subagent_step') addSub(ev);
+  else if (ev.type === 'subagent_done') subDone(ev);
+  else if (ev.type === 'final') onFinal(ev);
+  else if (ev.type === 'error') $('article').innerHTML = '<pre class="err">'+ev.message+'</pre>';
+  else if (ev.type === 'done') { $('main-badge').textContent = '完成'; loadHist(); }
+}
+
+function addMain(ev) {
+  const box = $('main-trace');
+  if (box.querySelector('.empty')) box.innerHTML = '';
+  const id = 'm' + ev.idx;
+  let el = document.getElementById(id);
+  const final = ev.final;
+  const html =
+    '<div class="step ' + (final ? 'final' : '') + '">'
+    + '<span class="tag">[' + ev.idx + '] ' + (ev.done ? '执行后' : (final ? '收尾' : '决策中')) + '</span>'
+    + (ev.thought ? '<div class="th">💭 ' + esc(ev.thought) + '</div>' : '')
+    + (ev.action ? '<div class="act">▶ ' + esc(ev.action) + (ev.action_input ? ' : ' + esc(ev.action_input) : '') + '</div>' : '')
+    + (ev.observation ? '<div class="obs">' + esc(ev.observation).slice(0, 400) + (ev.observation.length > 400 ? '…' : '') + '</div>' : '')
+    + '</div>';
+  if (el) el.outerHTML = html; else box.insertAdjacentHTML('beforeend', html);
+}
+
+function onDispatch(ev) {
+  $('sub-badge').textContent = ev.subtopics.length;
+  const box = $('subs');
+  if (box.querySelector('.empty')) box.innerHTML = '';
+  ev.subtopics.forEach((t, i) => {
+    const sid = ev.subagent_ids[i];
+    const div = document.createElement('div');
+    div.className = 'sub';
+    div.id = 'sub_' + sid;
+    div.innerHTML = '<div class="sub-h">子Agent #' + (i+1) + '</div>'
+      + '<div class="sub-d">' + esc(t) + '</div><div class="s-steps"></div>';
+    box.appendChild(div);
+    subMap[sid] = {el: div, topic: t};
+  });
+}
+
+function addSub(ev) {
+  const sid = ev.subagent_id;
+  const s = subMap[sid];
+  if (!s) return;
+  const steps = s.el.querySelector('.s-steps');
+  const id = sid + '_' + ev.idx;
+  let el = document.getElementById(id);
+  const html = '<div class="s-step" id="'+id+'">'
+    + '<b>['+ev.idx+'] ' + esc(ev.action || (ev.final?'Final':'…')) + '</b>'
+    + (ev.thought ? '<br>💭 ' + esc(ev.thought).slice(0,80) : '')
+    + (ev.observation ? '<br>🔍 ' + esc(ev.observation).slice(0,80) : '')
+    + '</div>';
+  if (el) el.outerHTML = html; else steps.insertAdjacentHTML('beforeend', html);
+}
+
+function subDone(ev) {
+  const s = subMap[ev.subagent_id];
+  if (s) {
+    const d = s.el.querySelector('.sub-d');
+    d.textContent = ev.subtopic + ' · 用时 ' + ev.duration + 's';
+    d.style.color = '#4a7cff';
+  }
+}
+
+function onFinal(ev) {
+  $('art-badge').textContent = ev.figure + ' · ' + ev.title;
+  // 文章渲染：标题行高亮
+  let art = esc(ev.answer);
+  art = art.replace(/「(.+?)」/g, '<span class="article-title">「$1」</span>');
+  $('article').innerHTML = art;
+  const st = ev.parallel_stats && ev.parallel_stats[0];
+  let html = '';
+  if (st) {
+    html = '<span>子Agent数：<b>'+st.n_subagents+'</b></span>'
+      + '<span>并行墙钟：<b>'+st.wall_clock+'s</b></span>'
+      + '<span>串行需：<b>'+st.serial_sum+'s</b></span>'
+      + '<span>加速：<b>'+st.speedup+'×</b></span>';
+  }
+  const tu = ev.token_usage;
+  if (tu && tu.calls) {
+    const tot = (tu.prompt||0) + (tu.completion||0);
+    html += '<span>LLM调用：<b>'+tu.calls+'次</b></span>'
+      + '<span>token：<b>'+tot+'</b> (输入'+(tu.prompt||0)+'/输出'+(tu.completion||0)+')</span>';
+  }
+  $('stats').innerHTML = html;
+}
+
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+async function loadHist() {
+  try {
+    const r = await fetch('/history'); const j = await r.json();
+    const arr = j.history || [];
+    $('hist-badge').textContent = arr.length;
+    if (!arr.length) { $('hist').innerHTML = '<div class="empty">还没有写过人物…</div>'; return; }
+    $('hist').innerHTML = arr.map((h,i) => {
+      const cls = 'chip ' + (i===arr.length-1?'last ':'') + (h.file?'clickable':'');
+      const click = h.file ? ' onclick="viewArticle(\''+esc(h.file)+'\')"' : '';
+      return '<span class="'+cls+'"'+click+' title="'+esc(h.title)+'">'
+        + esc(h.figure) + ' · ' + (h.timestamp||'').slice(5,16) + '</span>';
+    }).join('');
+  } catch(e) {}
+}
+
+async function viewArticle(file) {
+  try {
+    $('article').innerHTML = '<div class="empty">加载中…</div>';
+    const r = await fetch('/article?file='+encodeURIComponent(file)); const j = await r.json();
+    if (j.error) { $('article').innerHTML = '<pre class="err">'+esc(j.error)+'</pre>'; return; }
+    let art = esc(j.content);
+    art = art.replace(/「(.+?)」/g, '<span class="article-title">「$1」</span>');
+    $('article').innerHTML = art;
+    $('art-badge').textContent = '历史文章 · ' + file;
+  } catch(e) { $('article').innerHTML = '<pre class="err">加载失败</pre>'; }
+}
+loadHist();
+</script>
+</body>
+</html>
