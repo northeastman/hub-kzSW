@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "deepseek-delegating-agent"
+version = "0.1.0"
+description = "支持 Hermes 风格子 Agent 委派与联网搜索的轻量 DeepSeek Agent"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "ddgs>=9.5,<10",
+  "openai>=1.99,<3",
+  "tqdm>=4.67,<5",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3", "pytest-asyncio>=0.24"]
+
+[project.scripts]
+delegating-agent = "delegating_agent.cli:main"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/delegating_agent"]
