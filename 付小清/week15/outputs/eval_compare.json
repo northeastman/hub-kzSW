@@ -1,0 +1,43 @@
+{
+  "summary": {
+    "avg_parallel_s": 1.2,
+    "avg_serial_s": 3.6,
+    "avg_speedup": 3.0
+  },
+  "details": [
+    {
+      "question": "2024年中国新能源汽车市场调研：销量规模、主要厂商竞争格局、政策趋势",
+      "parallel": {
+        "wall": 1.2,
+        "n_subagents": 3,
+        "dispatch_wall": 1.2,
+        "serial_sum": 3.6,
+        "speedup": 3.0
+      },
+      "serial": {
+        "wall": 3.6,
+        "n_subagents": 3,
+        "dispatch_wall": 3.6,
+        "serial_sum": 3.6,
+        "speedup": 1.0
+      }
+    },
+    {
+      "question": "中国咖啡市场调研：市场规模、主要品牌、消费趋势",
+      "parallel": {
+        "wall": 1.2,
+        "n_subagents": 3,
+        "dispatch_wall": 1.2,
+        "serial_sum": 3.6,
+        "speedup": 3.0
+      },
+      "serial": {
+        "wall": 3.6,
+        "n_subagents": 3,
+        "dispatch_wall": 3.6,
+        "serial_sum": 3.6,
+        "speedup": 1.0
+      }
+    }
+  ]
+}

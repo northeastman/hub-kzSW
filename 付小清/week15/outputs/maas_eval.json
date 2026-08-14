@@ -1,0 +1,52 @@
+{
+  "api_host": "https://ws-an0d0vqov4zjj1qx.cn-beijing.maas.aliyuncs.com/compatible-mode/v1",
+  "model": "qwen3.7-plus",
+  "workspace": "默认业务空间 (ws-an0d0vqov4zjj1qx)",
+  "search_mode": "Mock（无 TAVILY_API_KEY，LLM 使用 MaaS qwen3.7-plus）",
+  "summary": {
+    "avg_parallel_s": 95.4,
+    "avg_serial_s": 129.29,
+    "avg_total_speedup": 1.35,
+    "avg_dispatch_speedup": 1.96
+  },
+  "details": [
+    {
+      "question": "2024年中国新能源汽车市场调研：销量规模、主要厂商竞争格局、政策趋势",
+      "parallel": {
+        "wall": 95.99,
+        "dispatch_wall": 48.97,
+        "serial_sum": 108.85,
+        "speedup": 2.22,
+        "n_subagents": 3,
+        "main_actions": ["dispatch_subagents", "Final Answer"],
+        "dispatched": true
+      },
+      "serial": {
+        "wall": 154.74,
+        "dispatch_wall": 89.15,
+        "n_subagents": 2,
+        "main_actions": ["dispatch_subagents", "web_search", "Final Answer"],
+        "dispatched": true
+      }
+    },
+    {
+      "question": "中国咖啡市场调研：市场规模、主要品牌、消费趋势",
+      "parallel": {
+        "wall": 94.8,
+        "dispatch_wall": 48.4,
+        "serial_sum": 82.31,
+        "speedup": 1.7,
+        "n_subagents": 2,
+        "main_actions": ["dispatch_subagents", "Final Answer"],
+        "dispatched": true
+      },
+      "serial": {
+        "wall": 103.83,
+        "dispatch_wall": 84.21,
+        "n_subagents": 2,
+        "main_actions": ["dispatch_subagents", "Final Answer"],
+        "dispatched": true
+      }
+    }
+  ]
+}
