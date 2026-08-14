@@ -1,0 +1,116 @@
+"""
+代码审查 Subagent HTTP 服务（FastAPI + SSE 流式）
+
+教学重点：
+  SSE 逐事件推送，前端实时看到：
+  - 主 agent 的 ReAct 每步（Thought/Action/Observation）
+  - 派发 reviewer 时拓扑加节点（每个节点=一个文件）
+  - 各 reviewer 并行 ReAct 步骤
+  - 最终审查报告 + 并行加速统计
+
+启动：
+  uvicorn src.serve:app --host 0.0.0.0 --port 8003
+  浏览器开 http://localhost:8003
+
+依赖：pip install fastapi uvicorn
+"""
+import os, sys, json, queue, threading, logging
+from pathlib import Path
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, StreamingResponse
+from pydantic import BaseModel
+
+BASE_DIR = Path(__file__).parent.parent
+sys.path.insert(0, str(Path(__file__).parent))
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger(__name__)
+STATIC_DIR = BASE_DIR / "static"
+
+
+@asynccontextmanager
+async def lifespan(app):
+    logger.info("代码审查 subagent 服务就绪")
+    yield
+
+app = FastAPI(lifespan=lifespan)
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
+
+class ReviewRequest(BaseModel):
+    project_dir: str
+
+
+@app.get("/health")
+def health():
+    has_llm = bool(os.getenv("DASHSCOPE_API_KEY"))
+    return {"status": "ok", "llm": has_llm}
+
+
+@app.post("/review")
+def review(req: ReviewRequest):
+    """SSE 流式：主 agent + 各 reviewer 的 ReAct 步骤逐事件推。"""
+    import agents
+
+    def event_stream():
+        q = queue.Queue()
+        SENTINEL = object()
+
+        def push(ev):
+            q.put(ev)
+
+        def on_main_step(step):
+            push({"type": "main_step", **step})
+
+        def on_dispatch(info):
+            push({"type": "dispatch", **info})
+
+        def on_reviewer_step(rid, step):
+            push({"type": "reviewer_step", "reviewer_id": rid, **step})
+
+        def on_reviewer_done(rid, duration, fpath):
+            push({"type": "reviewer_done", "reviewer_id": rid,
+                  "duration": duration, "file_path": fpath})
+
+        def run():
+            try:
+                r = agents.run_review(
+                    req.project_dir,
+                    on_main_step=on_main_step,
+                    on_dispatch=on_dispatch,
+                    on_reviewer_step=on_reviewer_step,
+                    on_reviewer_done=on_reviewer_done,
+                )
+                push({"type": "final", "answer": r["final_answer"],
+                      "parallel_stats": r["parallel_stats"],
+                      "main_trace_len": len(r["main_trace"]),
+                      "reviewer_count": len(r["reviewers"])})
+            except Exception as e:
+                push({"type": "error", "message": f"{type(e).__name__}: {str(e)[:200]}"})
+            finally:
+                push(SENTINEL)
+
+        threading.Thread(target=run, daemon=True).start()
+
+        # 先发 start
+        yield "data: " + json.dumps({"type": "start", "project_dir": req.project_dir},
+                                    ensure_ascii=False) + "\n\n"
+        while True:
+            ev = q.get()
+            if ev is SENTINEL:
+                yield "data: " + json.dumps({"type": "done"}, ensure_ascii=False) + "\n\n"
+                break
+            yield "data: " + json.dumps(ev, ensure_ascii=False) + "\n\n"
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+
+@app.get("/")
+def index():
+    return FileResponse(str(STATIC_DIR / "index.html"))
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("serve:app", host="0.0.0.0", port=8003, reload=False)
