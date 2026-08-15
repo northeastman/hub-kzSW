@@ -1,0 +1,243 @@
+{
+  "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)",
+  "python": "F:\\D\\miniconda3\\envs\\py313\\python.exe",
+  "optimizer_stats": {
+    "script": {
+      "docstring_chars_before": 1676,
+      "docstring_chars_after": 106,
+      "comment_lines_removed": 26,
+      "comment_chars_removed": 1368
+    },
+    "skill_md": {
+      "before_chars": 3267,
+      "core_chars": 930,
+      "reference_chars": 2524
+    }
+  },
+  "metrics_before": {
+    "SKILL.md": {
+      "chars": 3267,
+      "bytes": 5139,
+      "tokens": 1813,
+      "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)"
+    },
+    "reference.md": null,
+    "script_total": {
+      "chars": 17333,
+      "bytes": 17437,
+      "tokens": 4398,
+      "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)"
+    },
+    "script_docstring": {
+      "chars": 1676,
+      "bytes": 1764,
+      "tokens": 474,
+      "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)"
+    },
+    "script_comments": {
+      "chars": 1368,
+      "bytes": 1376,
+      "tokens": 347,
+      "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)"
+    },
+    "script_code": {
+      "chars": 14289,
+      "bytes": 14297,
+      "tokens": 3577,
+      "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)"
+    },
+    "always_loaded_tokens": 1813,
+    "script_readable_tokens": 4398
+  },
+  "metrics_after": {
+    "SKILL.md": {
+      "chars": 930,
+      "bytes": 1530,
+      "tokens": 546,
+      "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)"
+    },
+    "reference.md": {
+      "chars": 2524,
+      "bytes": 3712,
+      "tokens": 1264,
+      "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)"
+    },
+    "script_total": {
+      "chars": 14395,
+      "bytes": 14459,
+      "tokens": 3631,
+      "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)"
+    },
+    "script_docstring": {
+      "chars": 106,
+      "bytes": 162,
+      "tokens": 54,
+      "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)"
+    },
+    "script_comments": {
+      "chars": 0,
+      "bytes": 0,
+      "tokens": 0,
+      "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)"
+    },
+    "script_code": {
+      "chars": 14289,
+      "bytes": 14297,
+      "tokens": 3577,
+      "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)"
+    },
+    "always_loaded_tokens": 546,
+    "script_readable_tokens": 3631
+  },
+  "comparison": {
+    "tokenizer": "heuristic(CJK~1.5, ASCII~4char/tok)",
+    "SKILL.md": {
+      "before": 1813,
+      "after": 546,
+      "delta": -1267,
+      "ratio": 0.301
+    },
+    "reference.md": {
+      "before": 0,
+      "after": 1264,
+      "note": "按需加载，不计入常驻成本"
+    },
+    "script_total": {
+      "before": 4398,
+      "after": 3631,
+      "delta": -767,
+      "ratio": 0.826
+    },
+    "script_docstring": {
+      "before": 474,
+      "after": 54,
+      "delta": -420,
+      "ratio": 0.114
+    },
+    "script_comments": {
+      "before": 347,
+      "after": 0,
+      "delta": -347,
+      "ratio": 0.0
+    },
+    "script_code": {
+      "before": 3577,
+      "after": 3577,
+      "delta": 0,
+      "ratio": 1.0
+    },
+    "always_loaded_tokens": {
+      "before": 1813,
+      "after": 546,
+      "delta": -1267,
+      "ratio": 0.301,
+      "note": "每次 skill 触发都加载 SKILL.md 的 token 成本"
+    }
+  },
+  "functional_equivalence": {
+    "all_equal": true,
+    "tasks": [
+      {
+        "id": "t1",
+        "files": [
+          "20230719182031遥测数据.txt",
+          "20230719191613遥测数据.txt"
+        ],
+        "column": 63,
+        "mode": "parsed",
+        "x_mode": "index",
+        "rows": 3069,
+        "col_name": "+Xxyw/-Xxyw/+Yxyw1温度第一次采集",
+        "categorical": false,
+        "equal": true
+      },
+      {
+        "id": "t2",
+        "files": [
+          "20230719182031遥测数据.txt",
+          "20230719191613遥测数据.txt"
+        ],
+        "column": 11,
+        "mode": "hex",
+        "x_mode": "index",
+        "rows": 3069,
+        "col_name": "错误指令计数",
+        "categorical": false,
+        "equal": true
+      },
+      {
+        "id": "t3",
+        "files": [
+          "20230719182031遥测数据.txt"
+        ],
+        "column": 1,
+        "mode": "parsed",
+        "x_mode": "index",
+        "rows": 1532,
+        "col_name": "试验数据采集单元主机状态",
+        "categorical": true,
+        "equal": true
+      },
+      {
+        "id": "t4",
+        "files": [
+          "20250318112637遥测数据.txt",
+          "20250318170100遥测数据.txt"
+        ],
+        "column": 3,
+        "mode": "parsed",
+        "x_mode": "index",
+        "rows": 8365,
+        "col_name": "指令类型码",
+        "categorical": false,
+        "equal": true
+      },
+      {
+        "id": "t5",
+        "files": [
+          "20250318112637遥测数据.txt"
+        ],
+        "column": 3,
+        "mode": "hex",
+        "x_mode": "index",
+        "rows": 4187,
+        "col_name": "指令类型码",
+        "categorical": false,
+        "equal": true
+      },
+      {
+        "id": "t6",
+        "files": [
+          "20230719182031遥测数据.txt",
+          "20230719191613遥测数据.txt"
+        ],
+        "column": 63,
+        "mode": "parsed",
+        "x_mode": "time",
+        "rows": 3069,
+        "col_name": "+Xxyw/-Xxyw/+Yxyw1温度第一次采集",
+        "categorical": false,
+        "equal": true
+      },
+      {
+        "id": "t7",
+        "files": [
+          "20250318112637遥测数据.txt",
+          "20250318170100遥测数据.txt"
+        ],
+        "column": 0,
+        "mode": "parsed",
+        "x_mode": "index",
+        "rows": 8365,
+        "col_name": "0",
+        "categorical": true,
+        "equal": true
+      }
+    ]
+  },
+  "png_equivalence": {
+    "png_equal": true,
+    "before_sha": "34ea983617dc8b0945d0b6e6022ecbcc043375dda23a12f8e47cc6cbd9f47bb3",
+    "after_sha": "34ea983617dc8b0945d0b6e6022ecbcc043375dda23a12f8e47cc6cbd9f47bb3"
+  }
+}

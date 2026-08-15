@@ -1,0 +1,72 @@
+{
+  "before": {
+    "label": "优化前 (skill-before)",
+    "file_count": 1,
+    "files": [
+      "SKILL.md"
+    ],
+    "total_chars": 7499,
+    "total_lines": 197,
+    "total_words": 1147,
+    "estimated_tokens_total": 1874,
+    "estimated_tokens_always_loaded": 1874,
+    "estimated_tokens_lazy": 1,
+    "skill_md_chars": 7499,
+    "skill_md_lines": 197,
+    "script_parse_ms": 0.0
+  },
+  "after": {
+    "label": "优化后 (skill-after)",
+    "file_count": 3,
+    "files": [
+      "reference.md",
+      "scripts\\lint_check.py",
+      "SKILL.md"
+    ],
+    "total_chars": 4225,
+    "total_lines": 151,
+    "total_words": 535,
+    "estimated_tokens_total": 1056,
+    "estimated_tokens_always_loaded": 321,
+    "estimated_tokens_lazy": 734,
+    "skill_md_chars": 1287,
+    "skill_md_lines": 54,
+    "script_parse_ms": 2.711
+  },
+  "comparison": {
+    "token_always_loaded_reduction_pct": 82.9,
+    "token_total_reduction_pct": 43.6,
+    "chars_reduction_pct": 43.7,
+    "lines_reduction_pct": 23.4,
+    "always_loaded_tokens_before": 1874,
+    "always_loaded_tokens_after": 321,
+    "lazy_tokens_after": 734,
+    "effective_context_saving": "Agent 默认只加载 SKILL.md；reference.md 按需读取，首次上下文节省约 82.9%"
+  },
+  "functional_coverage": {
+    "security": {
+      "before": true,
+      "after": true
+    },
+    "SQL": {
+      "before": true,
+      "after": true
+    },
+    "correctness": {
+      "before": true,
+      "after": true
+    },
+    "test": {
+      "before": true,
+      "after": true
+    },
+    "Critical": {
+      "before": true,
+      "after": true
+    },
+    "Suggestion": {
+      "before": true,
+      "after": true
+    }
+  }
+}

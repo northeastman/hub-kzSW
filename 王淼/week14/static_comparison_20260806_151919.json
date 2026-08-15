@@ -1,0 +1,354 @@
+{
+  "generated_at": "2026-08-06T15:19:19.587046",
+  "optimization_target": "token_reduction",
+  "comparison": {
+    "token_analysis": {
+      "v1_chars": 828,
+      "v2_chars": 579,
+      "char_reduction_pct": 30.1,
+      "v1_estimated_tokens": 710,
+      "v2_estimated_tokens": 467,
+      "token_saved": 243,
+      "token_saving_pct": 34.2,
+      "note": "Token 为基于字符类型的估算值，实际值取决于分词器"
+    },
+    "structure_analysis": {
+      "v1": {
+        "total_lines": 56,
+        "total_chars": 828,
+        "header_count": 12,
+        "table_rows": 0,
+        "list_items": 26,
+        "bold_sections": 0
+      },
+      "v2": {
+        "total_lines": 38,
+        "total_chars": 579,
+        "header_count": 3,
+        "table_rows": 7,
+        "list_items": 6,
+        "bold_sections": 6
+      },
+      "improvements": [
+        "表格使用: 7 行表格（v1: 0 行）",
+        "列表项: 6 项（v1: 26 项）",
+        "文档行数: 56 → 38 (减少 18 行)"
+      ]
+    },
+    "coverage_analysis": {
+      "v1": {
+        "total_questions": 8,
+        "fully_covered": 6,
+        "partially_covered": 2,
+        "not_covered": 0,
+        "coverage_score": 0.867,
+        "avg_coverage_per_q": 0.875
+      },
+      "v2": {
+        "total_questions": 8,
+        "fully_covered": 5,
+        "partially_covered": 2,
+        "not_covered": 1,
+        "coverage_score": 0.733,
+        "avg_coverage_per_q": 0.791
+      },
+      "per_question_comparison": [
+        {
+          "id": 46,
+          "question": "我刚付款2小时，订单还没发货，可以取消订单吗？",
+          "v1_coverage": {
+            "ratio": 0.5,
+            "missing": [
+              "可以"
+            ]
+          },
+          "v2_coverage": {
+            "ratio": 0.5,
+            "missing": [
+              "可以"
+            ]
+          },
+          "improved": false,
+          "regressed": false,
+          "note": [
+            "可以"
+          ]
+        },
+        {
+          "id": 47,
+          "question": "我付款3天了，订单还显示待发货，可以直接取消吗？",
+          "v1_coverage": {
+            "ratio": 1.0,
+            "missing": []
+          },
+          "v2_coverage": {
+            "ratio": 1.0,
+            "missing": []
+          },
+          "improved": false,
+          "regressed": false,
+          "note": "全覆盖"
+        },
+        {
+          "id": 48,
+          "question": "标准配送需要几天可以收到？",
+          "v1_coverage": {
+            "ratio": 1.0,
+            "missing": []
+          },
+          "v2_coverage": {
+            "ratio": 1.0,
+            "missing": []
+          },
+          "improved": false,
+          "regressed": false,
+          "note": "全覆盖"
+        },
+        {
+          "id": 49,
+          "question": "次日达服务需要几点前下单？在哪些城市有？",
+          "v1_coverage": {
+            "ratio": 1.0,
+            "missing": []
+          },
+          "v2_coverage": {
+            "ratio": 0.33,
+            "missing": [
+              "北京",
+              "上海"
+            ]
+          },
+          "improved": false,
+          "regressed": true,
+          "note": [
+            "北京",
+            "上海"
+          ]
+        },
+        {
+          "id": 50,
+          "question": "我在新疆，可以选次日达吗？",
+          "v1_coverage": {
+            "ratio": 1.0,
+            "missing": []
+          },
+          "v2_coverage": {
+            "ratio": 1.0,
+            "missing": []
+          },
+          "improved": false,
+          "regressed": false,
+          "note": "全覆盖"
+        },
+        {
+          "id": 51,
+          "question": "取消未发货订单，退款多久到账？",
+          "v1_coverage": {
+            "ratio": 1.0,
+            "missing": []
+          },
+          "v2_coverage": {
+            "ratio": 1.0,
+            "missing": []
+          },
+          "improved": false,
+          "regressed": false,
+          "note": "全覆盖"
+        },
+        {
+          "id": 52,
+          "question": "付款后36小时，订单待发货，可以取消吗？",
+          "v1_coverage": {
+            "ratio": 0.5,
+            "missing": [
+              "可以"
+            ]
+          },
+          "v2_coverage": {
+            "ratio": 0.5,
+            "missing": [
+              "可以"
+            ]
+          },
+          "improved": false,
+          "regressed": false,
+          "note": [
+            "可以"
+          ]
+        },
+        {
+          "id": 53,
+          "question": "满多少元可以免运费？",
+          "v1_coverage": {
+            "ratio": 1.0,
+            "missing": []
+          },
+          "v2_coverage": {
+            "ratio": 1.0,
+            "missing": []
+          },
+          "improved": false,
+          "regressed": false,
+          "note": "全覆盖"
+        }
+      ]
+    },
+    "estimated_accuracy": {
+      "v1": {
+        "likely_correct": 6,
+        "partial_coverage": 2,
+        "unlikely_correct": 0,
+        "estimated_accuracy": 0.875,
+        "confidence": "medium"
+      },
+      "v2": {
+        "likely_correct": 5,
+        "partial_coverage": 2,
+        "unlikely_correct": 1,
+        "estimated_accuracy": 0.75,
+        "confidence": "medium"
+      },
+      "note": "基于关键词覆盖度的理论估算，实际准确率需 LLM 测试"
+    }
+  },
+  "question_details": [
+    {
+      "id": 46,
+      "question": "我刚付款2小时，订单还没发货，可以取消订单吗？",
+      "v1_coverage": {
+        "ratio": 0.5,
+        "missing": [
+          "可以"
+        ]
+      },
+      "v2_coverage": {
+        "ratio": 0.5,
+        "missing": [
+          "可以"
+        ]
+      },
+      "improved": false,
+      "regressed": false,
+      "note": [
+        "可以"
+      ]
+    },
+    {
+      "id": 47,
+      "question": "我付款3天了，订单还显示待发货，可以直接取消吗？",
+      "v1_coverage": {
+        "ratio": 1.0,
+        "missing": []
+      },
+      "v2_coverage": {
+        "ratio": 1.0,
+        "missing": []
+      },
+      "improved": false,
+      "regressed": false,
+      "note": "全覆盖"
+    },
+    {
+      "id": 48,
+      "question": "标准配送需要几天可以收到？",
+      "v1_coverage": {
+        "ratio": 1.0,
+        "missing": []
+      },
+      "v2_coverage": {
+        "ratio": 1.0,
+        "missing": []
+      },
+      "improved": false,
+      "regressed": false,
+      "note": "全覆盖"
+    },
+    {
+      "id": 49,
+      "question": "次日达服务需要几点前下单？在哪些城市有？",
+      "v1_coverage": {
+        "ratio": 1.0,
+        "missing": []
+      },
+      "v2_coverage": {
+        "ratio": 0.33,
+        "missing": [
+          "北京",
+          "上海"
+        ]
+      },
+      "improved": false,
+      "regressed": true,
+      "note": [
+        "北京",
+        "上海"
+      ]
+    },
+    {
+      "id": 50,
+      "question": "我在新疆，可以选次日达吗？",
+      "v1_coverage": {
+        "ratio": 1.0,
+        "missing": []
+      },
+      "v2_coverage": {
+        "ratio": 1.0,
+        "missing": []
+      },
+      "improved": false,
+      "regressed": false,
+      "note": "全覆盖"
+    },
+    {
+      "id": 51,
+      "question": "取消未发货订单，退款多久到账？",
+      "v1_coverage": {
+        "ratio": 1.0,
+        "missing": []
+      },
+      "v2_coverage": {
+        "ratio": 1.0,
+        "missing": []
+      },
+      "improved": false,
+      "regressed": false,
+      "note": "全覆盖"
+    },
+    {
+      "id": 52,
+      "question": "付款后36小时，订单待发货，可以取消吗？",
+      "v1_coverage": {
+        "ratio": 0.5,
+        "missing": [
+          "可以"
+        ]
+      },
+      "v2_coverage": {
+        "ratio": 0.5,
+        "missing": [
+          "可以"
+        ]
+      },
+      "improved": false,
+      "regressed": false,
+      "note": [
+        "可以"
+      ]
+    },
+    {
+      "id": 53,
+      "question": "满多少元可以免运费？",
+      "v1_coverage": {
+        "ratio": 1.0,
+        "missing": []
+      },
+      "v2_coverage": {
+        "ratio": 1.0,
+        "missing": []
+      },
+      "improved": false,
+      "regressed": false,
+      "note": "全覆盖"
+    }
+  ]
+}

@@ -1,0 +1,502 @@
+[
+ {
+  "id": 1,
+  "category": "大模型基础",
+  "title": "自回归生成：模型的推理原理"
+ },
+ {
+  "id": 2,
+  "category": "大模型基础",
+  "title": "Token 与分词：模型的文字单位"
+ },
+ {
+  "id": 3,
+  "category": "大模型基础",
+  "title": "上下文窗口与长文本处理"
+ },
+ {
+  "id": 4,
+  "category": "大模型基础",
+  "title": "Transformer 架构与注意力机制"
+ },
+ {
+  "id": 5,
+  "category": "大模型基础",
+  "title": "预训练、指令微调、RLHF 三阶段"
+ },
+ {
+  "id": 6,
+  "category": "大模型基础",
+  "title": "微调 vs 提示词：何时该微调"
+ },
+ {
+  "id": 7,
+  "category": "大模型基础",
+  "title": "幻觉从哪来、怎么缓解"
+ },
+ {
+  "id": 8,
+  "category": "大模型基础",
+  "title": "温度与采样参数：输出确定性"
+ },
+ {
+  "id": 9,
+  "category": "大模型基础",
+  "title": "多模态模型：图文语音的统一"
+ },
+ {
+  "id": 10,
+  "category": "大模型基础",
+  "title": "模型选型：参数、成本与场景匹配"
+ },
+ {
+  "id": 11,
+  "category": "大模型基础",
+  "title": "开源模型 vs 闭源模型"
+ },
+ {
+  "id": 12,
+  "category": "大模型基础",
+  "title": "长上下文 vs RAG：怎么选"
+ },
+ {
+  "id": 13,
+  "category": "RAG 检索增强生成",
+  "title": "RAG 整体架构：检索-增强-生成"
+ },
+ {
+  "id": 14,
+  "category": "RAG 检索增强生成",
+  "title": "文本切分与向量化"
+ },
+ {
+  "id": 15,
+  "category": "RAG 检索增强生成",
+  "title": "向量数据库与召回策略"
+ },
+ {
+  "id": 16,
+  "category": "RAG 检索增强生成",
+  "title": "混合检索与重排序"
+ },
+ {
+  "id": 17,
+  "category": "RAG 检索增强生成",
+  "title": "查询改写与多轮检索"
+ },
+ {
+  "id": 18,
+  "category": "RAG 检索增强生成",
+  "title": "引文溯源：让答案可验证"
+ },
+ {
+  "id": 19,
+  "category": "RAG 检索增强生成",
+  "title": "RAG 的失败模式与兜底"
+ },
+ {
+  "id": 20,
+  "category": "RAG 检索增强生成",
+  "title": "RAG 评估：RAGAS 与检索/生成质量"
+ },
+ {
+  "id": 21,
+  "category": "RAG 检索增强生成",
+  "title": "知识库更新：增量与一致性"
+ },
+ {
+  "id": 22,
+  "category": "RAG 检索增强生成",
+  "title": "知识图谱 + RAG"
+ },
+ {
+  "id": 23,
+  "category": "RAG 检索增强生成",
+  "title": "多模态 RAG"
+ },
+ {
+  "id": 24,
+  "category": "Agent 智能体",
+  "title": "Agent 四要素：规划/记忆/工具/行动"
+ },
+ {
+  "id": 25,
+  "category": "Agent 智能体",
+  "title": "ReAct 与思维链"
+ },
+ {
+  "id": 26,
+  "category": "Agent 智能体",
+  "title": "工具调用与函数式 API 设计"
+ },
+ {
+  "id": 27,
+  "category": "Agent 智能体",
+  "title": "规划策略：任务分解与反思"
+ },
+ {
+  "id": 28,
+  "category": "Agent 智能体",
+  "title": "Agent 记忆：短期与长期"
+ },
+ {
+  "id": 29,
+  "category": "Agent 智能体",
+  "title": "多智能体协作模式"
+ },
+ {
+  "id": 30,
+  "category": "Agent 智能体",
+  "title": "工作流 vs Agent：怎么选"
+ },
+ {
+  "id": 31,
+  "category": "Agent 智能体",
+  "title": "Agent 评测：完成率与成本"
+ },
+ {
+  "id": 32,
+  "category": "Agent 智能体",
+  "title": "Agent 的安全与权限控制"
+ },
+ {
+  "id": 33,
+  "category": "Agent 智能体",
+  "title": "操作电脑/浏览器的 Agent"
+ },
+ {
+  "id": 34,
+  "category": "Agent 智能体",
+  "title": "Agent 产品的边界与兜底"
+ },
+ {
+  "id": 35,
+  "category": "提示词工程",
+  "title": "结构化提示词：角色/任务/格式"
+ },
+ {
+  "id": 36,
+  "category": "提示词工程",
+  "title": "系统提示词 vs 用户提示词"
+ },
+ {
+  "id": 37,
+  "category": "提示词工程",
+  "title": "少样本示例与思维链提示"
+ },
+ {
+  "id": 38,
+  "category": "提示词工程",
+  "title": "输出约束：让模型稳定输出 JSON"
+ },
+ {
+  "id": 39,
+  "category": "提示词工程",
+  "title": "提示词压缩与上下文管理"
+ },
+ {
+  "id": 40,
+  "category": "提示词工程",
+  "title": "中文场景的提示词要点"
+ },
+ {
+  "id": 41,
+  "category": "提示词工程",
+  "title": "反提示注入与安全"
+ },
+ {
+  "id": 42,
+  "category": "提示词工程",
+  "title": "提示词评测与版本管理"
+ },
+ {
+  "id": 43,
+  "category": "提示词工程",
+  "title": "提示词库：团队沉淀的方式"
+ },
+ {
+  "id": 44,
+  "category": "提示词工程",
+  "title": "Prompt 的局限：何时换方案"
+ },
+ {
+  "id": 45,
+  "category": "提示词工程",
+  "title": "从提示词到系统设计"
+ },
+ {
+  "id": 46,
+  "category": "AI 产品设计",
+  "title": "从场景反推模型需求"
+ },
+ {
+  "id": 47,
+  "category": "AI 产品设计",
+  "title": "AI 产品的 MVP 验证"
+ },
+ {
+  "id": 48,
+  "category": "AI 产品设计",
+  "title": "交互范式：对话、工具还是被动智能"
+ },
+ {
+  "id": 49,
+  "category": "AI 产品设计",
+  "title": "人机协同：AI 增强 vs AI 替代"
+ },
+ {
+  "id": 50,
+  "category": "AI 产品设计",
+  "title": "不确定性设计：置信度与兜底"
+ },
+ {
+  "id": 51,
+  "category": "AI 产品设计",
+  "title": "错误处理与降级策略"
+ },
+ {
+  "id": 52,
+  "category": "AI 产品设计",
+  "title": "延迟与体验：流式输出的产品化"
+ },
+ {
+  "id": 53,
+  "category": "AI 产品设计",
+  "title": "反馈闭环：用户反馈如何回流"
+ },
+ {
+  "id": 54,
+  "category": "AI 产品设计",
+  "title": "个性化：记忆与用户画像"
+ },
+ {
+  "id": 55,
+  "category": "AI 产品设计",
+  "title": "多模态交互设计"
+ },
+ {
+  "id": 56,
+  "category": "AI 产品设计",
+  "title": "AI 产品的可用性测试"
+ },
+ {
+  "id": 57,
+  "category": "AI 产品设计",
+  "title": "从 Demo 到产品：工程化差距"
+ },
+ {
+  "id": 58,
+  "category": "评测与数据",
+  "title": "大模型评测体系：能力/安全/对齐"
+ },
+ {
+  "id": 59,
+  "category": "评测与数据",
+  "title": "golden set 与测试集构建"
+ },
+ {
+  "id": 60,
+  "category": "评测与数据",
+  "title": "评测指标：准确率、召回、忠实度"
+ },
+ {
+  "id": 61,
+  "category": "评测与数据",
+  "title": "自动化评测与人工评测的取舍"
+ },
+ {
+  "id": 62,
+  "category": "评测与数据",
+  "title": "LLM-as-Judge：用模型评模型"
+ },
+ {
+  "id": 63,
+  "category": "评测与数据",
+  "title": "线上评测：A/B 与灰度"
+ },
+ {
+  "id": 64,
+  "category": "评测与数据",
+  "title": "数据标注：质量与成本"
+ },
+ {
+  "id": 65,
+  "category": "评测与数据",
+  "title": "合成数据：能用吗、怎么用"
+ },
+ {
+  "id": 66,
+  "category": "评测与数据",
+  "title": "脏数据如何影响生成质量"
+ },
+ {
+  "id": 67,
+  "category": "评测与数据",
+  "title": "数据飞轮与数据治理"
+ },
+ {
+  "id": 68,
+  "category": "评测与数据",
+  "title": "数据隐私：脱敏与授权"
+ },
+ {
+  "id": 69,
+  "category": "商业化与增长",
+  "title": "单位经济模型：token 成本 vs 价值"
+ },
+ {
+  "id": 70,
+  "category": "商业化与增长",
+  "title": "成本优化：缓存、路由与模型分层"
+ },
+ {
+  "id": 71,
+  "category": "商业化与增长",
+  "title": "AI 产品定价：订阅、按量还是混合"
+ },
+ {
+  "id": 72,
+  "category": "商业化与增长",
+  "title": "场景付费意愿：用户为何买单"
+ },
+ {
+  "id": 73,
+  "category": "商业化与增长",
+  "title": "免费版与付费版的边界"
+ },
+ {
+  "id": 74,
+  "category": "商业化与增长",
+  "title": "AI 产品的获客与留存"
+ },
+ {
+  "id": 75,
+  "category": "商业化与增长",
+  "title": "AI 产品的北极星指标"
+ },
+ {
+  "id": 76,
+  "category": "商业化与增长",
+  "title": "AI 功能是护城河吗"
+ },
+ {
+  "id": 77,
+  "category": "商业化与增长",
+  "title": "企业市场：AI 的销售与交付"
+ },
+ {
+  "id": 78,
+  "category": "商业化与增长",
+  "title": "ChatGPT 的破圈与增长逻辑"
+ },
+ {
+  "id": 79,
+  "category": "商业化与增长",
+  "title": "从功能到平台：AI 生态化"
+ },
+ {
+  "id": 80,
+  "category": "合规与伦理",
+  "title": "生成式 AI 合规：内容标识与安全"
+ },
+ {
+  "id": 81,
+  "category": "合规与伦理",
+  "title": "算法备案与生成式 AI 管理办法"
+ },
+ {
+  "id": 82,
+  "category": "合规与伦理",
+  "title": "数据隐私与个人信息保护"
+ },
+ {
+  "id": 83,
+  "category": "合规与伦理",
+  "title": "版权与训练数据来源"
+ },
+ {
+  "id": 84,
+  "category": "合规与伦理",
+  "title": "深度合成与深度伪造治理"
+ },
+ {
+  "id": 85,
+  "category": "合规与伦理",
+  "title": "未成年人保护与内容分级"
+ },
+ {
+  "id": 86,
+  "category": "合规与伦理",
+  "title": "AI 安全测试与红队"
+ },
+ {
+  "id": 87,
+  "category": "合规与伦理",
+  "title": "偏见与公平：模型歧视问题"
+ },
+ {
+  "id": 88,
+  "category": "合规与伦理",
+  "title": "AI 的可解释性与透明性"
+ },
+ {
+  "id": 89,
+  "category": "合规与伦理",
+  "title": "用户协议与免责声明设计"
+ },
+ {
+  "id": 90,
+  "category": "合规与伦理",
+  "title": "AI 治理机制：产品侧怎么落地"
+ },
+ {
+  "id": 91,
+  "category": "行业案例与趋势",
+  "title": "AI 原生应用的三大特征"
+ },
+ {
+  "id": 92,
+  "category": "行业案例与趋势",
+  "title": "AI 搜索：从检索到答案引擎"
+ },
+ {
+  "id": 93,
+  "category": "行业案例与趋势",
+  "title": "智能客服从 0 到 1"
+ },
+ {
+  "id": 94,
+  "category": "行业案例与趋势",
+  "title": "办公场景 Agent 落地"
+ },
+ {
+  "id": 95,
+  "category": "行业案例与趋势",
+  "title": "代码助手的商业模式"
+ },
+ {
+  "id": 96,
+  "category": "行业案例与趋势",
+  "title": "教育 AI：个性化学习"
+ },
+ {
+  "id": 97,
+  "category": "行业案例与趋势",
+  "title": "医疗 AI 的边界与监管"
+ },
+ {
+  "id": 98,
+  "category": "行业案例与趋势",
+  "title": "AI 视频生成与内容生产变革"
+ },
+ {
+  "id": 99,
+  "category": "行业案例与趋势",
+  "title": "具身智能与机器人"
+ },
+ {
+  "id": 100,
+  "category": "行业案例与趋势",
+  "title": "从聊天到工作流：应用趋势"
+ }
+]
